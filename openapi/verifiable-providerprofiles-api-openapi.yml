@@ -1,0 +1,4304 @@
+openapi: 3.0.1
+info:
+  title: Verifiable API Documentation Alerts ProviderProfiles API
+  description: "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n"
+  version: 26.12.1.962
+servers:
+- url: https://discovery.verifiable.com/api
+  description: Production
+- url: https://discovery-staging.verifiable.com/api
+  description: Staging
+tags:
+- name: ProviderProfiles
+  description: "These endpoints let you import a provider’s profile data from different sources (such as a provider’s National Provider Identifier (NPI) record). This allows you to build a more complete picture of a provider within Verifiable and gives you easy access to the latest provider profile data across multiple sources. \n\nIn order to import an external profile, each source has its own list of required parameters. A provider must first have the required data in their Verifiable profile before you can run an import.\n\nOnce a request is created, fetching a profile is fast and typically takes seconds to return. You can check the status of an import request using the \"Get an existing provider profile import\" endpoint.\n"
+paths:
+  /providers/profiles/import/sources:
+    get:
+      tags:
+      - ProviderProfiles
+      summary: 'List provider profile import sources
+
+        '
+      description: 'Returns a list of sources where you can import provider profile data from. You can choose a source to import from and select the parameters required for a successful request.
+
+        '
+      operationId: ListProviderProfileImportSources
+      parameters:
+      - name: source
+        in: query
+        description: The source of the import to get profiles.
+        schema:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          example: CaqhPo
+      - name: sortedBy
+        in: query
+        schema:
+          enum:
+          - Name
+          - Source
+          type: string
+      - name: sort
+        in: query
+        description: If set, the properties and directions the returned data will be sorted by.
+        schema:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Name
+              - Source
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+      - name: offset
+        in: query
+        description: The offset for the page to start.
+        deprecated: true
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically.
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: The number of items to include in a single page.
+        schema:
+          type: integer
+          format: int32
+      - name: sortDirection
+        in: query
+        description: The direction the returned data will be sorted by.
+        schema:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfileImportSourcePageModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/profiles/import:
+    post:
+      tags:
+      - ProviderProfiles
+      summary: 'Create a new provider profile import
+
+        '
+      description: "To import a profile from an external source, you must first create an import request. When the request is initiated, the provider profile record will be created with a “Pending” status. When complete, the status will change to “Completed”. \n\nIf the request is successful, the provider profile will have a “Profile\" value. If an error occurs, the profile will have a \"FailureCode\" and \"FailureDescription\" value.\n"
+      operationId: CreateProviderProfileImport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderProfileImportRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfileImportModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProviderProfiles
+      summary: 'List provider profile imports
+
+        '
+      description: 'Returns a list of all the provider profiles that have been imported so far. You can filter the selection by source, status, providerId, get only latest record for each provider, and change the sorting and pages.
+
+        '
+      operationId: ListProviderProfileImports
+      parameters:
+      - name: latest
+        in: query
+        description: If set, returns only the most recent import of each source type for a given provider.
+        schema:
+          type: boolean
+      - name: status
+        in: query
+        description: If set, returns only the profiles with this status.
+        schema:
+          enum:
+          - Pending
+          - Working
+          - Completed
+          - Failed
+          type: string
+      - name: source
+        in: query
+        description: If set, returns only the profiles of this source.
+        schema:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          example: CaqhPo
+      - name: providerId
+        in: query
+        description: If set, returns only the imports for a given provider.
+        schema:
+          type: string
+          format: uuid
+      - name: sortedBy
+        in: query
+        schema:
+          enum:
+          - Id
+          - Source
+          - Status
+          - Completed
+          - Started
+          type: string
+      - name: sort
+        in: query
+        description: If set, the properties and directions the returned data will be sorted by.
+        schema:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Id
+              - Source
+              - Status
+              - Completed
+              - Started
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+      - name: offset
+        in: query
+        description: The offset for the page to start.
+        deprecated: true
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically.
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: The number of items to include in a single page.
+        schema:
+          type: integer
+          format: int32
+      - name: sortDirection
+        in: query
+        description: The direction the returned data will be sorted by.
+        schema:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfileImportPageModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/profiles/import/{importId}:
+    get:
+      tags:
+      - ProviderProfiles
+      summary: 'Get an existing provider profile import
+
+        '
+      description: "Returns a specific provider profile import model, allowing you to check the model status and get the profile value. \n"
+      operationId: GetProviderProfileImport
+      parameters:
+      - name: importId
+        in: path
+        description: Identifier of the provider profile import to get the data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfileImportModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/profiles/imports/{source}/parameters/{providerId}:
+    get:
+      tags:
+      - ProviderProfiles
+      summary: 'Get profile import parameters for a provider
+
+        '
+      description: 'Returns the list of provider profile import parameters that will be used during a profile import.
+
+        '
+      operationId: GetProviderImportParameters
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier of the provider for which the parameters should be returned.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: source
+        in: path
+        description: The source of the import to get profiles.
+        required: true
+        schema:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          example: CaqhPo
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IProviderParameter'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+components:
+  schemas:
+    CaqhProfile.RemittanceInfo:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        fax:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        isSameAsOfficeManager:
+          type: boolean
+          nullable: true
+        billingDepartmentName:
+          type: string
+          nullable: true
+        checkPayableTo:
+          type: string
+          nullable: true
+        hasElectronicBillingCapabilities:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    ProviderCaqhIdParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        caqhProviderId:
+          type: integer
+          format: int64
+      additionalProperties: false
+    CaqhProfile.ProviderIdentifier:
+      type: object
+      properties:
+        number:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        isParticipatingProvider:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    NpiProfile.Identifier:
+      type: object
+      properties:
+        number:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        issuer:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.StateDisclosureSection:
+      type: object
+      properties:
+        sectionName:
+          type: string
+          nullable: true
+        questions:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Emails:
+      type: object
+      properties:
+        primaryEmail:
+          type: string
+          nullable: true
+        personalEmail:
+          type: string
+          nullable: true
+        ccEmail1:
+          type: string
+          nullable: true
+        ccEmail2:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.MailingAddress:
+      type: object
+      properties:
+        streetLine1:
+          type: string
+          nullable: true
+        streetLine2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        province:
+          type: string
+          nullable: true
+        county:
+          type: string
+          nullable: true
+        zipCode:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.DisclosureEducation:
+      type: object
+      properties:
+        trainingProgramDiscipline:
+          type: boolean
+          nullable: true
+        trainingProgramDisciplineExplanation:
+          type: string
+          nullable: true
+        boardCertificationRevoked:
+          type: boolean
+          nullable: true
+        boardCertificationRevokedExplanation:
+          type: string
+          nullable: true
+        boardCertificationUnderInvestigation:
+          type: boolean
+          nullable: true
+        boardCertificationUnderInvestigationExplanation:
+          type: string
+          nullable: true
+        trainingProgramUnderInvestigation:
+          type: boolean
+          nullable: true
+        trainingProgramUnderInvestigationExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    FacilityCmsCertificationInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        certificateNumber:
+          type: string
+          nullable: true
+        certificateType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.OfficeHours:
+      type: object
+      properties:
+        day:
+          type: string
+          nullable: true
+        endTime:
+          type: string
+          format: timespan
+          nullable: true
+        startTime:
+          type: string
+          format: timespan
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.DeaRegistration:
+      type: object
+      properties:
+        number:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        isLimited:
+          type: boolean
+          nullable: true
+        alternatePrescriberName:
+          type: string
+          nullable: true
+        dateApplicationSubmitted:
+          type: string
+          format: date-time
+          nullable: true
+        hasXWaiver:
+          type: boolean
+          nullable: true
+        xWaiverNumber:
+          type: string
+          nullable: true
+        isAcceptingNewMatPatients:
+          type: boolean
+          nullable: true
+        matPanelSize:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderGenderParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        gender:
+          enum:
+          - Unknown
+          - Male
+          - Female
+          - NonBinaryOrThirdGender
+          - Other
+          - PreferNotToSay
+          type: string
+      additionalProperties: false
+    ProviderProfileImportSourcePageModel:
+      type: object
+      properties:
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IProviderProfileImportSource'
+          description: The provider profile import sources in the current page.
+        sortedBy:
+          enum:
+          - Name
+          - Source
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Name
+              - Source
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - source: Npi
+          name: string
+          requiredParameterTypes:
+          - Name
+        sortedBy: Name
+        sortDirection: Asc
+        sort:
+          Name: Asc
+          Source: Desc
+    CaqhProfile.CulturalCompetencyTraining:
+      type: object
+      properties:
+        hasCompletedCulturalCompetencyTraining:
+          type: boolean
+          nullable: true
+        programs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.CulturalCompetencyProgram'
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.OfficeManagerContact:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        fax:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        isCredentialingContact:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderSsnParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        ssn:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.TrainingGap:
+      type: object
+      properties:
+        explanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.ReferencesInfo:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        fax:
+          type: string
+          nullable: true
+        providerType:
+          type: string
+          nullable: true
+        associationEndDate:
+          type: string
+          format: date-time
+          nullable: true
+        associationStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        cell:
+          type: string
+          nullable: true
+        relationship:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        yearsKnown:
+          type: string
+          nullable: true
+        ipCode:
+          type: string
+          nullable: true
+        department:
+          type: string
+          nullable: true
+        facilityName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+      additionalProperties: false
+    CaqhProfile.AbilityToPerformJob:
+      type: object
+      properties:
+        illegalDrugUse:
+          type: boolean
+          nullable: true
+        illegalDrugUseExplanation:
+          type: string
+          nullable: true
+        chemicalSubstancesUse:
+          type: boolean
+          nullable: true
+        chemicalSubstancesUseExplanation:
+          type: string
+          nullable: true
+        poseARisk:
+          type: boolean
+          nullable: true
+        poseARiskExplanation:
+          type: string
+          nullable: true
+        unableToPerformFunctions:
+          type: boolean
+          nullable: true
+        unableToPerformFunctionsExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.BillingContactInfo:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        fax:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        isSameAsOfficeManager:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.MilitaryService:
+      type: object
+      properties:
+        isOnActiveMilitaryDuty:
+          type: boolean
+          nullable: true
+        isInReservesOrNationalGuard:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.PracticeLimitations:
+      type: object
+      properties:
+        ageMax:
+          type: string
+          nullable: true
+        ageMin:
+          type: string
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        hasPracticeLimitations:
+          type: boolean
+          nullable: true
+        hasAgeLimitations:
+          type: boolean
+          nullable: true
+        onlyNativeAmericans:
+          type: string
+          nullable: true
+        onlyEnrolledStudents:
+          type: string
+          nullable: true
+        otherLimitations:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.GroupMailingAddress:
+      type: object
+      properties:
+        streetLine1:
+          type: string
+          nullable: true
+        streetLine2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        province:
+          type: string
+          nullable: true
+        county:
+          type: string
+          nullable: true
+        zipCode:
+          type: string
+          nullable: true
+        groupMedicaidNumber:
+          type: string
+          nullable: true
+        groupMedicareNumber:
+          type: string
+          nullable: true
+        organizationNpi:
+          type: string
+          nullable: true
+        typeOfPractice:
+          type: string
+          nullable: true
+        hasOrganizationNpi:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Identifiers:
+      type: object
+      properties:
+        ssn:
+          type: string
+          nullable: true
+        fnin:
+          type: string
+          nullable: true
+        fninCountry:
+          type: string
+          nullable: true
+        upin:
+          type: string
+          nullable: true
+        npi:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.LocationInfo:
+      type: object
+      properties:
+        generalInformation:
+          $ref: '#/components/schemas/CaqhProfile.LocationGeneralInfo'
+        mailingAddress:
+          $ref: '#/components/schemas/CaqhProfile.GroupMailingAddress'
+        phoneNumbers:
+          $ref: '#/components/schemas/CaqhProfile.PhoneNumbers'
+        taxInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.TaxInfo'
+          nullable: true
+        officeHours:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.OfficeHours'
+          nullable: true
+        practiceLimitations:
+          $ref: '#/components/schemas/CaqhProfile.PracticeLimitations'
+        patients:
+          $ref: '#/components/schemas/CaqhProfile.PatientsInfo'
+        officeManagerContact:
+          $ref: '#/components/schemas/CaqhProfile.OfficeManagerContact'
+        billingContact:
+          $ref: '#/components/schemas/CaqhProfile.BillingContactInfo'
+        remittance:
+          $ref: '#/components/schemas/CaqhProfile.RemittanceInfo'
+        telehealth:
+          $ref: '#/components/schemas/CaqhProfile.TelehealthInfo'
+        hasClosedPractice:
+          type: boolean
+          nullable: true
+        hasPartners:
+          type: boolean
+          nullable: true
+        coveringColleagues:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.CoveringColleague'
+          nullable: true
+        hasMidLevelPractitioners:
+          type: boolean
+          nullable: true
+        midLevelPractitioners:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.MidLevelPractitioner'
+          nullable: true
+        accessibility:
+          $ref: '#/components/schemas/CaqhProfile.AccessibilityInfo'
+        clinicalServices:
+          $ref: '#/components/schemas/CaqhProfile.ClinicalServicesInfo'
+      additionalProperties: false
+    CaqhProfile.LocationGeneralInfo:
+      type: object
+      properties:
+        officeType:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        isCurrentlyPracticingAtLocation:
+          type: string
+          nullable: true
+        explanation:
+          type: string
+          nullable: true
+        practiceName:
+          type: string
+          nullable: true
+        departmentName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        email:
+          type: string
+          nullable: true
+        isCorrespondenceLocation:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+        confirmedDate:
+          type: string
+          format: date-time
+          nullable: true
+        willContinueToPractice:
+          type: boolean
+          nullable: true
+        providerDirectoryClassification:
+          type: string
+          nullable: true
+        specialty:
+          type: string
+          nullable: true
+        subspecialty:
+          type: string
+          nullable: true
+        typeOfService:
+          type: string
+          nullable: true
+        clinicalNarrative:
+          type: string
+          nullable: true
+        appointmentSchedulingWebsite:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderNccpaBoardCertificateInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        number:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.ContactInfo:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        fax:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AmaTraining:
+      type: object
+      properties:
+        sponsoringInstitution:
+          type: string
+          nullable: true
+        sponsoringState:
+          type: string
+          nullable: true
+        programName:
+          type: string
+          nullable: true
+        specialty:
+          type: string
+          nullable: true
+        trainingType:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date
+          nullable: true
+        endDate:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.CaqhHeaders:
+      type: object
+      properties:
+        caqhDataSummaryDate:
+          type: string
+          format: date-time
+          nullable: true
+        caqhProviderId:
+          type: string
+          nullable: true
+        lastReattestationDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    AmericanMedicalAssociationPhysicianProviderProfileModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          readOnly: true
+          example: CaqhPo
+        name:
+          type: string
+          nullable: true
+        npi:
+          type: string
+          nullable: true
+        nccpa:
+          type: string
+          nullable: true
+        educationRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmaEducation'
+          nullable: true
+        trainingRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmaTraining'
+          nullable: true
+        profileDocumentFilePath:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderProfileImportPageModel:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Id
+              - Source
+              - Status
+              - Completed
+              - Started
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderProfileImportModel'
+          description: The provider profile imports in the current page.
+        sortedBy:
+          enum:
+          - Id
+          - Source
+          - Status
+          - Completed
+          - Started
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          providerId: 4834bcdc-4a64-444d-966b-1a6fe381da24
+          source: Npi
+          started: '2019-08-24T14:15:22.0000000Z'
+          completed: '2019-08-24T14:15:22.0000000Z'
+          status: Pending
+          trigger: Manual
+          failureCode: DatabaseError
+          failureReason:
+            messageTemplate: string
+            messageParams:
+              property1: string
+              property2: string
+          profile:
+            type: Npi
+            npiNumber: 0
+            enumerationType: string
+            basic:
+              replacementNpi: 0
+              ein: string
+              organizationName: string
+              lastName: string
+              firstName: string
+              middleName: string
+              namePrefix: string
+              nameSuffix: string
+              credential: string
+              enumerationDate: '2019-08-24T14:15:22.0000000Z'
+              lastUpdateDate: '2019-08-24T14:15:22.0000000Z'
+              certificationDate: '2019-08-24T14:15:22.0000000Z'
+              isSoleProprietor: true
+              isOrganizationalSubpart: true
+              parentOrganizationLbn: string
+              parentOrganizationTin: string
+              authorizedOfficialNamePrefix: string
+              authorizedOfficialNameSuffix: string
+              authorizedOfficialCredential: string
+              authorizedOfficialFirstName: string
+              authorizedOfficialLastName: string
+              authorizedOfficialMiddleName: string
+              authorizedOfficialTelephoneNumber: string
+              authorizedOfficialTitleOrPosition: string
+              deactivationDate: '2019-08-24T14:15:22.0000000Z'
+              reactivationDate: '2019-08-24T14:15:22.0000000Z'
+              gender: string
+              status: string
+              name: string
+            otherNames:
+            - nameTypeCode: string
+              lastName: string
+              firstName: string
+              middleName: string
+              prefix: string
+              suffix: string
+              credential: string
+              type: string
+              organizationName: string
+            addresses:
+            - addressLine1: string
+              addressLine2: string
+              state: AL
+              postalCode: string
+              countryCode: string
+              city: string
+              telephoneNumber: string
+              faxNumber: string
+              purpose: Location
+              updateDate: '2019-08-24T14:15:22.0000000Z'
+            practiceLocations:
+            - addressLine1: string
+              addressLine2: string
+              state: AL
+              postalCode: string
+              countryCode: string
+              city: string
+              telephoneNumber: string
+              faxNumber: string
+              purpose: Location
+              updateDate: '2019-08-24T14:15:22.0000000Z'
+            taxonomies:
+            - code: string
+              license: string
+              state: AL
+              isPrimary: true
+              description: string
+              taxonomyGroup: string
+            identifiers:
+            - number: string
+              code: string
+              state: AL
+              issuer: string
+              description: string
+            isDeactivated: true
+            deactivationReason: string
+          parameters:
+          - addressType: Unspecified
+            addressLine: string
+            city: string
+            state: AL
+            zipCode: string
+            type: Name
+        sortedBy: Id
+        sortDirection: Asc
+        sort:
+          Id: Asc
+          Source: Desc
+          Status: Asc
+          Completed: Desc
+    ProviderLicenseParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        licenseTypeId:
+          type: string
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        number:
+          type: string
+          nullable: true
+        isPrimary:
+          type: boolean
+      additionalProperties: false
+    CaqhProfile.Specialty:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        boardCertificationNumber:
+          type: string
+          nullable: true
+        boardCertificationExpirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        boardCertificationInitialCertificationDate:
+          type: string
+          format: date-time
+          nullable: true
+        boardCertificationLastCertificationDate:
+          type: string
+          format: date-time
+          nullable: true
+        boardCertificationName:
+          type: string
+          nullable: true
+        subSpecialtyName:
+          type: string
+          nullable: true
+        isBoardCertified:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    NpiProfile.NpiProviderProfileModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          readOnly: true
+          example: CaqhPo
+        npiNumber:
+          type: integer
+          format: int64
+        enumerationType:
+          type: string
+          nullable: true
+        basic:
+          $ref: '#/components/schemas/NpiProfile.NpiBasicModel'
+        otherNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.OtherName'
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.Address'
+          nullable: true
+        practiceLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.Address'
+          nullable: true
+        taxonomies:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.Taxonomy'
+          nullable: true
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.Identifier'
+          nullable: true
+        isDeactivated:
+          type: boolean
+        deactivationReason:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.EmploymentInfo:
+      type: object
+      properties:
+        employerName:
+          type: string
+          nullable: true
+        department:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        phone:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        isCurrentEmployer:
+          type: boolean
+          nullable: true
+        reasonForDeparture:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.CoveringColleague:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        nuccGrouping:
+          type: string
+          nullable: true
+        specialty:
+          type: string
+          nullable: true
+        providerType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AmericanMedicalAssociationPhysicianAssistantProviderProfileModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          readOnly: true
+          example: CaqhPo
+        name:
+          type: string
+          nullable: true
+        npi:
+          type: string
+          nullable: true
+        nccpa:
+          type: string
+          nullable: true
+        educationRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmaEducation'
+          nullable: true
+        trainingRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmaTraining'
+          nullable: true
+        profileDocumentFilePath:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.AccessibilityInfo:
+      type: object
+      properties:
+        meetsAdaRequirements:
+          type: boolean
+          nullable: true
+        hasHandicappedAccessibility:
+          type: boolean
+          nullable: true
+        exteriorBuilding:
+          type: boolean
+          nullable: true
+        interiorBuilding:
+          type: boolean
+          nullable: true
+        wheelchairAccessToExamRoom:
+          type: boolean
+          nullable: true
+        examTableScaleChair:
+          type: boolean
+          nullable: true
+        gurneysAndStretchers:
+          type: boolean
+          nullable: true
+        portableLifts:
+          type: boolean
+          nullable: true
+        radiologicEquipment:
+          type: boolean
+          nullable: true
+        signageAndDocuments:
+          type: boolean
+          nullable: true
+        parking:
+          type: boolean
+          nullable: true
+        restroom:
+          type: boolean
+          nullable: true
+        otherHandicappedAccess:
+          type: string
+          nullable: true
+        hasOtherDisabilityServices:
+          type: boolean
+          nullable: true
+        textTelephony:
+          type: boolean
+          nullable: true
+        americanSignLanguage:
+          type: boolean
+          nullable: true
+        mentalPhysicalImpairmentServices:
+          type: boolean
+          nullable: true
+        otherDisabilityServices:
+          type: string
+          nullable: true
+        isAccessibleByPublicTransportation:
+          type: boolean
+          nullable: true
+        busTransportation:
+          type: boolean
+          nullable: true
+        subway:
+          type: boolean
+          nullable: true
+        regionalTrain:
+          type: boolean
+          nullable: true
+        otherTransportation:
+          type: string
+          nullable: true
+        hasChildCareServices:
+          type: boolean
+          nullable: true
+        meetFireSafetyRequirements:
+          type: boolean
+          nullable: true
+        hasTdd:
+          type: boolean
+          nullable: true
+        acceptsWorkersCompPatients:
+          type: boolean
+          nullable: true
+        staffTrainedForWorkersComp:
+          type: boolean
+          nullable: true
+        modifiedDutyEvaluated:
+          type: boolean
+          nullable: true
+        accommodatesUrgentWalkIns:
+          type: boolean
+          nullable: true
+        staffAvailableForCompReps:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.LiabilityInsurance:
+      type: object
+      properties:
+        liabilityCoverageLimitations:
+          type: boolean
+          nullable: true
+        liabilityCoverageLimitationsExplanation:
+          type: string
+          nullable: true
+        surchargeOrHighRisk:
+          type: boolean
+          nullable: true
+        surchargeOrHighRiskExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Education:
+      type: object
+      properties:
+        schoolName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        phone:
+          type: string
+          nullable: true
+        degree:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        areaOfTraining:
+          type: string
+          nullable: true
+        completed:
+          type: boolean
+          nullable: true
+        graduationDate:
+          type: string
+          format: date-time
+          nullable: true
+        disciplinaryAction:
+          type: string
+          nullable: true
+        certificateAwarded:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.DemographicInfo:
+      type: object
+      properties:
+        gender:
+          type: string
+          nullable: true
+        race:
+          type: string
+          nullable: true
+        birthDate:
+          type: string
+          format: date-time
+          nullable: true
+        birthCity:
+          type: string
+          nullable: true
+        birthState:
+          type: string
+          nullable: true
+        birthCountry:
+          type: string
+          nullable: true
+        isUsCitizen:
+          type: boolean
+          nullable: true
+        citizenshipCountry:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IProviderProfileImportSource:
+      type: object
+      properties:
+        source:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          readOnly: true
+          example: CaqhPo
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        requiredParameterTypes:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - Name
+            - Npi
+            - DateOfBirth
+            - Ssn
+            - License
+            - Address
+            - Education
+            - BoardCertificationNumber
+            - Dea
+            - Certificate
+            - CaqhId
+            - ProviderType
+            - FacilityName
+            - FacilityAccreditationInfo
+            - FacilityCmsCertificationInfo
+            - NccpaBoardCertificateInfo
+            - Gender
+            type: string
+          nullable: true
+          readOnly: true
+        hasPassThroughFee:
+          type: boolean
+          readOnly: true
+        supportsReimport:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
+    FailureModel:
+      type: object
+      properties:
+        messageTemplate:
+          type: string
+          description: An informative human readable message describing the verification failure.
+        messageParams:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
+      additionalProperties: false
+      description: An object with a reason message template and an array of params. Can be used to construct a meaningful description of the error. Not set when no errors happened.
+    CaqhProfile.Alias:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Document:
+      type: object
+      properties:
+        documentUrl:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        receivedDate:
+          type: string
+          format: date-time
+          nullable: true
+        download:
+          $ref: '#/components/schemas/CaqhProfile.DocumentDownload'
+        status:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Arrangements:
+      type: object
+      properties:
+        hospitalName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        status:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        groupName:
+          type: string
+          nullable: true
+        organizationNpi:
+          type: integer
+          format: int64
+          nullable: true
+        otherHospitalName:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        admittingProvider:
+          type: string
+          nullable: true
+        admittingProviderFirstName:
+          type: string
+          nullable: true
+        admittingProviderLastName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Cme:
+      type: object
+      properties:
+        hasCme:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.CredentialingInfo:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        phone:
+          type: string
+          nullable: true
+        fax:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        isPrimaryCredentialingContact:
+          type: boolean
+          nullable: true
+        locationType:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        contactHours:
+          type: string
+          nullable: true
+        contactTitle:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.EducationInfo:
+      type: object
+      properties:
+        graduateType:
+          type: string
+          nullable: true
+        professionalSchoolInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Education'
+          nullable: true
+        undergraduateEducation:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Education'
+          nullable: true
+      additionalProperties: false
+    ProviderDeaParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        registrationNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderCertificateParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        certificateType:
+          enum:
+          - AhaBasicLifeSupport
+          - AhaAdvancedCardiacLifeSupport
+          - AhaNeonatalAdvancedLifeSupport
+          - AhaPediatricAdvancedLifeSupport
+          - CaliforniaCertifiedWellnessCoach
+          - AhaAdvancedCardiovascularLifeSupport
+          - AhaAdvancedStrokeLifeSupport
+          - AhaPears
+          - AhaHeartsaver
+          type: string
+          nullable: true
+        certificateNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.PatientsInfo:
+      type: object
+      properties:
+        isAcceptingNewPatients:
+          type: boolean
+          nullable: true
+        isAcceptingNewMedicarePatients:
+          type: boolean
+          nullable: true
+        isAcceptingNewMedicaidPatients:
+          type: boolean
+          nullable: true
+        isAcceptingExistingPatientsWithPayorChange:
+          type: boolean
+          nullable: true
+        isAcceptingNewChipPatients:
+          type: boolean
+          nullable: true
+        isAcceptingNewPatientsFromReferrals:
+          type: boolean
+          nullable: true
+        doesAcceptanceVaryByPlan:
+          type: boolean
+          nullable: true
+        acceptanceVaryByPlanExplanation:
+          type: string
+          nullable: true
+        referralConditions:
+          type: string
+          nullable: true
+        referralQuestions:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderNpiParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        number:
+          type: integer
+          format: int64
+      additionalProperties: false
+    NpiProfile.Taxonomy:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+        license:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        isPrimary:
+          type: boolean
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        taxonomyGroup:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderNameParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.CriminalHistory:
+      type: object
+      properties:
+        felony:
+          type: boolean
+          nullable: true
+        felonyExplanation:
+          type: string
+          nullable: true
+        misdemeanor:
+          type: boolean
+          nullable: true
+        misdemeanorExplanation:
+          type: string
+          nullable: true
+        courtMartialed:
+          type: boolean
+          nullable: true
+        courtMartialedExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.CertInfo:
+      type: object
+      properties:
+        hasCertification:
+          type: boolean
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        certificateNo:
+          type: string
+          nullable: true
+        dateOfCertification:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.TrainingInfo:
+      type: object
+      properties:
+        cme:
+          $ref: '#/components/schemas/CaqhProfile.Cme'
+        facultyPositions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Training'
+          nullable: true
+        fellowship:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Training'
+          nullable: true
+        internship:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Training'
+          nullable: true
+        otherTraining:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Training'
+          nullable: true
+        residency:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Training'
+          nullable: true
+        trainingGaps:
+          $ref: '#/components/schemas/CaqhProfile.TrainingGap'
+        culturalCompetencyTraining:
+          $ref: '#/components/schemas/CaqhProfile.CulturalCompetencyTraining'
+      additionalProperties: false
+    CaqhProfile.HospitalAffiliations:
+      type: object
+      properties:
+        hasAdmittingPrivileges:
+          type: boolean
+          nullable: true
+        hasAdmittingArrangements:
+          type: boolean
+          nullable: true
+        hasNonAdmittingAffiliations:
+          type: boolean
+          nullable: true
+        explanation:
+          type: string
+          nullable: true
+        admittingPrivileges:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Privileges'
+          nullable: true
+        admittingArrangements:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Arrangements'
+          nullable: true
+        nonAdmittingAffiliations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.NonAdmittingAffiliation'
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.CertificationInfo:
+      type: object
+      properties:
+        hasCertifications:
+          type: boolean
+          nullable: true
+        qasp:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        cpr:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        bls:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        acls:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        also:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        coreC:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        atls:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        nals:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        nrp:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        pals:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        other:
+          $ref: '#/components/schemas/CaqhProfile.CertInfo'
+        hasAnesthesiaPermit:
+          type: boolean
+          nullable: true
+        therapeuticsClassificationNumber:
+          type: string
+          nullable: true
+        otherInterests:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpiProfile.Address:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          nullable: true
+        addressLine2:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+          nullable: true
+        countryCode:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        telephoneNumber:
+          type: string
+          nullable: true
+        faxNumber:
+          type: string
+          nullable: true
+        purpose:
+          enum:
+          - Location
+          - Mailing
+          - Primary
+          - Secondary
+          type: string
+          nullable: true
+        updateDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.PhoneNumbers:
+      type: object
+      properties:
+        homePhone:
+          type: string
+          nullable: true
+        personalCellPhone:
+          type: string
+          nullable: true
+        fax:
+          type: string
+          nullable: true
+        appointmentPhone:
+          type: string
+          nullable: true
+        phoneExtension:
+          type: string
+          nullable: true
+        backOfficePhone:
+          type: string
+          nullable: true
+        has24HourPhoneCoverage:
+          type: boolean
+          nullable: true
+        phoneCoverageType:
+          type: string
+          nullable: true
+        otherCoverageSpecify:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.OtherSanctions:
+      type: object
+      properties:
+        subjectOfInvestigation:
+          type: boolean
+          nullable: true
+        subjectOfInvestigationExplanation:
+          type: string
+          nullable: true
+        reportedToNpdb:
+          type: boolean
+          nullable: true
+        reportedToNpdbExplanation:
+          type: string
+          nullable: true
+        sanctions:
+          type: boolean
+          nullable: true
+        sanctionsExplanation:
+          type: string
+          nullable: true
+        illegalMisconduct:
+          type: boolean
+          nullable: true
+        illegalMisconductExplanation:
+          type: string
+          nullable: true
+        militaryAgencyLimitations:
+          type: boolean
+          nullable: true
+        militaryAgencyLimitationsExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IProviderParameter:
+      oneOf:
+      - $ref: '#/components/schemas/FacilityAccreditationInfoParameter'
+      - $ref: '#/components/schemas/FacilityCmsCertificationInfoParameter'
+      - $ref: '#/components/schemas/FacilityNameParameter'
+      - $ref: '#/components/schemas/ProviderAddressParameter'
+      - $ref: '#/components/schemas/ProviderBoardCertificationNumberParameter'
+      - $ref: '#/components/schemas/ProviderCaqhIdParameter'
+      - $ref: '#/components/schemas/ProviderCertificateParameter'
+      - $ref: '#/components/schemas/ProviderDateOfBirthParameter'
+      - $ref: '#/components/schemas/ProviderDeaParameter'
+      - $ref: '#/components/schemas/ProviderEducationParameter'
+      - $ref: '#/components/schemas/ProviderGenderParameter'
+      - $ref: '#/components/schemas/ProviderLicenseParameter'
+      - $ref: '#/components/schemas/ProviderNameParameter'
+      - $ref: '#/components/schemas/ProviderNccpaBoardCertificateInfoParameter'
+      - $ref: '#/components/schemas/ProviderNpiParameter'
+      - $ref: '#/components/schemas/ProviderSsnParameter'
+      - $ref: '#/components/schemas/ProviderTypeParameter'
+      discriminator:
+        propertyName: type
+        mapping:
+          FacilityAccreditationInfo: '#/components/schemas/FacilityAccreditationInfoParameter'
+          FacilityCmsCertificationInfo: '#/components/schemas/FacilityCmsCertificationInfoParameter'
+          FacilityName: '#/components/schemas/FacilityNameParameter'
+          Address: '#/components/schemas/ProviderAddressParameter'
+          BoardCertificationNumber: '#/components/schemas/ProviderBoardCertificationNumberParameter'
+          CaqhId: '#/components/schemas/ProviderCaqhIdParameter'
+          Certificate: '#/components/schemas/ProviderCertificateParameter'
+          DateOfBirth: '#/components/schemas/ProviderDateOfBirthParameter'
+          Dea: '#/components/schemas/ProviderDeaParameter'
+          Education: '#/components/schemas/ProviderEducationParameter'
+          Gender: '#/components/schemas/ProviderGenderParameter'
+          License: '#/components/schemas/ProviderLicenseParameter'
+          Name: '#/components/schemas/ProviderNameParameter'
+          NccpaBoardCertificateInfo: '#/components/schemas/ProviderNccpaBoardCertificateInfoParameter'
+          Npi: '#/components/schemas/ProviderNpiParameter'
+          Ssn: '#/components/schemas/ProviderSsnParameter'
+          ProviderType: '#/components/schemas/ProviderTypeParameter'
+    CaqhProfile.PersonalInfo:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/CaqhProfile.Name'
+        otherName:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Alias'
+          nullable: true
+        homeAddress:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        mailingAddress:
+          $ref: '#/components/schemas/CaqhProfile.MailingAddress'
+        primaryMethodOfContact:
+          $ref: '#/components/schemas/CaqhProfile.Emails'
+        phoneNumbers:
+          $ref: '#/components/schemas/CaqhProfile.PhoneNumbers'
+        personalIdentificationNumbers:
+          $ref: '#/components/schemas/CaqhProfile.Identifiers'
+        demographics:
+          $ref: '#/components/schemas/CaqhProfile.DemographicInfo'
+        emergencyContact:
+          $ref: '#/components/schemas/CaqhProfile.ContactInfo'
+        languages:
+          type: string
+          nullable: true
+        otherLanguages:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AmaEducation:
+      type: object
+      properties:
+        school:
+          type: string
+          nullable: true
+        degreeAwarded:
+          type: string
+          nullable: true
+        degreeType:
+          type: string
+          nullable: true
+        enrollmentDate:
+          type: string
+          format: date
+          nullable: true
+        degreeDate:
+          type: string
+          format: date
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.DocumentDownload:
+      type: object
+      properties:
+        downloadStatus:
+          enum:
+          - Completed
+          - Failed
+          type: string
+        fileName:
+          type: string
+          nullable: true
+        fileId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.EmploymentGap:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        gapExplanation:
+          type: string
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.TelehealthInfo:
+      type: object
+      properties:
+        hasTelehealthServices:
+          type: boolean
+          nullable: true
+        isHipaaCompliant:
+          type: boolean
+          nullable: true
+        hasAudio:
+          type: boolean
+          nullable: true
+        hasAudioVideo:
+          type: boolean
+          nullable: true
+        hasAdaptiveInterviews:
+          type: boolean
+          nullable: true
+        hasSecureTexting:
+          type: boolean
+          nullable: true
+        hasRemoteMonitoring:
+          type: boolean
+          nullable: true
+        hasStoreAndForward:
+          type: boolean
+          nullable: true
+        supportsFamilyCaregivers:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    ProviderAddressParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        addressType:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+        addressLine:
+          type: string
+          nullable: true
+        addressLine2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        zipCode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.DocumentInfo:
+      type: object
+      properties:
+        downloadFolder:
+          type: string
+          nullable: true
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Document'
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.SpecialtyInfo:
+      type: object
+      properties:
+        primarySpecialty:
+          $ref: '#/components/schemas/CaqhProfile.Specialty'
+        secondarySpecialty:
+          $ref: '#/components/schemas/CaqhProfile.Specialty'
+        additionalSpecialty:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Specialty'
+          nullable: true
+        specialSkills:
+          $ref: '#/components/schemas/CaqhProfile.SpecialSkillsInfo'
+      additionalProperties: false
+    CaqhProfile.TaxInfo:
+      type: object
+      properties:
+        taxId:
+          type: string
+          nullable: true
+        taxIdType:
+          type: string
+          nullable: true
+        isPrimaryTaxId:
+          type: boolean
+          nullable: true
+        groupName:
+          type: string
+          nullable: true
+        practiceNameOnW9:
+          type: string
+          nullable: true
+        groupPracticeNameOnW9:
+          type: string
+          nullable: true
+        groupTaxId:
+          type: string
+          nullable: true
+        groupTypeOfTaxId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderTypeParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+        typeId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    CaqhProfile.Name:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderDateOfBirthParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        dateOfBirth:
+          type: string
+          format: date-time
+      additionalProperties: false
+    CaqhProfile.PracticeLocations:
+      type: object
+      properties:
+        activeLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.LocationInfo'
+          nullable: true
+        archivedLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.LocationInfo'
+          nullable: true
+      additionalProperties: false
+    NpiProfile.OtherName:
+      type: object
+      properties:
+        nameTypeCode:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        credential:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        organizationName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.WorkHistoryInfo:
+      type: object
+      properties:
+        employmentInformationRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.EmploymentInfo'
+          nullable: true
+        employmentGapRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.EmploymentGap'
+          nullable: true
+        militaryService:
+          $ref: '#/components/schemas/CaqhProfile.MilitaryService'
+      additionalProperties: false
+    CaqhProfile.InsuranceInfo:
+      type: object
+      properties:
+        policyNumber:
+          type: string
+          nullable: true
+        originalEffectiveDate:
+          type: string
+          format: date-time
+          nullable: true
+        currentEffectiveDate:
+          type: string
+          format: date-time
+          nullable: true
+        currentExpirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        carrierName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        phone:
+          type: string
+          nullable: true
+        phoneExtension:
+          type: string
+          nullable: true
+        isUnlimitedCoverage:
+          type: boolean
+          nullable: true
+        coverageType:
+          type: string
+          nullable: true
+        occurrenceCoverageAmount:
+          type: string
+          nullable: true
+        aggregateCoverageAmount:
+          type: string
+          nullable: true
+        includesTailCoverage:
+          type: boolean
+          nullable: true
+        isIndividualCoverage:
+          type: boolean
+          nullable: true
+        isSelfInsured:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.CulturalCompetencyProgram:
+      type: object
+      properties:
+        programName:
+          type: string
+          nullable: true
+        administeringOrganization:
+          type: string
+          nullable: true
+        programWebsite:
+          type: string
+          nullable: true
+        completionDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.ClinicalServicesInfo:
+      type: object
+      properties:
+        hasLaboratoryServices:
+          type: boolean
+          nullable: true
+        labAccreditingProgram:
+          type: string
+          nullable: true
+        hasRadiologyServices:
+          type: boolean
+          nullable: true
+        hasXray:
+          type: boolean
+          nullable: true
+        xrayCertificationType:
+          type: string
+          nullable: true
+        hasEkg:
+          type: boolean
+          nullable: true
+        hasMinorLacerations:
+          type: boolean
+          nullable: true
+        hasPulmonaryFunctionTesting:
+          type: boolean
+          nullable: true
+        hasAllergyInjections:
+          type: boolean
+          nullable: true
+        hasAllergySkinTesting:
+          type: boolean
+          nullable: true
+        hasOfficeGynecology:
+          type: boolean
+          nullable: true
+        hasDrawingBlood:
+          type: boolean
+          nullable: true
+        hasAsthmaTreatment:
+          type: boolean
+          nullable: true
+        hasImmunizations:
+          type: boolean
+          nullable: true
+        hasFlexibleSigmoidoscopy:
+          type: boolean
+          nullable: true
+        hasTympanometryAudiometry:
+          type: boolean
+          nullable: true
+        hasOsteopathicManipulation:
+          type: boolean
+          nullable: true
+        hasIvHydration:
+          type: boolean
+          nullable: true
+        hasCardiacStressTest:
+          type: boolean
+          nullable: true
+        hasPhysicalTherapy:
+          type: boolean
+          nullable: true
+        hasTreadmill:
+          type: boolean
+          nullable: true
+        isAnesthesiaAdministered:
+          type: boolean
+          nullable: true
+        anesthesiaClass:
+          type: string
+          nullable: true
+        anesthesiaAdministeredByFirstName:
+          type: string
+          nullable: true
+        anesthesiaAdministeredByLastName:
+          type: string
+          nullable: true
+        otherServices:
+          type: string
+          nullable: true
+        specialSkillsByPractitioner:
+          type: string
+          nullable: true
+        specialSkillsByStaff:
+          type: string
+          nullable: true
+        nonEnglishLanguages:
+          type: string
+          nullable: true
+        nonEnglishLanguagesEmployeeType:
+          type: string
+          nullable: true
+        hasInterpreters:
+          type: boolean
+          nullable: true
+        interpreterLanguages:
+          type: string
+          nullable: true
+        interpreterEmployeeType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.MidLevelPractitioner:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        nuccGrouping:
+          type: string
+          nullable: true
+        specialty:
+          type: string
+          nullable: true
+        providerType:
+          type: string
+          nullable: true
+        stateLicenseNumber:
+          type: string
+          nullable: true
+        licenseState:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.ProfessionalIdentificationNumbers:
+      type: object
+      properties:
+        professionalLicenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.License'
+          nullable: true
+        deaRegistration:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.DeaRegistration'
+          nullable: true
+        cdsRegistration:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.CdsRegistration'
+          nullable: true
+        medicare:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.ProviderIdentifier'
+          nullable: true
+        medicaid:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.ProviderIdentifier'
+          nullable: true
+        ecfmg:
+          type: string
+          nullable: true
+        ecfmgIssueDate:
+          type: string
+          format: date-time
+          nullable: true
+        dmap:
+          type: string
+          nullable: true
+        flex:
+          type: string
+          nullable: true
+        nationalBoardOfMedicalExaminers:
+          type: string
+          nullable: true
+        prescriptiveAuthority:
+          type: string
+          nullable: true
+        texasDps:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.NonAdmittingAffiliation:
+      type: object
+      properties:
+        hospitalName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        phone:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        reasonForDiscontinuance:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.License:
+      type: object
+      properties:
+        state:
+          type: string
+          nullable: true
+        isCurrentlyPracticingInState:
+          type: boolean
+          nullable: true
+        licenseNumber:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        isUnlimited:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    NpiProfile.NpiBasicModel:
+      type: object
+      properties:
+        replacementNpi:
+          type: integer
+          format: int64
+          nullable: true
+        ein:
+          type: string
+          nullable: true
+        organizationName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        namePrefix:
+          type: string
+          nullable: true
+        nameSuffix:
+          type: string
+          nullable: true
+        credential:
+          type: string
+          nullable: true
+        enumerationDate:
+          type: string
+          format: date-time
+          nullable: true
+        lastUpdateDate:
+          type: string
+          format: date-time
+          nullable: true
+        certificationDate:
+          type: string
+          format: date-time
+          nullable: true
+        isSoleProprietor:
+          type: boolean
+          nullable: true
+        isOrganizationalSubpart:
+          type: boolean
+          nullable: true
+        parentOrganizationLbn:
+          type: string
+          nullable: true
+        parentOrganizationTin:
+          type: string
+          nullable: true
+        authorizedOfficialNamePrefix:
+          type: string
+          nullable: true
+        authorizedOfficialNameSuffix:
+          type: string
+          nullable: true
+        authorizedOfficialCredential:
+          type: string
+          nullable: true
+        authorizedOfficialFirstName:
+          type: string
+          nullable: true
+        authorizedOfficialLastName:
+          type: string
+          nullable: true
+        authorizedOfficialMiddleName:
+          type: string
+          nullable: true
+        authorizedOfficialTelephoneNumber:
+          type: string
+          nullable: true
+        authorizedOfficialTitleOrPosition:
+          type: string
+          nullable: true
+        deactivationDate:
+          type: string
+          format: date-time
+          nullable: true
+        reactivationDate:
+          type: string
+          format: date-time
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.DeaCds:
+      type: object
+      properties:
+        limitations:
+          type: boolean
+          nullable: true
+        limitationsExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderProfileImportModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider profile import.
+          format: uuid
+        providerId:
+          type: string
+          description: The provider unique identifier associated with this profile import.
+          format: uuid
+        source:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          description: Source of the import.
+          example: CaqhPo
+        started:
+          type: string
+          description: TimeStamp of this import when started
+          format: date-time
+        completed:
+          type: string
+          description: TimeStamp of this import when completed or `null` if is still in progress.
+          format: date-time
+        status:
+          enum:
+          - Pending
+          - Working
+          - Completed
+          - Failed
+          type: string
+          description: Status of the import. If it is `Pending` or `Working` it means that we are busy performing the import. Once the status is `Completed` or `Failed` the import is done.
+        trigger:
+          enum:
+          - Manual
+          - Automated
+          type: string
+          description: Type of trigger for this import.
+        failureCode:
+          enum:
+          - DatabaseError
+          - InvalidImportSourceError
+          - UnknownError
+          - ParseError
+          - NpiSourceError
+          - ImportError
+          - ImportRequestError
+          - SourceError
+          - NoContent
+          - BadRequest
+          - Unauthorized
+          - Forbidden
+          - NotFound
+          - NotAcceptable
+          - RequestTimeout
+          - TooManyRequests
+          - InternalServerError
+          - BadGateway
+          - ServiceUnavailable
+          - GatewayTimeout
+          type: string
+          description: If set it means there was an error during the import or `null` when no errors happened.
+        failureReason:
+          $ref: '#/components/schemas/FailureModel'
+        profile:
+          $ref: '#/components/schemas/ProviderProfileModel'
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/IProviderParameter'
+      additionalProperties: false
+    CaqhProfile.CdsRegistration:
+      type: object
+      properties:
+        state:
+          type: string
+          nullable: true
+        cds:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        isUnlimited:
+          type: boolean
+          nullable: true
+        limitationsDescription:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderProfileModel:
+      oneOf:
+      - $ref: '#/components/schemas/AmericanMedicalAssociationPhysicianAssistantProviderProfileModel'
+      - $ref: '#/components/schemas/AmericanMedicalAssociationPhysicianProviderProfileModel'
+      - $ref: '#/components/schemas/NpiProfile.NpiProviderProfileModel'
+      - $ref: '#/components/schemas/CaqhProfile.CaqhProviderProfileModel'
+      discriminator:
+        propertyName: type
+        mapping:
+          AmericanMedicalAssociationPhysicianAssistant: '#/components/schemas/AmericanMedicalAssociationPhysicianAssistantProviderProfileModel'
+          AmericanMedicalAssociationPhysician: '#/components/schemas/AmericanMedicalAssociationPhysicianProviderProfileModel'
+          Npi: '#/components/schemas/NpiProfile.NpiProviderProfileModel'
+          Caqh: '#/components/schemas/CaqhProfile.CaqhProviderProfileModel'
+    CaqhProfile.Training:
+      type: object
+      properties:
+        hospitalName:
+          type: string
+          nullable: true
+        affiliatedSchoolName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        fax:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        trainingType:
+          type: string
+          nullable: true
+        programType:
+          type: string
+          nullable: true
+        department:
+          type: string
+          nullable: true
+        completed:
+          type: boolean
+          nullable: true
+        specialty:
+          type: string
+          nullable: true
+        completionDate:
+          type: string
+          format: date-time
+          nullable: true
+        directorName:
+          type: string
+          nullable: true
+        disciplinaryActionsExplanation:
+          type: string
+          nullable: true
+        reasonForLeaving:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Licensure:
+      type: object
+      properties:
+        licenseLimitations:
+          type: boolean
+          nullable: true
+        licenseLimitationsExplanation:
+          type: string
+          nullable: true
+        licenseChallenge:
+          type: boolean
+          nullable: true
+        licenseChallengeExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.SpecialSkillsInfo:
+      type: object
+      properties:
+        patientAgeGroups:
+          type: string
+          nullable: true
+        patientGenderIdentities:
+          type: string
+          nullable: true
+        specialPatientPopulations:
+          type: string
+          nullable: true
+        otherSpecialExperience:
+          type: string
+          nullable: true
+        otherSpecify:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderProfileImportRequestModel:
+      required:
+      - providerId
+      - source
+      type: object
+      properties:
+        providerId:
+          type: string
+          description: The provider unique identifier associated with this profile import.
+          format: uuid
+        source:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          description: Source of the import.
+          example: CaqhPo
+      additionalProperties: false
+    CaqhProfile.CaqhAddress:
+      type: object
+      properties:
+        streetLine1:
+          type: string
+          nullable: true
+        streetLine2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        province:
+          type: string
+          nullable: true
+        county:
+          type: string
+          nullable: true
+        zipCode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Malpractice:
+      type: object
+      properties:
+        liabilityActions:
+          type: boolean
+          nullable: true
+        liabilityActionsExplanation:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        claimResolutionDate:
+          type: string
+          format: date-time
+          nullable: true
+        claimStatus:
+          type: string
+          nullable: true
+        dateClaimFiled:
+          type: string
+          format: date-time
+          nullable: true
+        dateOfOccurrence:
+          type: string
+          format: date-time
+          nullable: true
+        descriptionOfAllegations:
+          type: string
+          nullable: true
+        descriptionOfInjury:
+          type: string
+          nullable: true
+        resultedInDeath:
+          type: string
+          nullable: true
+        insuranceCarrierName:
+          type: string
+          nullable: true
+        numberOfCodefendants:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        policyNumber:
+          type: string
+          nullable: true
+        resolutionMethod:
+          type: string
+          nullable: true
+        settlementAmount:
+          type: string
+          nullable: true
+        isIncludedInNpdb:
+          type: boolean
+          nullable: true
+        primaryDefendant:
+          type: string
+          nullable: true
+        yourInvolvement:
+          type: string
+          nullable: true
+      additionalProperties: false
+    FacilityAccreditationInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        accreditationNumber:
+          type: string
+          nullable: true
+        accreditationProgram:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderBoardCertificationNumberParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        boardCertificationNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.PrepareInfo:
+      type: object
+      properties:
+        nuccGrouping:
+          type: string
+          nullable: true
+        providerType:
+          type: string
+          nullable: true
+        practiceSetting:
+          type: string
+          nullable: true
+        primaryPracticeState:
+          type: string
+          nullable: true
+        otherPracticeStates:
+          type: string
+          nullable: true
+        applicationType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.Privileges:
+      type: object
+      properties:
+        hospitalName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CaqhProfile.CaqhAddress'
+        isPrimaryHospital:
+          type: boolean
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        reasonForDiscontinuance:
+          type: string
+          nullable: true
+        annualAdmissionPercentage:
+          type: string
+          nullable: true
+        numberOfAdmitsPerMonth:
+          type: string
+          nullable: true
+        facilityType:
+          type: string
+          nullable: true
+        isMilitaryHospital:
+          type: boolean
+          nullable: true
+        isAmbulatorySurgeryCenter:
+          type: boolean
+          nullable: true
+        isSecondaryHospital:
+          type: boolean
+          nullable: true
+        otherHospitalName:
+          type: string
+          nullable: true
+        department:
+          type: string
+          nullable: true
+        contact:
+          $ref: '#/components/schemas/CaqhProfile.ContactInfo'
+      additionalProperties: false
+    CaqhProfile.CaqhDisclosureInfo:
+      type: object
+      properties:
+        licensure:
+          $ref: '#/components/schemas/CaqhProfile.Licensure'
+        hospitalPrivilegesAndOtherAffiliations:
+          $ref: '#/components/schemas/CaqhProfile.HospitalPrivilegesAndOtherAffiliations'
+        education:
+          $ref: '#/components/schemas/CaqhProfile.DisclosureEducation'
+        deaCds:
+          $ref: '#/components/schemas/CaqhProfile.DeaCds'
+        medicareMedicaid:
+          $ref: '#/components/schemas/CaqhProfile.MedicareMedicaid'
+        otherSanctions:
+          $ref: '#/components/schemas/CaqhProfile.OtherSanctions'
+        liabilityInsurance:
+          $ref: '#/components/schemas/CaqhProfile.LiabilityInsurance'
+        malpracticeHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.Malpractice'
+          nullable: true
+        criminalHistory:
+          $ref: '#/components/schemas/CaqhProfile.CriminalHistory'
+        abilityToPerformJob:
+          $ref: '#/components/schemas/CaqhProfile.AbilityToPerformJob'
+      additionalProperties: false
+    CaqhProfile.MedicareMedicaid:
+      type: object
+      properties:
+        limitations:
+          type: boolean
+          nullable: true
+        limitationsExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.DisclosureInfo:
+      type: object
+      properties:
+        caqh:
+          $ref: '#/components/schemas/CaqhProfile.CaqhDisclosureInfo'
+        stateDisclosures:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/CaqhProfile.StateDisclosureSection'
+            nullable: true
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.HospitalPrivilegesAndOtherAffiliations:
+      type: object
+      properties:
+        clinicalPrivilegesLimitations:
+          type: boolean
+          nullable: true
+        clinicalPrivilegesLimitationsExplanation:
+          type: string
+          nullable: true
+        privilegesWhileUnderInvestigation:
+          type: boolean
+          nullable: true
+        privilegesWhileUnderInvestigationExplanation:
+          type: string
+          nullable: true
+        terminatedForCause:
+          type: boolean
+          nullable: true
+        terminatedForCauseExplanation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhProfile.CaqhProviderProfileModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Npi
+          - CaqhPo
+          - AmericanMedicalAssociationPhysician
+          - AmericanMedicalAssociationPhysicianAssistant
+          type: string
+          readOnly: true
+          example: CaqhPo
+        reportPath:
+          type: string
+          nullable: true
+        headers:
+          $ref: '#/components/schemas/CaqhProfile.CaqhHeaders'
+        prepare:
+          $ref: '#/components/schemas/CaqhProfile.PrepareInfo'
+        personalInformation:
+          $ref: '#/components/schemas/CaqhProfile.PersonalInfo'
+        professionalIdentificationNumbers:
+          $ref: '#/components/schemas/CaqhProfile.ProfessionalIdentificationNumbers'
+        education:
+          $ref: '#/components/schemas/CaqhProfile.EducationInfo'
+        trainingInformation:
+          $ref: '#/components/schemas/CaqhProfile.TrainingInfo'
+        specialtyInformation:
+          $ref: '#/components/schemas/CaqhProfile.SpecialtyInfo'
+        practiceLocations:
+          $ref: '#/components/schemas/CaqhProfile.PracticeLocations'
+        hospitalAffiliations:
+          $ref: '#/components/schemas/CaqhProfile.HospitalAffiliations'
+        credentialingInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.CredentialingInfo'
+          nullable: true
+        insuranceInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.InsuranceInfo'
+          nullable: true
+        workHistoryInformation:
+          $ref: '#/components/schemas/CaqhProfile.WorkHistoryInfo'
+        referencesInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaqhProfile.ReferencesInfo'
+          nullable: true
+        disclosureInformation:
+          $ref: '#/components/schemas/CaqhProfile.DisclosureInfo'
+        documentInformation:
+          $ref: '#/components/schemas/CaqhProfile.DocumentInfo'
+        certificationInformation:
+          $ref: '#/components/schemas/CaqhProfile.CertificationInfo'
+      additionalProperties: false
+    ProviderEducationParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        graduationYear:
+          type: integer
+          format: int32
+          nullable: true
+        schoolName:
+          type: string
+          nullable: true
+        schoolCode:
+          type: string
+          nullable: true
+        branchCode:
+          type: string
+          nullable: true
+        degree:
+          type: string
+          nullable: true
+      additionalProperties: false
+    FacilityNameParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'Enter your bearer token in the format: Bearer {your token}'
+      scheme: bearer
+      bearerFormat: custom
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+- name: Definitions
+  tags:
+  - Definitions
+- name: Providers
+  tags:
+  - Providers
+  - ProvidersInfo
+  - ProviderProfiles
+  - Notes
+  - Files
+- name: Facilities
+  tags:
+  - Facilities
+  - FacilitiesInfo
+  - FacilitiesSpecialties
+- name: Verifications
+  tags:
+  - Licenses
+  - Datasets
+  - DEA
+  - BoardCertifications
+- name: Monitoring
+  tags:
+  - Monitoring
+  - Alerts
+- name: Credentialing
+  tags:
+  - CredentialingRequests
+- name: Integrations
+  tags:
+  - Integrations
+  - Webhooks
+- name: Audits
+  tags:
+  - Audit
+- name: Account
+  tags:
+  - Users
+- name: Organizations
+  tags:
+  - Reports
+- name: Models
+  tags:
+  - Dataset Records
+  - Webhook Callbacks

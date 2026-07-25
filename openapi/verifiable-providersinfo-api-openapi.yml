@@ -1,0 +1,5567 @@
+openapi: 3.0.1
+info:
+  title: Verifiable API Documentation Alerts ProvidersInfo API
+  description: "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n"
+  version: 26.12.1.962
+servers:
+- url: https://discovery.verifiable.com/api
+  description: Production
+- url: https://discovery-staging.verifiable.com/api
+  description: Staging
+tags:
+- name: ProvidersInfo
+  description: 'Endpoints related to managing and listing providers'' info. Education, insurance, training and CAQH login info can be added to providers. Education, liability insurance, and training can have multiple entries. They can be created via POST, modified by PATCH, and removed by DELETE methods. CAQH login info is a single entry per provider and can be created or replaced by PUT, removed by DELETE and modified by PATCH method.
+
+    '
+paths:
+  /providers/{providerId}/info:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get info for the existing provider
+
+        '
+      description: 'Returns the info for a specific provider.
+
+        '
+      operationId: GetProviderInfo
+      parameters:
+      - name: providerId
+        in: path
+        description: Identifier of the provider to get the data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: providerInfoType
+        in: query
+        description: 'If not specified, will return all data for the provider. Info types can be combined, ex.: `providerInfoType=licenses&providerInfoType=deaRegistrations`.'
+        schema:
+          type: array
+          items:
+            enum:
+            - BasicInfo
+            - Caqh
+            - LiabilityInsurance
+            - Education
+            - Training
+            - WorkHistory
+            - DeaRegistrations
+            - Licenses
+            - BoardCertifications
+            - Certificates
+            - MedicaidEnrollment
+            - Specialty
+            - HospitalAffiliation
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              example:
+                BasicInfo:
+                  firstName: string
+                  lastName: string
+                  dateOfBirth: '2019-08-24T14:15:22.0000000Z'
+                  ssn: '***'
+                  id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                  credentialingStatus: string
+                  aliases:
+                  - firstName: string
+                    lastName: string
+                  addresses:
+                  - state: AL
+                    zipCode: string
+                    city: string
+                    addressLine1: string
+                    type: Unspecified
+                  emails:
+                  - email: string
+                    type: Unspecified
+                  phone: string
+                  languages:
+                  - string
+                  gender: string
+                  ethnicity:
+                  - enum
+                  credentialedDate: '2019-08-24T14:15:22.0000000Z'
+                  recredentialedDates:
+                  - '2019-08-24T14:15:22.0000000Z'
+                  providerType: string
+                CaqhInfo:
+                  caqhId: string
+                LiabilityInsurance:
+                - id: Guid
+                  name: string
+                  isSelfInsured: bool
+                  originalEffectiveDate: Date
+                  effectiveDate: Date
+                  expirationDate: Date
+                  CoverageType: enum
+                  isUnlimitedCoverage: bool
+                  includesTailCoverage: bool
+                  occurrenceCoverageAmount: number
+                  aggregateCoverageAmount: number
+                  policyNumber: string
+                  lastUpdatedAt: '2025-06-03T20:49:03.9129760Z'
+                Education:
+                - id: Guid
+                  ecfmgNumber: string
+                  ecfmgIssueDate: '2019-08-24T14:15:22.0000000Z'
+                  graduateType: enum
+                  schoolName: string
+                  schoolCode: string
+                  startDate: '2000-09-01T00:00:00.0000000Z'
+                  endDate: '2000-09-01T00:00:00.0000000Z'
+                  completed: bool
+                  degree: string
+                  lastUpdatedAt: '2025-06-03T20:49:03.9129760Z'
+                Training:
+                - id: Guid
+                  trainingType: enum
+                  institutionName: string
+                  schoolCode: string
+                  startDate: '2000-09-01T00:00:00.0000000Z'
+                  endDate: '2000-09-01T00:00:00.0000000Z'
+                  completed: bool
+                  lastUpdatedAt: '2025-06-03T20:49:03.9129760Z'
+                MedicaidEnrollment:
+                - state: AL
+                  nonVerifiedInfo:
+                    effectiveDate: '2026-01-01'
+                    providerType: string
+                    providerSpeciality: string
+                    address: string
+                    inOutState: enum
+                    issueDate: '2010-01-01'
+                  id: 2939ccdc-4acf-4b3a-b2d2-40f1e078882a
+                  lastUpdatedAt: '2025-06-03T20:49:03.9129760Z'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+      x-codeSamples: []
+  /providers/{providerId}/info/caqh:
+    put:
+      tags:
+      - ProvidersInfo
+      summary: 'Create or replace caqh login info for the existing provider
+
+        '
+      description: 'Creates or replaces the CAQH login info for a specific provider.
+
+        '
+      operationId: PutProviderCaqhInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaqhLoginInfoRequestModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaqhLoginInfoModel'
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s CAQH login info
+
+        '
+      description: 'Change an existing CAQH login info associated with the specified provider.
+
+
+        '
+      operationId: PatchProviderCaqhInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaqhLoginInfoRequestModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaqhLoginInfoModel'
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing CAQH login info for the existing provider
+
+        '
+      description: 'Deletes an existing CAQH login info associated with the specified provider.
+
+        '
+      operationId: DeleteProviderCaqhInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get CAQH login info for a provider
+
+        '
+      description: 'Returns the CAQH login info associated with the specified provider.
+
+        '
+      operationId: GetProviderCaqhInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaqhLoginInfoModel'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/aliases/{aliasId}:
+    put:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s alias
+
+        '
+      description: 'Change an existing alias associated with the specified provider.
+
+        '
+      operationId: PutProviderAliasInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: aliasId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderAliasRequestModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAliasModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/aliases/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get alias for the existing provider
+
+        '
+      description: 'Returns the alias for a specific provider.
+
+        '
+      operationId: GetProviderAliasInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAliasModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing alias for the existing provider
+
+        '
+      description: 'Deletes an existing alias associated with the specified provider.
+
+        '
+      operationId: DeleteProviderAliasInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/boardCertifications:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create board certification info for the existing provider
+
+        '
+      description: 'Add a board certification info for the specified provider.
+
+        '
+      operationId: CreateBoardCertificationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoardCertificationInfoRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardCertificationInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List board certifications
+
+        '
+      description: 'Returns all board certifications associated with the specified provider.
+
+        '
+      operationId: ListBoardCertificationsInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BoardCertificationInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/boardCertifications/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get board certification for the existing provider
+
+        '
+      description: 'Returns the board certification for a specific provider.
+
+        '
+      operationId: GetBoardCertificationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardCertificationInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s board certification info
+
+        '
+      description: 'Change an existing board certification info associated with the specified provider.
+
+        '
+      operationId: PatchBoardCertificationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoardCertificationInfoPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardCertificationInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing board certification info for the existing provider
+
+        '
+      description: 'Deletes an existing board certification info associated with the specified provider.
+
+        '
+      operationId: DeleteBoardCertificationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/certificates:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create certificate info for the existing provider
+
+        '
+      description: 'Add a certificate info for the specified provider.
+
+        '
+      operationId: CreateCertificateInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateInfoRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List certificates
+
+        '
+      description: 'Returns all certificates associated with the specified provider.
+
+        '
+      operationId: ListCertificateInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CertificateInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/certificates/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get certificate for the existing provider
+
+        '
+      description: 'Returns the certificate for a specific provider.
+
+        '
+      operationId: GetCertificateInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s certificate info
+
+        '
+      description: 'Change an existing certificate info associated with the specified provider.
+
+        '
+      operationId: PatchCertificateInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateInfoPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing certificate info for the existing provider
+
+        '
+      description: 'Deletes an existing certificate info associated with the specified provider.
+
+        '
+      operationId: DeleteCertificateInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/liabilityInsurances:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create liability insurance info for the existing provider
+
+        '
+      description: 'Creates the liability insurance info for a specific provider.
+
+        '
+      operationId: CreateProviderLiabilityInsurance
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LiabilityInsuranceRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiabilityInsuranceModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List liability insurances
+
+        '
+      description: 'Returns all liability insurances associated with the specified provider.
+
+        '
+      operationId: ListProviderLiabilityInsuranceInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiabilityInsuranceModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/liabilityInsurances/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get liability insurance for the existing provider
+
+        '
+      description: 'Returns the liability insurance for a specific provider.
+
+        '
+      operationId: GetProviderLiabilityInsuranceInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiabilityInsuranceModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s liability insurance
+
+        '
+      description: 'Change an existing liability insurance associated with the specified provider.
+
+        '
+      operationId: PatchProviderLiabilityInsuranceInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LiabilityInsurancePatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiabilityInsuranceModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing liability insurance info for the existing provider
+
+        '
+      description: 'Deletes an existing insurance info associated with the specified provider.
+
+        '
+      operationId: DeleteProviderLiabilityInsuranceInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/educations:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create education info for the existing provider
+
+        '
+      description: 'Creates the education info for a specific provider.
+
+        '
+      operationId: CreateProviderEducationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EducationRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EducationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List educations
+
+        '
+      description: 'Returns all educations associated with the specified provider.
+
+        '
+      operationId: ListProviderEducationInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EducationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/educations/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get education for the existing provider
+
+        '
+      description: 'Returns the education for a specific provider.
+
+        '
+      operationId: GetProviderEducationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EducationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s education info
+
+        '
+      description: 'Change an existing education info associated with the specified provider.
+
+        '
+      operationId: PatchProviderEducationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EducationPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EducationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing education info for the existing provider
+
+        '
+      description: 'Deletes an existing education info associated with the specified provider.
+
+        '
+      operationId: DeleteProviderEducationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/trainings:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create training info for the existing provider
+
+        '
+      description: 'Creates the training info for a specific provider.
+
+        '
+      operationId: CreateProviderTrainingInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List trainings
+
+        '
+      description: 'Returns all trainings associated with the specified provider.
+
+        '
+      operationId: ListProviderTrainingInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainingModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/trainings/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get training for the existing provider
+
+        '
+      description: 'Returns the training for a specific provider.
+
+        '
+      operationId: GetProviderTrainingInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s training info
+
+        '
+      description: 'Change an existing training info associated with the specified provider.
+
+        '
+      operationId: PatchProviderTrainingInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing training info for the existing provider
+
+        '
+      description: 'Deletes an existing training info associated with the specified provider.
+
+        '
+      operationId: DeleteProviderTrainingInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/workHistory:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create work history info for the existing provider
+
+        '
+      description: 'Creates the work history info for a specific provider.
+
+        '
+      operationId: CreateProviderWorkHistoryInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkHistoryRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkHistoryModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List work history entries
+
+        '
+      description: 'Returns all work history entries associated with the specified provider.
+
+        '
+      operationId: ListProviderWorkHistoryInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkHistoryModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/workHistory/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get work history for the existing provider
+
+        '
+      description: 'Returns the work history for a specific provider.
+
+        '
+      operationId: GetProviderWorkHistoryInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkHistoryModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s work history info
+
+        '
+      description: 'Change an existing work history info associated with the specified provider.
+
+        '
+      operationId: PatchProviderWorkHistoryInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkHistoryPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkHistoryModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing work history info for the existing provider
+
+        '
+      description: 'Deletes an existing work history info associated with the specified provider.
+
+        '
+      operationId: DeleteProviderWorkHistoryInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/specialties:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create specialty for the existing provider
+
+        '
+      description: 'Creates a specialty for a specific provider. Each provider can have one Primary specialty, one Secondary specialty, and multiple Additional specialties. The same taxonomy cannot be used across multiple specialties for the same provider.
+
+        '
+      operationId: CreateProviderSpecialty
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderSpecialtyRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderSpecialtyModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '409':
+          description: Conflict
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List all specialties for a provider
+
+        '
+      description: 'Retrieves all specialties for a specific provider. A provider can have one Primary, one Secondary, and multiple Additional specialties.
+
+        '
+      operationId: ListProviderSpecialties
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProviderSpecialtyModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/specialties/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get specialty by identifier
+
+        '
+      description: 'Retrieves a specific specialty for a provider by its identifier.
+
+        '
+      operationId: GetProviderSpecialty
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderSpecialtyModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Update specialty for a provider
+
+        '
+      description: 'Updates a specific specialty for a provider. The same taxonomy cannot be used across multiple specialties for the same provider. Only one Primary and one Secondary specialty is allowed per provider.
+
+        '
+      operationId: PatchProviderSpecialty
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderSpecialtyPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderSpecialtyModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Conflict
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete specialty for a provider
+
+        '
+      description: 'Deletes a specific specialty for a provider by its identifier.
+
+        '
+      operationId: DeleteProviderSpecialty
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/hospitalAffiliations:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create hospital affiliation for an existing provider
+
+        '
+      description: 'Add a hospital affiliation for the specified provider.
+
+        '
+      operationId: CreateProviderHospitalAffiliation
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HospitalAffiliationRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HospitalAffiliationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List hospital affiliations for an existing provider
+
+        '
+      description: 'Returns all hospital affiliations for the specified provider.
+
+        '
+      operationId: ListProviderHospitalAffiliations
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HospitalAffiliationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/hospitalAffiliations/{id}:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get a hospital affiliation for an existing provider
+
+        '
+      description: 'Returns a specific hospital affiliation for the specified provider.
+
+        '
+      operationId: GetProviderHospitalAffiliation
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HospitalAffiliationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Update a hospital affiliation for an existing provider
+
+        '
+      description: 'Change an existing hospital affiliation associated with the specified provider.
+
+        '
+      operationId: PatchProviderHospitalAffiliation
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HospitalAffiliationPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HospitalAffiliationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete a hospital affiliation for an existing provider
+
+        '
+      description: 'Deletes an existing hospital affiliation associated with the specified provider.
+
+        '
+      operationId: DeleteProviderHospitalAffiliation
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/dea:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create DEA registration info for the existing provider
+
+        '
+      description: 'Add a DEA registration info for the specified provider.
+
+        '
+      operationId: CreateDeaRegistrationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeaRegistrationInfoRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeaRegistrationInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List DEA registrations
+
+        '
+      description: 'Returns all DEA registrations associated with the specified provider.
+
+        '
+      operationId: ListDeaRegistrationInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeaRegistrationInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/addresses:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create address for an existing provider
+
+        '
+      description: 'Add an address for the specified provider.
+
+        '
+      operationId: CreateProviderAddressInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderAddressRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAddressModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List addresses
+
+        '
+      description: 'Returns all addresses associated with the specified provider.
+
+        '
+      operationId: ListProviderAddressInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProviderAddressModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/aliases:
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List aliases
+
+        '
+      description: 'Returns all aliases associated with the specified provider.
+
+        '
+      operationId: ListProviderAliasInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProviderAliasModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create alias for an existing provider
+
+        '
+      description: 'Add an alias for the specified provider.
+
+        '
+      operationId: CreateProviderAliasInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderAliasRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAliasModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/emails:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create email for an existing provider
+
+        '
+      description: 'Add an email for the specified provider.
+
+        '
+      operationId: CreateProviderEmailInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderEmailRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderEmailModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List emails
+
+        '
+      description: 'Returns all emails associated with the specified provider.
+
+        '
+      operationId: ListProviderEmailInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProviderEmailModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/medicaidEnrollments:
+    post:
+      tags:
+      - ProvidersInfo
+      summary: 'Create medicaid enrollment info for the existing provider
+
+        '
+      description: 'Creates the medicaid enrollment info for a specific provider.
+
+        '
+      operationId: CreateProviderMedicaidEnrollmentInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicaidEnrollmentRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedicaidEnrollmentModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'List Medicaid enrollments
+
+        '
+      description: 'Returns all medicaid enrollments associated with the specified provider.
+
+        '
+      operationId: ListProviderMedicaidEnrollmentInfos
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedicaidEnrollmentModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/dea/{id}:
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing DEA registration info for the existing provider
+
+        '
+      description: 'Deletes an existing DEA registration info associated with the specified provider.
+
+        '
+      operationId: DeleteDeaRegistrationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get DEA registration for the existing provider
+
+        '
+      description: 'Returns the DEA registration for a specific provider.
+
+        '
+      operationId: GetDeaRegistrationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeaRegistrationInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s DEA registration info
+
+        '
+      description: 'Change an existing DEA registration info associated with the specified provider.
+
+        '
+      operationId: PatchDeaRegistrationInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeaRegistrationInfoPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeaRegistrationInfoModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/addresses/{id}:
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing address for a provider
+
+        '
+      description: 'Deletes an existing address associated with the specified provider.
+
+        '
+      operationId: DeleteProviderAddressInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get address for an existing provider
+
+        '
+      description: 'Returns the address for a specific provider.
+
+        '
+      operationId: GetProviderAddressInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAddressModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s address
+
+        '
+      description: 'Change an existing address associated with the specified provider.
+
+        '
+      operationId: PutProviderAddressInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderAddressRequestModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAddressModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/emails/{id}:
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing email for a provider
+
+        '
+      description: 'Deletes an existing email associated with the specified provider.
+
+        '
+      operationId: DeleteProviderEmailInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get email for the existing provider
+
+        '
+      description: 'Returns the email for a specific provider.
+
+        '
+      operationId: GetProviderEmailInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderEmailModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s email
+
+        '
+      description: 'Change an existing email associated with the specified provider.
+
+        '
+      operationId: PutProviderEmailInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderEmailRequestModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderEmailModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/info/medicaidEnrollments/{id}:
+    delete:
+      tags:
+      - ProvidersInfo
+      summary: 'Delete existing Medicaid enrollment info for the existing provider
+
+        '
+      description: 'Deletes an existing Medicaid enrollment info associated with the specified provider.
+
+        '
+      operationId: DeleteProviderMedicaidEnrollmentInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - ProvidersInfo
+      summary: 'Get medicaid enrollment info for the existing provider
+
+        '
+      description: 'Returns the medicaid enrollment for a specific provider
+
+        '
+      operationId: GetProviderMedicaidEnrollmentInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedicaidEnrollmentModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - ProvidersInfo
+      summary: 'Change an existing provider''s Medicaid enrollment info
+
+        '
+      description: 'Change an existing Medicaid enrollment info associated with the specified provider.
+
+        '
+      operationId: PatchProviderMedicaidEnrollmentInfo
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicaidEnrollmentPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedicaidEnrollmentModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+components:
+  schemas:
+    ProviderAddressModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located.
+        zipCode:
+          minLength: 1
+          type: string
+          description: The postal code associated with the address.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+        id:
+          type: string
+          description: Unique identifier for this address.
+          format: uuid
+      additionalProperties: false
+    HospitalAffiliationAdmittingPrivilegesPatchModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `AdmittingPrivileges`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting privilege status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        isPrimaryHospital:
+          type: boolean
+          description: Indicates whether this is the provider's primary hospital.
+        privilegeType:
+          enum:
+          - FullAndUnrestricted
+          - Temporary
+          - Limited
+          type: string
+          description: The type of admitting privilege.
+        department:
+          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
+        admissionPercent:
+          type: string
+          description: The percentage of admissions at this hospital.
+        admitsPerMonth:
+          type: string
+          description: The average number of admissions per month.
+        specialtyLimitationsAtInstitution:
+          type: string
+          description: Any specialty limitations at this institution.
+        privilegeRestrictionExplanation:
+          type: string
+          description: Explanation for any privilege restrictions.
+        timeSpentPercentAtThisFacility:
+          type: string
+          description: The percentage of time the provider spends at this facility.
+        admitClientsFromPracticeLocations:
+          type: string
+          description: The practice locations from which clients are admitted.
+        isMilitaryHospital:
+          type: boolean
+          description: Indicates whether this is a military hospital.
+        exitExplanation:
+          type: string
+          description: Explanation for exiting the affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Patch model for updating an admitting privileges hospital affiliation.
+    MedicaidEnrollmentPatchModel:
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
+      additionalProperties: false
+    HospitalAffiliationAdmittingArrangementsPatchModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `AdmittingArrangements`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting arrangement status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        whoAdmitsForYou:
+          enum:
+          - AProviderInMyPractice
+          - AProviderNotInMyPractice
+          - AHospitalistGroup
+          - Other
+          type: string
+          description: Indicates who admits patients on behalf of the provider.
+        admittingProvider:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
+        admittingOrganization:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
+        department:
+          type: string
+          description: The department associated with the admitting arrangement.
+        details:
+          type: string
+          description: Additional details about the admitting arrangement.
+      additionalProperties: false
+      description: Patch model for updating an admitting arrangements hospital affiliation.
+    EducationPatchModel:
+      type: object
+      properties:
+        ecfmgNumber:
+          type: string
+          description: Educational Commission for Foreign Medical Graduates number
+        ecfmgIssueDate:
+          type: string
+          description: Timestamp when the certificate was issued
+          format: date-time
+        graduateType:
+          enum:
+          - Undergraduate
+          - Professional
+          - FifthPathway
+          type: string
+          description: Degree program type
+        schoolName:
+          type: string
+          description: Name of school
+        schoolCode:
+          type: string
+          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
+        branchCode:
+          type: string
+          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
+        startDate:
+          type: string
+          description: Timestamp when this provider started their degree program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished their degree program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed their graduate education at this school
+        degree:
+          type: string
+          description: Degree awarded
+      additionalProperties: false
+    WorkHistoryAddressModel:
+      required:
+      - addressLine1
+      - city
+      type: object
+      properties:
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located. This property is required when the country field is set to US.
+        zipCode:
+          type: string
+          description: The postal code associated with the address. This property is required when the country field is set to US.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        countryId:
+          type: string
+          description: The ID of the country from the countries list.
+          format: uuid
+      additionalProperties: false
+    MedicaidEnrollmentNonVerifiedInfoModel:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The effective date of this Medicaid enrollment.
+          format: date-time
+        providerType:
+          type: string
+          description: The type of provider of this Medicaid enrollment.
+        providerSpecialty:
+          type: string
+          description: Provider specialty associated with the Medicaid enrollment.
+        address:
+          type: string
+          description: Provider address.
+        inState:
+          type: boolean
+      additionalProperties: false
+    HospitalAffiliationHospitalInfoModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the hospital.
+        address:
+          $ref: '#/components/schemas/HospitalAffiliationAddressModel'
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalContactInfoModel'
+      additionalProperties: false
+      description: Information about the hospital associated with a provider's affiliation.
+    MedicaidEnrollmentModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this Medicaid enrollment.
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: State of the Medicaid enrollment.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
+      additionalProperties: false
+    ProviderAddressRequestModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - type
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located.
+        zipCode:
+          minLength: 1
+          type: string
+          description: The postal code associated with the address.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+      additionalProperties: false
+    CertificateInfoModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid
+        type:
+          enum:
+          - AhaBasicLifeSupport
+          - AhaAdvancedCardiacLifeSupport
+          - AhaNeonatalAdvancedLifeSupport
+          - AhaPediatricAdvancedLifeSupport
+          - CaliforniaCertifiedWellnessCoach
+          - AhaAdvancedCardiovascularLifeSupport
+          - AhaAdvancedStrokeLifeSupport
+          - AhaPears
+          - AhaHeartsaver
+          type: string
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        certificateNumber:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        certifyingOrganization:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CaqhLoginInfoRequestModel:
+      type: object
+      properties:
+        caqhId:
+          type: string
+          description: ' CAQH provider ID.'
+      additionalProperties: false
+      example:
+        caqhId: string
+    DeaRegistrationInfoPatchModel:
+      required:
+      - registrationNumber
+      type: object
+      properties:
+        registrationNumber:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    WorkHistoryPatchModel:
+      type: object
+      properties:
+        workHistoryType:
+          enum:
+          - Employment
+          - Gap
+          type: string
+          description: '`Gap` identifies a time period when this provider was not employed'
+        name:
+          type: string
+          description: Name or employer
+        jobTitle:
+          type: string
+          description: Job title while working for this employer
+        address:
+          $ref: '#/components/schemas/WorkHistoryAddressModel'
+        phone:
+          type: string
+          description: Employer phone number
+        startDate:
+          type: string
+          description: Timestamp when this provider started working for the employer
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished working for the employer
+          format: date-time
+        isCurrentEmployer:
+          type: boolean
+          description: Identifies if the provider is currently employed by the employer
+        departureReason:
+          type: string
+          description: Reason provider left this employer
+        gapExplanation:
+          type: string
+          description: If work history type is set to Gap provider must explain reason for the gap in employment
+      additionalProperties: false
+    HospitalAffiliationNonAdmittingAffiliationsPatchModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `NonAdmittingAffiliations`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's non-admitting affiliation status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        description:
+          type: string
+          description: Description of the non-admitting affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: 'The reason the affiliation was discontinued. Allowed values: `VoluntaryResignation`, `Suspension`, `TerminationWithCause`, `HospitalClosed`.'
+      additionalProperties: false
+      description: Patch model for updating a non-admitting hospital affiliation.
+    NonAdmittingAffiliationsModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Always `NonAdmittingAffiliations`.
+          readOnly: true
+        lastUpdatedAt:
+          type: string
+          description: The date and time the entry was last updated.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier of the hospital affiliation.
+          format: uuid
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's non-admitting affiliation status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        description:
+          type: string
+          description: Description of the non-admitting affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Response model for a non-admitting hospital affiliation.
+    HospitalAffiliationAddressModel:
+      required:
+      - addressLine1
+      - city
+      type: object
+      properties:
+        addressLine1:
+          minLength: 1
+          type: string
+          description: Primary street address.
+        addressLine2:
+          type: string
+          description: Secondary address information
+        city:
+          minLength: 1
+          type: string
+          description: City.
+        state:
+          type: string
+          description: State or province.
+        zipCode:
+          type: string
+          description: ZIP or postal code.
+        country:
+          type: string
+          description: Country.
+      additionalProperties: false
+      description: Physical address of a hospital associated with a provider's affiliation.
+    HospitalAffiliationAdmittingOrganizationModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the admitting organization.
+        npi:
+          type: integer
+          description: The National Provider Identifier (NPI) of the admitting organization.
+          format: int64
+      additionalProperties: false
+      description: Information about the organization that admits patients on behalf of the provider.
+    WorkHistoryModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this work history entry
+          format: uuid
+        workHistoryType:
+          enum:
+          - Employment
+          - Gap
+          type: string
+          description: '`Gap` identifies a time period when this provider was not employed'
+        name:
+          type: string
+          description: Name or employer
+        jobTitle:
+          type: string
+          description: Job title while working for this employer
+        address:
+          $ref: '#/components/schemas/WorkHistoryAddressModel'
+        phone:
+          type: string
+          description: Employer phone number
+        startDate:
+          type: string
+          description: Timestamp when this provider started working for the employer
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished working for the employer
+          format: date-time
+        isCurrentEmployer:
+          type: boolean
+          description: Identifies if the provider is currently employed by the employer
+        departureReason:
+          type: string
+          description: Reason provider left this employer
+        gapExplanation:
+          type: string
+          description: If work history type is set to Gap provider must explain reason for the gap in employment
+      additionalProperties: false
+    WorkHistoryRequestModel:
+      type: object
+      properties:
+        workHistoryType:
+          enum:
+          - Employment
+          - Gap
+          type: string
+          description: '`Gap` identifies a time period when this provider was not employed'
+        name:
+          type: string
+          description: Name or employer
+        jobTitle:
+          type: string
+          description: Job title while working for this employer
+        address:
+          $ref: '#/components/schemas/WorkHistoryAddressModel'
+        phone:
+          type: string
+          description: Employer phone number
+        startDate:
+          type: string
+          description: Timestamp when this provider started working for the employer
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished working for the employer
+          format: date-time
+        isCurrentEmployer:
+          type: boolean
+          description: Identifies if the provider is currently employed by the employer
+        departureReason:
+          type: string
+          description: Reason provider left this employer
+        gapExplanation:
+          type: string
+          description: If work history type is set to Gap provider must explain reason for the gap in employment
+      additionalProperties: false
+    HospitalAffiliationPatchModel:
+      oneOf:
+      - $ref: '#/components/schemas/HospitalAffiliationAdmittingPrivilegesPatchModel'
+      - $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsPatchModel'
+      - $ref: '#/components/schemas/HospitalAffiliationNonAdmittingAffiliationsPatchModel'
+      description: The base patch model for updating a hospital affiliation. Use one of the concrete types based on the `type` discriminator.
+      discriminator:
+        propertyName: type
+        mapping:
+          AdmittingPrivileges: '#/components/schemas/HospitalAffiliationAdmittingPrivilegesPatchModel'
+          AdmittingArrangements: '#/components/schemas/HospitalAffiliationAdmittingArrangementsPatchModel'
+          NonAdmittingAffiliations: '#/components/schemas/HospitalAffiliationNonAdmittingAffiliationsPatchModel'
+    AdmittingArrangementsModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Always `AdmittingArrangements`.
+          readOnly: true
+        lastUpdatedAt:
+          type: string
+          description: The date and time the entry was last updated.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier of the hospital affiliation.
+          format: uuid
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting arrangement status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        whoAdmitsForYou:
+          enum:
+          - AProviderInMyPractice
+          - AProviderNotInMyPractice
+          - AHospitalistGroup
+          - Other
+          type: string
+          description: Indicates who admits patients on behalf of the provider.
+        admittingProvider:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
+        admittingOrganization:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
+        department:
+          type: string
+          description: The department associated with the admitting arrangement.
+        details:
+          type: string
+          description: Additional details about the admitting arrangement.
+      additionalProperties: false
+      description: Response model for an admitting arrangements hospital affiliation.
+    ProviderSpecialtyModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the specialty was created or last modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this specialty.
+          format: uuid
+        type:
+          enum:
+          - Primary
+          - Secondary
+          - Additional
+          type: string
+          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed).
+        taxonomyId:
+          type: string
+          description: Identifier of the taxonomy associated with this specialty. The same taxonomy cannot be used across multiple specialties for the same provider.
+          format: uuid
+      additionalProperties: false
+    HospitalAffiliationAdmittingArrangementsProviderModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The admitting provider's first name.
+        lastName:
+          type: string
+          description: The admitting provider's last name.
+        isSpecialityMatching:
+          type: boolean
+          description: Indicates whether the admitting provider's specialty matches the credentialed provider's specialty.
+        npi:
+          type: integer
+          description: The National Provider Identifier (NPI) of the admitting provider.
+          format: int64
+      additionalProperties: false
+      description: Information about the provider who admits patients on behalf of the provider.
+    AdmittingArrangementsRequestModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `AdmittingArrangements`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting arrangement status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        whoAdmitsForYou:
+          enum:
+          - AProviderInMyPractice
+          - AProviderNotInMyPractice
+          - AHospitalistGroup
+          - Other
+          type: string
+          description: Indicates who admits patients on behalf of the provider.
+        admittingProvider:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
+        admittingOrganization:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
+        department:
+          type: string
+          description: The department associated with the admitting arrangement.
+        details:
+          type: string
+          description: Additional details about the admitting arrangement.
+      additionalProperties: false
+      description: Request model for creating an admitting arrangements hospital affiliation.
+    DeaRegistrationInfoModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid
+        registrationNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderEmailRequestModel:
+      required:
+      - email
+      - type
+      type: object
+      properties:
+        email:
+          minLength: 1
+          type: string
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
+          type: string
+          description: The type of the email.
+      additionalProperties: false
+    ProviderSpecialtyPatchModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Primary
+          - Secondary
+          - Additional
+          type: string
+          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed). When changing the type, validation ensures only one Primary and one Secondary specialty exists per provider.
+        taxonomyId:
+          type: string
+          description: Identifier of the taxonomy associated with this specialty. Must reference a valid taxonomy. The same taxonomy cannot be used across multiple specialties for the same provider.
+          format: uuid
+      additionalProperties: false
+    DeaRegistrationInfoRequestModel:
+      required:
+      - registrationNumber
+      type: object
+      properties:
+        registrationNumber:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    LiabilityInsuranceRequestModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of insurance
+        isSelfInsured:
+          type: boolean
+          description: Indicates whether the provider is self insured
+        originalEffectiveDate:
+          type: string
+          description: Timestamp of when the initial insurance coverage became effective
+          format: date-time
+        currentEffectiveDate:
+          type: string
+          description: Timestamp of when the current insurance coverage became effective
+          format: date-time
+        currentExpirationDate:
+          type: string
+          description: Timestamp of when the current insurance expires
+          format: date-time
+        coverageType:
+          enum:
+          - Individual
+          - Shared
+          - Occurrence
+          - ClaimsMade
+          type: string
+          description: 'Insurance type of coverage. Default: `Individual`'
+        isUnlimitedCoverage:
+          type: boolean
+          description: Does this insurance have unlimited coverage?
+        includesTailCoverage:
+          type: boolean
+          description: Indicates tail coverage status
+        occurrenceCoverageAmount:
+          type: number
+          description: Amount of coverage provided by this insurance per occurrence
+          format: double
+        aggregateCoverageAmount:
+          type: number
+          description: Amount of aggregated coverage provided by this insurance
+          format: double
+        policyNumber:
+          type: string
+          description: Insurance policy number
+      additionalProperties: false
+    HospitalAffiliationAdmittingPrivilegeDepartmentContactModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The contact's first name.
+        middleInitial:
+          type: string
+          description: The contact's middle initial.
+        lastName:
+          type: string
+          description: The contact's last name.
+        phone:
+          type: string
+          description: The contact's phone number.
+        email:
+          type: string
+          description: The contact's email address.
+        fax:
+          type: string
+          description: The contact's fax number.
+      additionalProperties: false
+      description: Contact information for a department associated with an admitting privileges affiliation.
+    CertificateInfoRequestModel:
+      required:
+      - certificateNumber
+      - type
+      type: object
+      properties:
+        type:
+          enum:
+          - AhaBasicLifeSupport
+          - AhaAdvancedCardiacLifeSupport
+          - AhaNeonatalAdvancedLifeSupport
+          - AhaPediatricAdvancedLifeSupport
+          - CaliforniaCertifiedWellnessCoach
+          - AhaAdvancedCardiovascularLifeSupport
+          - AhaAdvancedStrokeLifeSupport
+          - AhaPears
+          - AhaHeartsaver
+          type: string
+        certificateNumber:
+          minLength: 1
+          type: string
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        certifyingOrganization:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderEmailModel:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
+          type: string
+          description: The type of the email.
+        id:
+          type: string
+          description: Unique identifier for this specific email.
+          format: uuid
+      additionalProperties: false
+    BoardCertificationInfoPatchModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Provider first name mentioned on the board certification. This field will be used for board certification lookup.
+        lastName:
+          type: string
+          description: Provider last name mentioned on the board certification. This field will be used for board certification lookup.
+        isPrimary:
+          type: boolean
+          description: If the flag is set, certification will be set as primary for the provider.
+        boardCertificationNumber:
+          type: string
+          description: A unique Id provided by certification board to the provider. This will be used for board certification lookup.
+        specialty:
+          type: string
+        taxonomyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of NUCC taxonomy IDs to associate with this board certification. Each ID must reference a valid taxonomy id. Must be unique. Set to empty array to remove all taxonomies. Set to null to leave unchanged.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/NonVerifiedBoardCertificationInfoModel'
+      additionalProperties: false
+    ProviderAliasModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          type: string
+          description: The last (family) name of this alias.
+        id:
+          type: string
+          description: Unique identifier for this alias.
+          format: uuid
+      additionalProperties: false
+    HospitalAffiliationRequestModel:
+      oneOf:
+      - $ref: '#/components/schemas/AdmittingPrivilegesRequestModel'
+      - $ref: '#/components/schemas/AdmittingArrangementsRequestModel'
+      - $ref: '#/components/schemas/NonAdmittingAffiliationsRequestModel'
+      description: The base request model for creating a hospital affiliation. Use one of the concrete types based on the `type` discriminator.
+      discriminator:
+        propertyName: type
+        mapping:
+          AdmittingPrivileges: '#/components/schemas/AdmittingPrivilegesRequestModel'
+          AdmittingArrangements: '#/components/schemas/AdmittingArrangementsRequestModel'
+          NonAdmittingAffiliations: '#/components/schemas/NonAdmittingAffiliationsRequestModel'
+    AdmittingPrivilegesRequestModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `AdmittingPrivileges`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting privilege status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        isPrimaryHospital:
+          type: boolean
+          description: Indicates whether this is the provider's primary hospital.
+        privilegeType:
+          enum:
+          - FullAndUnrestricted
+          - Temporary
+          - Limited
+          type: string
+          description: The type of admitting privilege.
+        department:
+          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
+        admissionPercent:
+          type: string
+          description: The percentage of admissions at this hospital.
+        admitsPerMonth:
+          type: string
+          description: The average number of admissions per month.
+        specialtyLimitationsAtInstitution:
+          type: string
+          description: Any specialty limitations at this institution.
+        privilegeRestrictionExplanation:
+          type: string
+          description: Explanation for any privilege restrictions.
+        timeSpentPercentAtThisFacility:
+          type: string
+          description: The percentage of time the provider spends at this facility.
+        admitClientsFromPracticeLocations:
+          type: string
+          description: The practice locations from which clients are admitted.
+        isMilitaryHospital:
+          type: boolean
+          description: Indicates whether this is a military hospital.
+        exitExplanation:
+          type: string
+          description: Explanation for exiting the affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Request model for creating an admitting privileges hospital affiliation.
+    NonVerifiedBoardCertificationInfoModel:
+      type: object
+      properties:
+        initialCertificationDate:
+          type: string
+          description: Initial certification date for this board certificate.
+          format: date-time
+        recertificationDate:
+          type: string
+          description: Last recertification date for this board certificate.
+          format: date-time
+        expirationDate:
+          type: string
+          description: Expiration date for this board certificate.
+          format: date-time
+      additionalProperties: false
+    AdmittingPrivilegesModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Always `AdmittingPrivileges`.
+          readOnly: true
+        lastUpdatedAt:
+          type: string
+          description: The date and time the entry was last updated.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier of the hospital affiliation.
+          format: uuid
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting privilege status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        isPrimaryHospital:
+          type: boolean
+          description: Indicates whether this is the provider's primary hospital.
+        privilegeType:
+          enum:
+          - FullAndUnrestricted
+          - Temporary
+          - Limited
+          type: string
+          description: The type of admitting privilege.
+        department:
+          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
+        admissionPercent:
+          type: string
+          description: The percentage of admissions at this hospital.
+        admitsPerMonth:
+          type: string
+          description: The average number of admissions per month.
+        specialtyLimitationsAtInstitution:
+          type: string
+          description: Any specialty limitations at this institution.
+        privilegeRestrictionExplanation:
+          type: string
+          description: Explanation for any privilege restrictions.
+        timeSpentPercentAtThisFacility:
+          type: string
+          description: The percentage of time the provider spends at this facility.
+        admitClientsFromPracticeLocations:
+          type: string
+          description: The practice locations from which clients are admitted.
+        isMilitaryHospital:
+          type: boolean
+          description: Indicates whether this is a military hospital.
+        exitExplanation:
+          type: string
+          description: Explanation for exiting the affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Response model for an admitting privileges hospital affiliation.
+    HospitalAffiliationHospitalContactInfoModel:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: The hospital's phone number.
+        faxNumber:
+          type: string
+          description: The hospital's fax number.
+        emailAddress:
+          type: string
+          description: The hospital's email address.
+      additionalProperties: false
+      description: Contact information for a hospital associated with a provider's affiliation.
+    LiabilityInsurancePatchModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of insurance
+        isSelfInsured:
+          type: boolean
+          description: Indicates whether the provider is self insured
+        originalEffectiveDate:
+          type: string
+          description: Timestamp of when the initial insurance coverage became effective
+          format: date-time
+        currentEffectiveDate:
+          type: string
+          description: Timestamp of when the current insurance coverage became effective
+          format: date-time
+        currentExpirationDate:
+          type: string
+          description: Timestamp of when the current insurance expires
+          format: date-time
+        coverageType:
+          enum:
+          - Individual
+          - Shared
+          - Occurrence
+          - ClaimsMade
+          type: string
+          description: 'Insurance type of coverage. Default: `Individual`'
+        isUnlimitedCoverage:
+          type: boolean
+          description: Does this insurance have unlimited coverage?
+        includesTailCoverage:
+          type: boolean
+          description: Indicates tail coverage status
+        occurrenceCoverageAmount:
+          type: number
+          description: Amount of coverage provided by this insurance per occurrence
+          format: double
+        aggregateCoverageAmount:
+          type: number
+          description: Amount of aggregated coverage provided by this insurance
+          format: double
+        policyNumber:
+          type: string
+          description: Insurance policy number
+      additionalProperties: false
+    TrainingPatchModel:
+      type: object
+      properties:
+        trainingType:
+          enum:
+          - Internship
+          - Residency
+          - Fellowship
+          - OtherTraining
+          - FacultyPositions
+          - Unspecified
+          type: string
+          description: The type of training pursued
+        institutionName:
+          type: string
+          description: Name of the institution where training occurred
+        schoolCode:
+          type: string
+          description: School code as defined by the National Student Clearinghouse Participation List
+        schoolName:
+          type: string
+          description: Affiliated Medical School Name
+        startDate:
+          type: string
+          description: Timestamp when this provider started the training program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished the training program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed the training program at this institution
+        speciality:
+          type: string
+          description: Designated Speciality of the training record
+        sponsoringState:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Sponsoring State of the training record
+      additionalProperties: false
+    BoardCertificationInfoModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this board certification
+          format: uuid
+        type:
+          enum:
+          - AmericanBoardofMedicalSpecialties
+          - NationalBoardforCertifiedCounselors
+          - AmericanBoardofClinicalSocialWork
+          - AmericanSpeechLanguageHearingAssociation
+          - AmericanNursesCredentialingCenter
+          - AmericanAcademyofNursePractitioners
+          - AmericanOsteopathicAssociation
+          - AmericanMedicalAssociation
+          - NationalBoardofCertificationandRecertificationforNurseAnesthetists
+          - AmericanAssociationofCriticalCareNurses
+          - AmericanMidwiferyCertificationBoard
+          - AmericanBoardofPodiatricMedicine
+          - AmericanBoardofOralImplantology
+          - AmericanBoardofOralMedicine
+          - AmericanBoardofOrofacialPain
+          - NuclearMedicineTechnologyCertificationBoard
+          - AmericanDentalBoardofAnesthesiology
+          - AmericanBoardofDentalPublicHealth
+          - AmericanBoardofPediatricDentistry
+          - AmericanBoardofPeriodontology
+          - AmericanBoardofInternalMedicine
+          - NationalCommissiononCertificationofPhysicianAssistants
+          - AmericanBoardofAllergyandImmunology
+          - AmericanBoardofAnesthesiology
+          - AmericanBoardofColonandRectalSurgery
+          - AmericanBoardofDermatology
+          - AmericanBoardofEmergencyMedicine
+          - AmericanBoardofFamilyMedicine
+          - AmericanBoardofGeneticsandGenomics
+          - AmericanBoardofNeurologicalSurgery
+          - AmericanBoardofNuclearMedicine
+          - AmericanBoardofObstetricsandGynecology
+          - AmericanBoardofOphthalmology
+          - AmericanBoardofOptometry
+          - AmericanBoardofOrthopaedicSurgery
+          - AmericanBoardofOtolaryngologyHeadandNeckSurgery
+          - AmericanBoardofPathology
+          - AmericanBoardofPediatrics
+          - AmericanBoardofPhysicalMedicineandRehabilitation
+          - AmericanBoardofPlasticSurgery
+          - AmericanBoardofPreventiveMedicine
+          - AmericanBoardofProfessionalPsychology
+          - AmericanBoardofPsychiatryandNeurology
+          - AmericanBoardofRadiology
+          - AmericanBoardofSurgery
+          - AmericanBoardofThoracicSurgery
+          - AmericanBoardofUrology
+          - AmericanOptometricAssociation
+          - AssociationofSocialWorkBoards
+          - AmericanBoardofFootandAnkleSurgery
+          - AmericanBoardofOralandMaxillofacialPathology
+          - AmericanBoardofOralandMaxillofacialSurgery
+          - AmericanBoardofOrthodontics
+          - AmericanBoardofEndodontics
+          - AmericanBoardofProsthodontics
+          - NationalBoardforCertificationinOccupationalTherapy
+          - BehaviorAnalystCertificationBoard
+          - InternationalBoardofLactationConsultantExaminers
+          - CommissionOnDieteticRegistration
+          - NationalCertificationCommissionforAcupunctureandOrientalMedicine
+          - PediatricNursingCertification
+          - NationalCertificationCorporation
+          - OncologyNursingCertificationCorporation
+          - AmericanBoardOfCardiovascularMedicine
+          - AmericanAcademyOfHIVMedicine
+          - NationalBoardOfPhysiciansAndSurgeons
+          - BoardOfPharmacySpecialties
+          - AmericanBoardofOralandMaxillofacialRadiology
+          - AmericanBoardofGeneralDentistry
+          - NationalAssociationofSchoolPsychologists
+          - NationalPhlebotomyAssociation
+          - NationalCenterForCompetencyTesting
+          - AmericanRegistryofRadiologyTechnologists
+          - DentalAssistingNationalBoard
+          - AmericanMedicalCertificationAssociation
+          - AmericanBoardofAddictionMedicine
+          - AmericanRegistryForDiagnosticMedicalSonography
+          - AmericanBoardofMultipleSpecialtiesinPodiatry
+          - AmericanBoardOfObesityMedicine
+          - NationalCommissionForCertificationOfAnesthesiologistAssistants
+          - CardiovascularCredentialingInternational
+          - NationalBoardOfEchocardiography
+          - AmericanAlliedHealth
+          - AmericanMedicalTechnologists
+          - NationalAssociationForHealthProfessionals
+          - NationalHealthCareerAssociation
+          - NationalPhlebotomyCertificationExamination
+          - NationalAssociationOfPhlebotomyTechnicians
+          - NationalHealthcareCertificationOrganization
+          - NationalPerformanceSpecialists
+          - NationalRegistryOfAlliedHealthProfessionals
+          - NationalRegistryofEmergencyMedicalTechnicians
+          - BoardofCertificationforEmergencyNursing
+          - CertificationBoardforMusicTherapists
+          - AmericanBoardOfChiropracticInternists
+          - AmericanBoardOfPhysicalTherapySpecialties
+          - AmericanBoardofPhysicianSpecialties
+          - AmericanAcademyofOptometry
+          - PharmacyTechnicianCertificationBoard
+          - NationalBoardofSurgicalTechnologyandSurgicalAssisting
+          - AmericanBoardofPainMedicine
+          - ArtTherapyCredentialsBoard
+          - BehavioralInterventionCertificationCouncil
+          - AmericanOsteopathicBoardOfAnesthesiology
+          - AmericanOsteopathicBoardOfDermatology
+          - AmericanOsteopathicBoardOfEmergencyMedicine
+          - AmericanOsteopathicBoardOfFamilyPhysicians
+          - AmericanOsteopathicBoardOfInternalMedicine
+          - AmericanOsteopathicBoardOfNeurologyAndPsychiatry
+          - AmericanOsteopathicBoardOfNeuromusculoskeletalMedicine
+          - AmericanOsteopathicBoardOfNuclearMedicine
+          - AmericanOsteopathicBoardOfObstetricsAndGynecology
+          - AmericanOsteopathicBoardOfOphthalmologyAndOtolaryngology
+          - AmericanOsteopathicBoardOfOrthopedicSurgery
+          - AmericanOsteopathicBoardOfPathology
+          - AmericanOsteopathicBoardOfPediatrics
+          - AmericanOsteopathicBoardOfPhysicalMedicineAndRehabilitation
+          - AmericanOsteopathicBoardOfPreventiveMedicine
+          - AmericanOsteopathicBoardOfProctology
+          - AmericanOsteopathicBoardOfRadiology
+          - AmericanOsteopathicBoardOfSurgery
+          type: string
+          description: Board certification type.
+        firstName:
+          type: string
+          description: Provider first name mentioned on the board certification. This field will be used for board certification lookup.
+        lastName:
+          type: string
+          description: Provider last name mentioned on the board certification. This field will be used for board certification lookup.
+        boardCertificationNumber:
+          type: string
+          description: A unique Id provided by certification board to the provider. This will be used for board certification lookup.
+        specialty:
+          type: string
+        taxonomyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of NUCC taxonomy IDs associated with this board certification.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/NonVerifiedBoardCertificationInfoModel'
+        isPrimary:
+          type: boolean
+          description: If the flag is set, certification will be set as primary for the provider.
+      additionalProperties: false
+    LiabilityInsuranceModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this insurance
+          format: uuid
+        name:
+          type: string
+          description: Name of insurance
+        isSelfInsured:
+          type: boolean
+          description: Indicates whether the provider is self insured
+        originalEffectiveDate:
+          type: string
+          description: Timestamp of when the initial insurance coverage became effective
+          format: date-time
+        currentEffectiveDate:
+          type: string
+          description: Timestamp of when the current insurance coverage became effective
+          format: date-time
+        currentExpirationDate:
+          type: string
+          description: Timestamp of when the current insurance expires
+          format: date-time
+        coverageType:
+          enum:
+          - Individual
+          - Shared
+          - Occurrence
+          - ClaimsMade
+          type: string
+          description: 'Insurance type of coverage. Default: `Individual`'
+        isUnlimitedCoverage:
+          type: boolean
+          description: Does this insurance have unlimited coverage?
+        includesTailCoverage:
+          type: boolean
+          description: Indicates tail coverage status
+        occurrenceCoverageAmount:
+          type: number
+          description: Amount of coverage provided by this insurance per occurrence
+          format: double
+        aggregateCoverageAmount:
+          type: number
+          description: Amount of aggregated coverage provided by this insurance
+          format: double
+        policyNumber:
+          type: string
+          description: Insurance policy number
+      additionalProperties: false
+    CaqhLoginInfoModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        caqhId:
+          type: string
+          description: ' CAQH provider ID.'
+      additionalProperties: false
+    CertificateInfoPatchModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        certificateNumber:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        certifyingOrganization:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderAliasRequestModel:
+      required:
+      - firstName
+      - lastName
+      type: object
+      properties:
+        firstName:
+          minLength: 1
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          minLength: 1
+          type: string
+          description: The last (family) name of this alias.
+      additionalProperties: false
+    EducationRequestModel:
+      type: object
+      properties:
+        ecfmgNumber:
+          type: string
+          description: Educational Commission for Foreign Medical Graduates number
+        ecfmgIssueDate:
+          type: string
+          description: Timestamp when the certificate was issued
+          format: date-time
+        graduateType:
+          enum:
+          - Undergraduate
+          - Professional
+          - FifthPathway
+          type: string
+          description: Degree program type
+        schoolName:
+          type: string
+          description: Name of school
+        schoolCode:
+          type: string
+          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
+        branchCode:
+          type: string
+          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
+        startDate:
+          type: string
+          description: Timestamp when this provider started their degree program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished their degree program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed their graduate education at this school
+        degree:
+          type: string
+          description: Degree awarded
+      additionalProperties: false
+    NonAdmittingAffiliationsRequestModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `NonAdmittingAffiliations`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's non-admitting affiliation status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        description:
+          type: string
+          description: Description of the non-admitting affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Request model for creating a non-admitting hospital affiliation.
+    ProviderSpecialtyRequestModel:
+      required:
+      - taxonomyId
+      - type
+      type: object
+      properties:
+        type:
+          enum:
+          - Primary
+          - Secondary
+          - Additional
+          type: string
+          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed).
+        taxonomyId:
+          type: string
+          description: Identifier of the taxonomy associated with this specialty. Must reference a valid taxonomy. The same taxonomy cannot be used across multiple specialties for the same provider.
+          format: uuid
+      additionalProperties: false
+    BoardCertificationInfoRequestModel:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          enum:
+          - AmericanBoardofMedicalSpecialties
+          - NationalBoardforCertifiedCounselors
+          - AmericanBoardofClinicalSocialWork
+          - AmericanSpeechLanguageHearingAssociation
+          - AmericanNursesCredentialingCenter
+          - AmericanAcademyofNursePractitioners
+          - AmericanOsteopathicAssociation
+          - AmericanMedicalAssociation
+          - NationalBoardofCertificationandRecertificationforNurseAnesthetists
+          - AmericanAssociationofCriticalCareNurses
+          - AmericanMidwiferyCertificationBoard
+          - AmericanBoardofPodiatricMedicine
+          - AmericanBoardofOralImplantology
+          - AmericanBoardofOralMedicine
+          - AmericanBoardofOrofacialPain
+          - NuclearMedicineTechnologyCertificationBoard
+          - AmericanDentalBoardofAnesthesiology
+          - AmericanBoardofDentalPublicHealth
+          - AmericanBoardofPediatricDentistry
+          - AmericanBoardofPeriodontology
+          - AmericanBoardofInternalMedicine
+          - NationalCommissiononCertificationofPhysicianAssistants
+          - AmericanBoardofAllergyandImmunology
+          - AmericanBoardofAnesthesiology
+          - AmericanBoardofColonandRectalSurgery
+          - AmericanBoardofDermatology
+          - AmericanBoardofEmergencyMedicine
+          - AmericanBoardofFamilyMedicine
+          - AmericanBoardofGeneticsandGenomics
+          - AmericanBoardofNeurologicalSurgery
+          - AmericanBoardofNuclearMedicine
+          - AmericanBoardofObstetricsandGynecology
+          - AmericanBoardofOphthalmology
+          - AmericanBoardofOptometry
+          - AmericanBoardofOrthopaedicSurgery
+          - AmericanBoardofOtolaryngologyHeadandNeckSurgery
+          - AmericanBoardofPathology
+          - AmericanBoardofPediatrics
+          - AmericanBoardofPhysicalMedicineandRehabilitation
+          - AmericanBoardofPlasticSurgery
+          - AmericanBoardofPreventiveMedicine
+          - AmericanBoardofProfessionalPsychology
+          - AmericanBoardofPsychiatryandNeurology
+          - AmericanBoardofRadiology
+          - AmericanBoardofSurgery
+          - AmericanBoardofThoracicSurgery
+          - AmericanBoardofUrology
+          - AmericanOptometricAssociation
+          - AssociationofSocialWorkBoards
+          - AmericanBoardofFootandAnkleSurgery
+          - AmericanBoardofOralandMaxillofacialPathology
+          - AmericanBoardofOralandMaxillofacialSurgery
+          - AmericanBoardofOrthodontics
+          - AmericanBoardofEndodontics
+          - AmericanBoardofProsthodontics
+          - NationalBoardforCertificationinOccupationalTherapy
+          - BehaviorAnalystCertificationBoard
+          - InternationalBoardofLactationConsultantExaminers
+          - CommissionOnDieteticRegistration
+          - NationalCertificationCommissionforAcupunctureandOrientalMedicine
+          - PediatricNursingCertification
+          - NationalCertificationCorporation
+          - OncologyNursingCertificationCorporation
+          - AmericanBoardOfCardiovascularMedicine
+          - AmericanAcademyOfHIVMedicine
+          - NationalBoardOfPhysiciansAndSurgeons
+          - BoardOfPharmacySpecialties
+          - AmericanBoardofOralandMaxillofacialRadiology
+          - AmericanBoardofGeneralDentistry
+          - NationalAssociationofSchoolPsychologists
+          - NationalPhlebotomyAssociation
+          - NationalCenterForCompetencyTesting
+          - AmericanRegistryofRadiologyTechnologists
+          - DentalAssistingNationalBoard
+          - AmericanMedicalCertificationAssociation
+          - AmericanBoardofAddictionMedicine
+          - AmericanRegistryForDiagnosticMedicalSonography
+          - AmericanBoardofMultipleSpecialtiesinPodiatry
+          - AmericanBoardOfObesityMedicine
+          - NationalCommissionForCertificationOfAnesthesiologistAssistants
+          - CardiovascularCredentialingInternational
+          - NationalBoardOfEchocardiography
+          - AmericanAlliedHealth
+          - AmericanMedicalTechnologists
+          - NationalAssociationForHealthProfessionals
+          - NationalHealthCareerAssociation
+          - NationalPhlebotomyCertificationExamination
+          - NationalAssociationOfPhlebotomyTechnicians
+          - NationalHealthcareCertificationOrganization
+          - NationalPerformanceSpecialists
+          - NationalRegistryOfAlliedHealthProfessionals
+          - NationalRegistryofEmergencyMedicalTechnicians
+          - BoardofCertificationforEmergencyNursing
+          - CertificationBoardforMusicTherapists
+          - AmericanBoardOfChiropracticInternists
+          - AmericanBoardOfPhysicalTherapySpecialties
+          - AmericanBoardofPhysicianSpecialties
+          - AmericanAcademyofOptometry
+          - PharmacyTechnicianCertificationBoard
+          - NationalBoardofSurgicalTechnologyandSurgicalAssisting
+          - AmericanBoardofPainMedicine
+          - ArtTherapyCredentialsBoard
+          - BehavioralInterventionCertificationCouncil
+          - AmericanOsteopathicBoardOfAnesthesiology
+          - AmericanOsteopathicBoardOfDermatology
+          - AmericanOsteopathicBoardOfEmergencyMedicine
+          - AmericanOsteopathicBoardOfFamilyPhysicians
+          - AmericanOsteopathicBoardOfInternalMedicine
+          - AmericanOsteopathicBoardOfNeurologyAndPsychiatry
+          - AmericanOsteopathicBoardOfNeuromusculoskeletalMedicine
+          - AmericanOsteopathicBoardOfNuclearMedicine
+          - AmericanOsteopathicBoardOfObstetricsAndGynecology
+          - AmericanOsteopathicBoardOfOphthalmologyAndOtolaryngology
+          - AmericanOsteopathicBoardOfOrthopedicSurgery
+          - AmericanOsteopathicBoardOfPathology
+          - AmericanOsteopathicBoardOfPediatrics
+          - AmericanOsteopathicBoardOfPhysicalMedicineAndRehabilitation
+          - AmericanOsteopathicBoardOfPreventiveMedicine
+          - AmericanOsteopathicBoardOfProctology
+          - AmericanOsteopathicBoardOfRadiology
+          - AmericanOsteopathicBoardOfSurgery
+          type: string
+          description: Board certification type.
+        firstName:
+          type: string
+          description: Provider first name mentioned on the board certification. This field will be used for board certification lookup.
+        lastName:
+          type: string
+          description: Provider last name mentioned on the board certification. This field will be used for board certification lookup.
+        isPrimary:
+          type: boolean
+          description: If the flag is set, certification will be set as primary for the provider.
+        boardCertificationNumber:
+          type: string
+          description: A unique Id provided by certification board to the provider. This will be used for board certification lookup.
+        specialty:
+          type: string
+        taxonomyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of NUCC taxonomy IDs to associate with this board certification. Each ID must reference a valid taxonomy id. Must be unique. Optional - can be null or empty array.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/NonVerifiedBoardCertificationInfoModel'
+      additionalProperties: false
+    HospitalAffiliationModel:
+      oneOf:
+      - $ref: '#/components/schemas/AdmittingPrivilegesModel'
+      - $ref: '#/components/schemas/AdmittingArrangementsModel'
+      - $ref: '#/components/schemas/NonAdmittingAffiliationsModel'
+      discriminator:
+        propertyName: type
+        mapping:
+          AdmittingPrivileges: '#/components/schemas/AdmittingPrivilegesModel'
+          AdmittingArrangements: '#/components/schemas/AdmittingArrangementsModel'
+          NonAdmittingAffiliations: '#/components/schemas/NonAdmittingAffiliationsModel'
+    HospitalAffiliationDepartmentModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the department.
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingPrivilegeDepartmentContactModel'
+      additionalProperties: false
+      description: Department information associated with an admitting privileges affiliation.
+    TrainingRequestModel:
+      type: object
+      properties:
+        trainingType:
+          enum:
+          - Internship
+          - Residency
+          - Fellowship
+          - OtherTraining
+          - FacultyPositions
+          - Unspecified
+          type: string
+          description: The type of training pursued
+        institutionName:
+          type: string
+          description: Name of the institution where training occurred
+        schoolCode:
+          type: string
+          description: School code as defined by the National Student Clearinghouse Participation List
+        schoolName:
+          type: string
+          description: Affiliated Medical School Name
+        startDate:
+          type: string
+          description: Timestamp when this provider started the training program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished the training program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed the training program at this institution
+        speciality:
+          type: string
+          description: Designated Speciality of the training record
+        sponsoringState:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Sponsoring State of the training record
+      additionalProperties: false
+    MedicaidEnrollmentRequestModel:
+      required:
+      - state
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: State of the Medicaid enrollment.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
+      additionalProperties: false
+    EducationModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this education
+          format: uuid
+        ecfmgNumber:
+          type: string
+          description: Educational Commission for Foreign Medical Graduates number
+        ecfmgIssueDate:
+          type: string
+          description: Timestamp when the certificate was issued
+          format: date-time
+        graduateType:
+          enum:
+          - Undergraduate
+          - Professional
+          - FifthPathway
+          type: string
+          description: Degree program type
+        schoolName:
+          type: string
+          description: Name of school
+        schoolCode:
+          type: string
+          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
+        branchCode:
+          type: string
+          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
+        startDate:
+          type: string
+          description: Timestamp when this provider started their degree program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished their degree program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed their graduate education at this school
+        degree:
+          type: string
+          description: Degree awarded
+      additionalProperties: false
+    HospitalAffiliationAdmittingArrangementsContactModel:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: The contact's phone number.
+        emailAddress:
+          type: string
+          description: The contact's email address.
+      additionalProperties: false
+      description: Contact information for the provider or organization managing admitting arrangements.
+    TrainingModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this training
+          format: uuid
+        trainingType:
+          enum:
+          - Internship
+          - Residency
+          - Fellowship
+          - OtherTraining
+          - FacultyPositions
+          - Unspecified
+          type: string
+          description: The type of training pursued
+        institutionName:
+          type: string
+          description: Name of the institution where training occurred
+        schoolCode:
+          type: string
+          description: School code as defined by the National Student Clearinghouse Participation List
+        schoolName:
+          type: string
+          description: Affiliated Medical School Name
+        startDate:
+          type: string
+          description: Timestamp when this provider started the training program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished the training program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed the training program at this institution
+        speciality:
+          type: string
+          description: Designated Speciality of the training record
+        sponsoringState:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Sponsoring State of the training record
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'Enter your bearer token in the format: Bearer {your token}'
+      scheme: bearer
+      bearerFormat: custom
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+- name: Definitions
+  tags:
+  - Definitions
+- name: Providers
+  tags:
+  - Providers
+  - ProvidersInfo
+  - ProviderProfiles
+  - Notes
+  - Files
+- name: Facilities
+  tags:
+  - Facilities
+  - FacilitiesInfo
+  - FacilitiesSpecialties
+- name: Verifications
+  tags:
+  - Licenses
+  - Datasets
+  - DEA
+  - BoardCertifications
+- name: Monitoring
+  tags:
+  - Monitoring
+  - Alerts
+- name: Credentialing
+  tags:
+  - CredentialingRequests
+- name: Integrations
+  tags:
+  - Integrations
+  - Webhooks
+- name: Audits
+  tags:
+  - Audit
+- name: Account
+  tags:
+  - Users
+- name: Organizations
+  tags:
+  - Reports
+- name: Models
+  tags:
+  - Dataset Records
+  - Webhook Callbacks

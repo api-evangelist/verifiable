@@ -1,0 +1,6237 @@
+openapi: 3.0.1
+info:
+  title: Verifiable API Documentation Alerts Providers API
+  description: "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n"
+  version: 26.12.1.962
+servers:
+- url: https://discovery.verifiable.com/api
+  description: Production
+- url: https://discovery-staging.verifiable.com/api
+  description: Staging
+tags:
+- name: Providers
+  description: 'Endpoints related to managing and listing providers. A provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider. The data registered on the provider will be matched against the data returned by these lookups and used to detect inconsistencies or problems in the data or licenses.
+
+    '
+paths:
+  /providers:
+    post:
+      tags:
+      - Providers
+      summary: 'Create a new provider
+
+        '
+      description: Creates a new provider that can be used to store information about this provider. Once a provider is created you can attach records, notes, documents and create other associations with this provider such as adding them to a Group or Payer.
+      operationId: CreateProvider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - Providers
+      summary: 'List providers
+
+        '
+      description: 'Returns a page of providers.
+
+        '
+      operationId: ListProviders
+      parameters:
+      - name: status
+        in: query
+        description: If set, the items will be filtered on providers with the specified status.
+        schema:
+          enum:
+          - None
+          - NeedsReview
+          - ExpiresSoon
+          - Expired
+          - Monitored
+          - NotMonitored
+          - NotFoundLicenses
+          - DisciplinaryActionLicenses
+          - UnableToVerifyLicenses
+          type: string
+      - name: providerName
+        in: query
+        description: If set, the items will be filtered on providers with the specified name or alias name.
+        schema:
+          type: string
+      - name: credentialingStatus
+        in: query
+        description: If set, the items will be filtered on providers with the specified credentialing status.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: providerTypeId
+        in: query
+        description: If set, the items will be filtered on providers with the specified provider type.
+        schema:
+          type: string
+          format: uuid
+      - name: npi
+        in: query
+        description: If set, the items will be filtered on providers with the specified npi number.
+        schema:
+          type: integer
+          format: int64
+      - name: deactivated
+        in: query
+        description: If set, the items will be filtered on providers with the specified deactivated status.
+        schema:
+          type: boolean
+      - name: nextCredentialingDateOnOrAfter
+        in: query
+        description: If set, the items will be filtered on providers with the specified next credentialing date that is equal to or greater than the date specified.
+        schema:
+          type: string
+          format: date
+      - name: nextCredentialingDateOnOrBefore
+        in: query
+        description: If set, the items will be filtered on providers with the specified next credentialing date that is equal to or less than the date specified.
+        schema:
+          type: string
+          format: date
+      - name: sortedBy
+        in: query
+        description: The property by which the returned data will be sorted.
+        schema:
+          enum:
+          - Id
+          - LastName
+          - FirstName
+          - CredentialingStatus
+          - CredentialedDate
+          type: string
+      - name: sort
+        in: query
+        description: If set, the properties and directions the returned data will be sorted by.
+        schema:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Id
+              - LastName
+              - FirstName
+              - CredentialingStatus
+              - CredentialedDate
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+      - name: offset
+        in: query
+        description: The offset for the page to start.
+        deprecated: true
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically.
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: The number of items to include in a single page.
+        schema:
+          type: integer
+          format: int32
+      - name: sortDirection
+        in: query
+        description: The direction the returned data will be sorted by.
+        schema:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderPageModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}:
+    get:
+      tags:
+      - Providers
+      summary: 'Get an existing provider
+
+        '
+      description: 'Returns the data for a specific provider.
+
+        '
+      operationId: GetProvider
+      parameters:
+      - name: providerId
+        in: path
+        description: Identifier of the provider to get the data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - Providers
+      summary: 'Patch an existing provider
+
+        '
+      description: 'Allows you to change a provider''s name or other data properties.
+
+        '
+      operationId: PatchProvider
+      parameters:
+      - name: providerId
+        in: path
+        description: Identifier of the provider to patch.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderPatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - Providers
+      summary: 'Delete an existing provider
+
+        '
+      description: 'This will delete the provider and all associated data such as attached licenses, NPI records, DEA registration etc.
+
+        '
+      operationId: DeleteProvider
+      parameters:
+      - name: providerId
+        in: path
+        description: Identifier of the provider to get the data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: cancelNpdbContinuousQuery
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/aggregations:
+    get:
+      tags:
+      - Providers
+      summary: 'Get provider aggregations
+
+        '
+      description: 'Returns aggregated counts for providers with different statuses.
+
+        '
+      operationId: GetProviderAggregations
+      parameters:
+      - name: providerDeactivated
+        in: query
+        description: If set, the items will be filtered on providers with the specified deactivated status.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderAggregationsModel'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providertypes:
+    get:
+      tags:
+      - Providers
+      summary: 'List provider types
+
+        '
+      description: 'Returns a list of all provider types that are currently supported.
+
+        '
+      operationId: ListProviderTypes
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProviderTypeModel'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/report:
+    post:
+      tags:
+      - Providers
+      summary: 'Generate report for an existing provider
+
+        '
+      description: 'Generates report for the specified provider.
+
+        '
+      operationId: ReportProvider
+      parameters:
+      - name: providerId
+        in: path
+        description: Identifier of the provider to generate report.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderReportRequestModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/recredentialing/due:
+    get:
+      tags:
+      - Providers
+      summary: 'List providers due for recredentialing
+
+        '
+      description: 'Returns a page of providers due for recredentialing.
+
+        '
+      operationId: ListProvidersDueForRecredentialing
+      parameters:
+      - name: includeUnassigned
+        in: query
+        schema:
+          type: boolean
+      - name: providerName
+        in: query
+        description: If set, the items will be filtered on providers with the specified name or alias name.
+        schema:
+          type: string
+      - name: providerNpi
+        in: query
+        description: If set, the items will be filtered on providers with the specified npi number.
+        schema:
+          type: integer
+          format: int64
+      - name: credentialingRequestOwnerId
+        in: query
+        description: If set, the items will be filtered on providers with the specified credentialing request owner IDs.
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      - name: credentialingRequestEventStatus
+        in: query
+        description: If set, the items will be filtered on providers with the specified credentialing request event statuses.
+        schema:
+          type: array
+          items:
+            enum:
+            - RequestSubmitted
+            - RequestInProgress
+            - AdditionalInformationRequested
+            - AdditionalInformationSubmitted
+            - CancellationRequested
+            - Cancelled
+            - Completed
+            - CompletedWithConcern
+            - UnableToComplete
+            - SecondAttemptMissingInfo
+            - ThirdAttemptMissingInfo
+            type: string
+      - name: nextCredentialingDateOnOrAfter
+        in: query
+        description: If set, the items will be filtered on providers with the specified next credentialing date that is equal to or greater than the date specified.
+        schema:
+          type: string
+          format: date
+      - name: nextCredentialingDateOnOrBefore
+        in: query
+        description: If set, the items will be filtered on providers with the specified next credentialing date that is equal to or less than the date specified.
+        schema:
+          type: string
+          format: date
+      - name: sortedBy
+        in: query
+        description: The property by which the returned data will be sorted.
+        schema:
+          enum:
+          - ProviderFirstName
+          - ProviderLastName
+          - RequestCreatedAt
+          type: string
+      - name: sort
+        in: query
+        description: If set, the properties and directions the returned data will be sorted by.
+        schema:
+          type: object
+          additionalProperties:
+            enum:
+            - Asc
+            - Desc
+            type: string
+      - name: offset
+        in: query
+        description: The offset for the page to start.
+        deprecated: true
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically.
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: The number of items to include in a single page.
+        schema:
+          type: integer
+          format: int32
+      - name: sortDirection
+        in: query
+        description: The direction the returned data will be sorted by.
+        schema:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderDueForRecredentialingPageModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/monitoring/sanctions-and-exclusions/aggregations:
+    get:
+      tags:
+      - Providers
+      summary: 'Get provider sanctions and exclusions monitoring categories aggregations
+
+        '
+      description: 'Returns aggregated counts for providers monitoring categories for sanctions and exclusions.
+
+        '
+      operationId: GetProviderMonitoringSanctionsAndExclusionsSummaryAggregations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderMonitoringSanctionsAndExclusionsSummaryAggregationsModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/monitoring/sanctions-and-exclusions:
+    get:
+      tags:
+      - Providers
+      summary: 'List provider monitoring summary for sanctions and exclusions
+
+        '
+      description: 'Returns a page of provider monitoring summaries for sanctions and exclusions.
+
+        '
+      operationId: ListProviderMonitoringSanctionsAndExclusionsSummary
+      parameters:
+      - name: name
+        in: query
+        description: If set, the items will be filtered on providers with the specified name/alias.
+        schema:
+          type: string
+      - name: npi
+        in: query
+        description: If set, the items will be filtered on providers with the specified NPI number.
+        schema:
+          type: integer
+          format: int64
+      - name: credentialingStatus
+        in: query
+        description: If set, the items will be filtered on providers with the specified credentialing status.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: monitoringCategory
+        in: query
+        description: If set, the items will be filtered on providers with the specified monitoring category.
+        schema:
+          enum:
+          - NotMonitored
+          - PartiallyMonitored
+          - FullyMonitored
+          type: string
+      - name: sortedBy
+        in: query
+        schema:
+          enum:
+          - FirstName
+          - LastName
+          - CredentialingStatus
+          type: string
+      - name: sort
+        in: query
+        description: If set, the properties and directions the returned data will be sorted by.
+        schema:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - FirstName
+              - LastName
+              - CredentialingStatus
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+      - name: offset
+        in: query
+        description: The offset for the page to start.
+        deprecated: true
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically.
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: The number of items to include in a single page.
+        schema:
+          type: integer
+          format: int32
+      - name: sortDirection
+        in: query
+        description: The direction in which the returned data will be sorted.
+        schema:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderMonitoringSanctionsAndExclusionsSummaryPageModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/npdb/transfer-enrollment:
+    post:
+      tags:
+      - Providers
+      summary: 'Initiate an NPDB enrollment transfer for a provider
+
+        '
+      description: 'Initiates the transfer of an existing an NPDB enrollment to the specified provider. Once a transfer has been initiated, review the dataset scan results to monitor the transfer operation.
+
+        '
+      operationId: TransferNpdbEnrollment
+      parameters:
+      - name: providerId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferNpdbRequestModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferNpdbResponseModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Conflict
+        '500':
+          description: Server Error
+        '503':
+          description: Server Error
+      security:
+      - Bearer: []
+components:
+  schemas:
+    ProviderAddressModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located.
+        zipCode:
+          minLength: 1
+          type: string
+          description: The postal code associated with the address.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+        id:
+          type: string
+          description: Unique identifier for this address.
+          format: uuid
+      additionalProperties: false
+    ProviderCaqhIdParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        caqhProviderId:
+          type: integer
+          format: int64
+      additionalProperties: false
+    NpiProfile.Identifier:
+      type: object
+      properties:
+        number:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        issuer:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderDueForRecredentialingPageModel:
+      type: object
+      properties:
+        sort:
+          type: object
+          additionalProperties:
+            enum:
+            - Asc
+            - Desc
+            type: string
+        previousCursor:
+          type: string
+        nextCursor:
+          type: string
+        nextOffset:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderDueForRecredentialingModel'
+        sortedBy:
+          enum:
+          - ProviderFirstName
+          - ProviderLastName
+          - RequestCreatedAt
+          type: string
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      additionalProperties: false
+    StateSanctionsAndExclusionsSource:
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderMonitoringSanctionsAndExclusionsSummaryPageModel:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - FirstName
+              - LastName
+              - CredentialingStatus
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderMonitoringSanctionsAndExclusionsSummaryModel'
+          description: The providers monitoring summaries in the current page.
+        sortedBy:
+          enum:
+          - FirstName
+          - LastName
+          - CredentialingStatus
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+      additionalProperties: false
+    FacilityCmsCertificationInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        certificateNumber:
+          type: string
+          nullable: true
+        certificateType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StateSanctionsAndExclusionsExclusionDetails:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        period:
+          type: string
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+        authority:
+          type: string
+          nullable: true
+        providerId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderGenderParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        gender:
+          enum:
+          - Unknown
+          - Male
+          - Female
+          - NonBinaryOrThirdGender
+          - Other
+          - PreferNotToSay
+          type: string
+      additionalProperties: false
+    NpdbDatasetRecord:
+      type: object
+      properties:
+        subjectInformation:
+          $ref: '#/components/schemas/NpdbSubjectInformation'
+        queryInformation:
+          $ref: '#/components/schemas/NpdbQueryInformation'
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbReportInformation'
+          nullable: true
+        reportPaths:
+          type: array
+          items:
+            type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ProviderSsnParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        ssn:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpdbReportingEntityInformation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the reporting entity.
+        additionalName:
+          type: string
+          description: Additional names used by the reporting entity.
+        address:
+          $ref: '#/components/schemas/NormalizedAddress'
+        officeOrName:
+          type: string
+          description: The current individual or office designated as the point of contact for this report.
+        titleOrDepartment:
+          type: string
+          description: Title or department of point of contact.
+        phone:
+          type: string
+          description: Telephone number.
+        entityReference:
+          type: string
+          description: Entity Internal Report Reference. A file number or other reference information established by the reporting entity to help identify this report in their files. This information is not used by the NPDB, but it will be provided on copies of the report sent to query(es).
+      additionalProperties: false
+      example:
+        name: CPMC Van Ness Campus
+        additionalName: Sutter Health
+        address:
+          state: CA
+          zipCode: '94123'
+          city: San Francisco
+          addressLine: The avenue
+        officeOrName: Silver Tower
+        titleOrDepartment: HR
+        phone: '5781234567'
+        entityReference: '00000001'
+    StateSanctionsAndExclusionsRecord:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/StateSanctionsAndExclusionsSource'
+        providerType:
+          type: string
+          nullable: true
+        aliases:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateSanctionsAndExclusionsProviderAlias'
+          nullable: true
+        exclusionDetails:
+          $ref: '#/components/schemas/StateSanctionsAndExclusionsExclusionDetails'
+        additionalInfo:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        address:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        npiNumber:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    NscDatasetRecord:
+      type: object
+      properties:
+        degreeDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Degree'
+          nullable: true
+        enrollmentDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Enrollment'
+          nullable: true
+        transaction:
+          $ref: '#/components/schemas/Transaction'
+        previousNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonName'
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpdbSubmitterInformation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the authorized submitter.
+        phone:
+          type: string
+          description: Phone number of the authorized submitter.
+        title:
+          type: string
+          description: Title of the authorized submitter.
+        date:
+          type: string
+          format: date-time
+      additionalProperties: false
+      example:
+        name: Jane Smith
+        phone: 345-6789
+        title: CEO
+    ProviderAliasModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          type: string
+          description: The last (family) name of this alias.
+        id:
+          type: string
+          description: Unique identifier for this alias.
+          format: uuid
+      additionalProperties: false
+    OfacAlternateIdentityRecord:
+      type: object
+      properties:
+        identityNumber:
+          type: integer
+          format: int64
+        type:
+          type: string
+          nullable: true
+        remarks:
+          type: string
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    OigExclusionsDatasetRecord:
+      type: object
+      properties:
+        businessName:
+          type: string
+          nullable: true
+        general:
+          type: string
+          nullable: true
+        specialty:
+          type: string
+          nullable: true
+        upin:
+          type: integer
+          format: int32
+          nullable: true
+        exclusionType:
+          type: string
+          nullable: true
+        exclusionDate:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        address:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        npiNumber:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    SamDatasetRecord:
+      type: object
+      properties:
+        classification:
+          enum:
+          - Unknown
+          - Firm
+          - Individual
+          - SpecialEntityDesignation
+          - Vessel
+          type: string
+        openDataFlag:
+          type: boolean
+        duns:
+          type: string
+          nullable: true
+        uei:
+          type: string
+          nullable: true
+        exclusionProgram:
+          enum:
+          - Unknown
+          - Reciprocal
+          - Nonreciprocal
+          - Procurement
+          - NonProcurement
+          type: string
+        excludingAgency:
+          type: string
+          nullable: true
+        ctCode:
+          type: string
+          nullable: true
+        exclusionType:
+          type: string
+          nullable: true
+        additionalComments:
+          type: string
+          nullable: true
+        activeDate:
+          type: string
+          format: date-time
+          nullable: true
+        terminationDate:
+          type: string
+          format: date-time
+          nullable: true
+        recordStatus:
+          enum:
+          - Active
+          - Inactive
+          type: string
+        crossReference:
+          type: string
+          nullable: true
+        samNumber:
+          type: string
+          nullable: true
+        cage:
+          type: string
+          nullable: true
+        creationDate:
+          type: string
+          format: date-time
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        address:
+          type: string
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        npiNumber:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    NpdbProfessionalSchoolInformation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the school
+        yearOfGraduation:
+          type: string
+          description: Year subject graduated on this school.
+      additionalProperties: false
+      example:
+        name: UC Davis
+        yearOfGraduation: '2008'
+    ProviderAggregationsModel:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of providers.
+          format: int32
+        aggregations:
+          description: For each state that a provider can have, a count of providers in that state.
+      additionalProperties: false
+      example:
+        total: 100
+        aggregations:
+          NeedsReview: 2
+          ExpiresSoon: 10
+          Expired: 0
+          Monitored: 100
+          NotMonitored: 0
+    ProviderNccpaBoardCertificateInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        number:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderMonitoringSanctionsAndExclusionsSummaryModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider.
+          format: uuid
+        firstName:
+          type: string
+          description: The first (given) name associated with this provider.
+        lastName:
+          type: string
+          description: The last (family) name associated with this provider.
+        npi:
+          type: integer
+          description: The 10 digit National Provider Identifiers (NPI) of this provider.
+          format: int64
+        providerType:
+          $ref: '#/components/schemas/ProviderTypeModel'
+        credentialingStatus:
+          type: string
+          description: The name of credentialing status. The default value is 'Data Collection'.
+        credentialedDate:
+          type: string
+          description: Date this provider was originally credentialed
+          format: date-time
+        nextCredentialingDate:
+          type: string
+          description: Date this provider should be credentialed next
+          format: date
+        monitorArray:
+          type: array
+          items:
+            enum:
+            - Sam
+            - MedicareOptOut
+            - OigFugitives
+            - OfacSdn
+            - OfacConsolidated
+            - OigExclusions
+            - StateSanctionsAndExclusions
+            - Npdb
+            - Dmf
+            - Npi
+            - Nsc
+            - Dea
+            - CmsPreclusion
+            - Tricare
+            - AmericanBoardofInternalMedicine
+            - NationalCommissiononCertificationofPhysicianAssistants
+            - Abms
+            - NationalBoardforCertifiedCounselors
+            - AmericanAcademyofNursePractitioners
+            - NationalBoardofCertificationandRecertificationforNurseAnesthetists
+            - AmericanOsteopathicAssociation
+            - AmericanNursesCredentialingCenter
+            - NationalBoardforCertificationinOccupationalTherapy
+            - AmericanSpeechLanguageHearingAssociation
+            - AmericanBoardofFamilyMedicine
+            - AmericanBoardofPsychiatryandNeurology
+            - InternationalBoardofLactationConsultantExaminers
+            - AmericanMidwiferyCertificationBoard
+            - AmericanDentalBoardofAnesthesiology
+            - AmericanBoardofClinicalSocialWork
+            - BoardOfPharmacySpecialties
+            - AmericanBoardofAllergyandImmunology
+            - AmericanBoardofOrthodontics
+            - AmericanBoardofOralMedicine
+            - AmericanBoardofPediatricDentistry
+            - AmericanBoardofOralandMaxillofacialSurgery
+            - AmericanBoardofOralandMaxillofacialRadiology
+            - AmericanBoardofProsthodontics
+            - AmericanBoardofOralandMaxillofacialPathology
+            - AmericanBoardofEndodontics
+            - AmericanBoardofPeriodontology
+            - AmericanBoardofOralImplantology
+            - AmericanBoardofPodiatricMedicine
+            - AmericanBoardofDentalPublicHealth
+            - BehaviorAnalystCertificationBoard
+            - AmericanBoardofGeneralDentistry
+            - NationalAssociationofSchoolPsychologists
+            - AmericanBoardofAddictionMedicine
+            - AmericanBoardofMultipleSpecialtiesinPodiatry
+            - CommissionOnDieteticRegistration
+            - AmericanBoardOfObesityMedicine
+            - NationalCertificationCorporation
+            - NationalCommissionForCertificationOfAnesthesiologistAssistants
+            - AmericanRegistryOfRadiologyTechnologists
+            - AmericanBoardOfAnesthesiology
+            - AmericanRegistryForDiagnosticMedicalSonography
+            - NationalBoardOfPhysiciansAndSurgeons
+            - CardiovascularCredentialingInternational
+            - NationalCenterForCompetencyTesting
+            - NationalAssociationOfPhlebotomyTechnicians
+            - AmericanAlliedHealth
+            - NationalRegistryOfAlliedHealthProfessionals
+            - AmericanMedicalTechnologists
+            - NationalHealthCareerAssociation
+            - DentalAssistingNationalBoard
+            - PediatricNursingCertification
+            - NationalCertificationCommissionForAcupunctureAndOrientalMedicine
+            - CertificationBoardForMusicTherapists
+            - AmericanBoardOfChiropracticInternists
+            - AmericanBoardofPhysicalTherapySpecialties
+            - AmericanBoardofPhysicianSpecialties
+            - AmericanAcademyofOptometry
+            - AmericanBoardofNeurologicalSurgery
+            - AmericanBoardofObstetricsandGynecology
+            - AmericanBoardofOphthalmology
+            - AmericanBoardofOtolaryngologyHeadandNeckSurgery
+            - AmericanBoardofPediatrics
+            - AmericanBoardofOrthopaedicSurgery
+            - AmericanBoardofPhysicalMedicineandRehabilitation
+            - AmericanBoardofPlasticSurgery
+            - AmericanBoardofRadiology
+            - AmericanBoardofSurgery
+            - AmericanBoardofUrology
+            - AmericanBoardofColonandRectalSurgery
+            - AmericanAssociationofCriticalCareNurses
+            - AmericanBoardofFootandAnkleSurgery
+            - PharmacyTechnicianCertificationBoard
+            - NationalBoardofSurgicalTechnologyandSurgicalAssisting
+            - AmericanBoardofPainMedicine
+            - AmericanBoardofOrofacialPain
+            - NuclearMedicineTechnologyCertificationBoard
+            - AmericanBoardofEmergencyMedicine
+            - ArtTherapyCredentialsBoard
+            - AmericanBoardofProfessionalPsychology
+            - NationalRegistryofEmergencyMedicalTechnicians
+            - AmericanBoardofOptometry
+            - BehavioralInterventionCertificationCouncil
+            - AmericanHeartAssociation
+            - InternationalBoardCertifiedLactationConsultant
+            - MedicaidEnrollmentCalifornia
+            - JointCommission
+            - FacilityCmsCertification
+            type: string
+          description: An array of sanctions and exclusions dataset types under which this provider is being monitored.
+        monitoringCategory:
+          enum:
+          - NotMonitored
+          - PartiallyMonitored
+          - FullyMonitored
+          type: string
+          description: Category under which this provider is being monitored.
+      additionalProperties: false
+    NormalizedAddress:
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        zipCode:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        addressLine:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AbmsAddressRecord:
+      type: object
+      properties:
+        city:
+          type: string
+          nullable: true
+        stateOrProvince:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        restrictions:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AbmsOccupationInfo:
+      type: object
+      properties:
+        restrictions:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        startDateAccuracy:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EnrollmentInfo:
+      type: object
+      properties:
+        enrollmentStatus:
+          type: string
+          nullable: true
+        termBeginDate:
+          type: string
+          format: date-time
+          nullable: true
+        termEndDate:
+          type: string
+          format: date-time
+          nullable: true
+        schoolCertifiedOn:
+          type: string
+          format: date-time
+          nullable: true
+        anticipatedGraduationDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    DatasetScanOptions:
+      type: object
+      properties:
+        parameterSetId:
+          type: string
+          description: Set this to override the default parameters that will be used for a dataset scan. If a parameterSetId isn’t specified, we will use the default/preferred parameter set.
+          format: uuid
+        referenceId:
+          type: string
+          description: Set this to a provider info that will be used during the dataset scan, if a reference id isn’t supplied, we will use the data from the entity itself, such as name.
+          format: uuid
+      additionalProperties: false
+    ProviderLicenseParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        licenseTypeId:
+          type: string
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        number:
+          type: string
+          nullable: true
+        isPrimary:
+          type: boolean
+      additionalProperties: false
+    DatasetScanModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Sam
+          - MedicareOptOut
+          - OigFugitives
+          - OfacSdn
+          - OfacConsolidated
+          - OigExclusions
+          - StateSanctionsAndExclusions
+          - Npdb
+          - Dmf
+          - Npi
+          - Nsc
+          - Dea
+          - CmsPreclusion
+          - Tricare
+          - AmericanBoardofInternalMedicine
+          - NationalCommissiononCertificationofPhysicianAssistants
+          - Abms
+          - NationalBoardforCertifiedCounselors
+          - AmericanAcademyofNursePractitioners
+          - NationalBoardofCertificationandRecertificationforNurseAnesthetists
+          - AmericanOsteopathicAssociation
+          - AmericanNursesCredentialingCenter
+          - NationalBoardforCertificationinOccupationalTherapy
+          - AmericanSpeechLanguageHearingAssociation
+          - AmericanBoardofFamilyMedicine
+          - AmericanBoardofPsychiatryandNeurology
+          - InternationalBoardofLactationConsultantExaminers
+          - AmericanMidwiferyCertificationBoard
+          - AmericanDentalBoardofAnesthesiology
+          - AmericanBoardofClinicalSocialWork
+          - BoardOfPharmacySpecialties
+          - AmericanBoardofAllergyandImmunology
+          - AmericanBoardofOrthodontics
+          - AmericanBoardofOralMedicine
+          - AmericanBoardofPediatricDentistry
+          - AmericanBoardofOralandMaxillofacialSurgery
+          - AmericanBoardofOralandMaxillofacialRadiology
+          - AmericanBoardofProsthodontics
+          - AmericanBoardofOralandMaxillofacialPathology
+          - AmericanBoardofEndodontics
+          - AmericanBoardofPeriodontology
+          - AmericanBoardofOralImplantology
+          - AmericanBoardofPodiatricMedicine
+          - AmericanBoardofDentalPublicHealth
+          - BehaviorAnalystCertificationBoard
+          - AmericanBoardofGeneralDentistry
+          - NationalAssociationofSchoolPsychologists
+          - AmericanBoardofAddictionMedicine
+          - AmericanBoardofMultipleSpecialtiesinPodiatry
+          - CommissionOnDieteticRegistration
+          - AmericanBoardOfObesityMedicine
+          - NationalCertificationCorporation
+          - NationalCommissionForCertificationOfAnesthesiologistAssistants
+          - AmericanRegistryOfRadiologyTechnologists
+          - AmericanBoardOfAnesthesiology
+          - AmericanRegistryForDiagnosticMedicalSonography
+          - NationalBoardOfPhysiciansAndSurgeons
+          - CardiovascularCredentialingInternational
+          - NationalCenterForCompetencyTesting
+          - NationalAssociationOfPhlebotomyTechnicians
+          - AmericanAlliedHealth
+          - NationalRegistryOfAlliedHealthProfessionals
+          - AmericanMedicalTechnologists
+          - NationalHealthCareerAssociation
+          - DentalAssistingNationalBoard
+          - PediatricNursingCertification
+          - NationalCertificationCommissionForAcupunctureAndOrientalMedicine
+          - CertificationBoardForMusicTherapists
+          - AmericanBoardOfChiropracticInternists
+          - AmericanBoardofPhysicalTherapySpecialties
+          - AmericanBoardofPhysicianSpecialties
+          - AmericanAcademyofOptometry
+          - AmericanBoardofNeurologicalSurgery
+          - AmericanBoardofObstetricsandGynecology
+          - AmericanBoardofOphthalmology
+          - AmericanBoardofOtolaryngologyHeadandNeckSurgery
+          - AmericanBoardofPediatrics
+          - AmericanBoardofOrthopaedicSurgery
+          - AmericanBoardofPhysicalMedicineandRehabilitation
+          - AmericanBoardofPlasticSurgery
+          - AmericanBoardofRadiology
+          - AmericanBoardofSurgery
+          - AmericanBoardofUrology
+          - AmericanBoardofColonandRectalSurgery
+          - AmericanAssociationofCriticalCareNurses
+          - AmericanBoardofFootandAnkleSurgery
+          - PharmacyTechnicianCertificationBoard
+          - NationalBoardofSurgicalTechnologyandSurgicalAssisting
+          - AmericanBoardofPainMedicine
+          - AmericanBoardofOrofacialPain
+          - NuclearMedicineTechnologyCertificationBoard
+          - AmericanBoardofEmergencyMedicine
+          - ArtTherapyCredentialsBoard
+          - AmericanBoardofProfessionalPsychology
+          - NationalRegistryofEmergencyMedicalTechnicians
+          - AmericanBoardofOptometry
+          - BehavioralInterventionCertificationCouncil
+          - AmericanHeartAssociation
+          - InternationalBoardCertifiedLactationConsultant
+          - MedicaidEnrollmentCalifornia
+          - JointCommission
+          - FacilityCmsCertification
+          type: string
+          description: The type of records that are being scanned.
+        id:
+          type: string
+          description: Unique identifier for this dataset scan.
+          format: uuid
+        started:
+          type: string
+          description: Timestamp when this scan was started.
+          format: date-time
+        completed:
+          type: string
+          description: Timestamp at which the scan was completed or failed. If empty the scan is still running.
+          format: date-time
+        status:
+          enum:
+          - Pending
+          - Working
+          - Completed
+          - Failed
+          - Active
+          type: string
+          description: The status of this scan. `Pending` and `Working` means the scan is still running. `Active` means the scan has completed its initial execution and will continue to check for any changes going forward. `Completed` means it completed successfully, while `Failed` means there was a problem while scanning and the scan should be retried.
+        providerId:
+          type: string
+          description: The identifier of the provider that is associated with this scan, if any.
+          format: uuid
+        facilityId:
+          type: string
+          description: The identifier of the facility that is associated with this scan, if any.
+          format: uuid
+        provider:
+          description: The provider model that is associated with this scan, if any.
+          deprecated: true
+        trigger:
+          enum:
+          - Manual
+          - Monitor
+          type: string
+          description: Set to `Manual` if the scan is triggered by a user or `Monitor` if the scan was triggered by the monitoring system.
+        options:
+          $ref: '#/components/schemas/DatasetScanOptions'
+        failureReason:
+          $ref: '#/components/schemas/FailureModel'
+        statusDescription: {}
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/IProviderParameter'
+          description: The parameters that where used for this scan. The array of parameters is constructed from the provider data available at the time of the scan.
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetMatchModel'
+          description: Array of records that match the input data for this scan.
+        monitoringMetadata:
+          $ref: '#/components/schemas/MonitoringMetadata'
+        verifiedAt:
+          type: string
+          description: Indicates the most recent time that the verification was performed successfully.
+          format: date-time
+        datasetMetadata:
+          $ref: '#/components/schemas/DatasetMetadata'
+      additionalProperties: false
+    NpdbSubjectInformation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the subject / provider.
+        otherNames:
+          type: array
+          items:
+            type: string
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+          description: Date of birth of the subject / provider.
+          format: date-time
+        organizationName:
+          type: string
+          description: Organization name of the subject / provider.
+        organizationTypeCode:
+          type: string
+          description: The NPDB's organization type code.
+        workAddress:
+          $ref: '#/components/schemas/NormalizedAddress'
+        homeAddress:
+          $ref: '#/components/schemas/NormalizedAddress'
+        license:
+          type: string
+          description: The license type as described by NPDB.
+        organizationType:
+          type: string
+          description: Organization type as described by NPDB.
+        ssn:
+          type: array
+          items:
+            type: string
+        npi:
+          type: array
+          items:
+            type: string
+        occupationAndLicensure:
+          $ref: '#/components/schemas/NpdbOccupationAndLicensure'
+        otherOccupationAndLicensure:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbOccupationAndLicensure'
+        enrollmentStatuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbEnrollmentStatus'
+        professionalSchools:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbProfessionalSchoolInformation'
+      additionalProperties: false
+      example:
+        name: Kelly June Washington
+        dateOfBirth: 1988-11-6
+        organizationName: UCSF
+        organizationType: Medical Group/Practice
+        organizationTypeCode: '365'
+        workAddress:
+          state: CA
+          zipCode: '94123'
+          city: San Francisco
+          addressLine: The avenue
+        license: Physician (MD)
+    FacilityCmsCertificationDatasetRecord:
+      type: object
+      properties:
+        certificationType:
+          type: string
+          nullable: true
+        certificationNumber:
+          type: string
+          nullable: true
+        certificationDate:
+          type: string
+          format: date-time
+          nullable: true
+        facilityName:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        additionalProperties:
+          $ref: '#/components/schemas/FlexibleDataModel'
+        attachments:
+          type: array
+          items:
+            type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ProviderAddressRequestModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - type
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located.
+        zipCode:
+          minLength: 1
+          type: string
+          description: The postal code associated with the address.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+      additionalProperties: false
+    DateOfAttendance:
+      type: object
+      properties:
+        beginDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    OigFugitivesDatasetRecord:
+      type: object
+      properties:
+        status:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CourseOfStudy:
+      type: object
+      properties:
+        courseName:
+          type: string
+          nullable: true
+        ncescipCode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpdbReportSubjectInformation:
+      type: object
+      properties:
+        name:
+          type: string
+        otherNames:
+          type: array
+          items:
+            type: string
+          description: Other names used by the subject.
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date-time
+        organizationName:
+          type: string
+        organizationTypeCode:
+          type: string
+        workAddress:
+          $ref: '#/components/schemas/NormalizedAddress'
+        homeAddress:
+          $ref: '#/components/schemas/NormalizedAddress'
+        license:
+          type: string
+        organizationType:
+          type: string
+        ssn:
+          type: array
+          items:
+            type: string
+          description: Social Security Number (SSN) of subject.
+        npi:
+          type: array
+          items:
+            type: string
+          description: National Provider Identifiers (NPI).
+        occupationAndLicensure:
+          $ref: '#/components/schemas/NpdbOccupationAndLicensure'
+        otherOccupationAndLicensure:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbOccupationAndLicensure'
+        enrollmentStatuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbEnrollmentStatus'
+        professionalSchools:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbProfessionalSchoolInformation'
+          description: Professional school attended by the subject.
+        deceased:
+          type: boolean
+          description: True or false indicating if subject is deceased.
+        dea:
+          type: array
+          items:
+            type: string
+          description: Drug Enforcement Administration (DEA) Numbers.
+        upin:
+          type: array
+          items:
+            type: string
+        fein:
+          type: array
+          items:
+            type: string
+        healthCareEntities:
+          type: array
+          items:
+            type: string
+          description: Name of health care entities with which subject is affiliated or associated.
+        hospitalAffiliations:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbHospitalAffiliation'
+        affiliations:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbAffiliation'
+        occupationFieldOfLicensure:
+          type: string
+        stateLicenseNumber:
+          type: string
+      additionalProperties: false
+      example:
+        name: Kelly June Washington
+        dateOfBirth: 1988-11-6
+        organizationName: UCSF
+        organizationType: Medical Group/Practice
+        organizationTypeCode: '365'
+        workAddress:
+          state: CA
+          zipCode: '94123'
+          city: San Francisco
+          addressLine: The avenue
+        license: Physician (MD)
+        otherNames: ''
+        deceased: ''
+        ssn: '*****4057'
+        npi: '1234567890'
+        professionalSchools:
+        - name: UC Davis
+          yearOfGraduation: '2008'
+        specialty: ''
+        dea: '123456789012'
+        healthCareEntities: []
+        businessAddress:
+          state: CA
+          zipCode: '94123'
+          city: San Francisco
+          addressLine: The avenue
+        natureOfRelationship: Subject is Owner/Partner of Affiliate or Associate
+    BoardCertificationDatasetRecord:
+      type: object
+      properties:
+        boardCertificationNumber:
+          type: string
+          nullable: true
+        additionalProperties:
+          $ref: '#/components/schemas/FlexibleDataModel'
+        certifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/BoardCertification'
+          nullable: true
+        screenshots:
+          type: array
+          items:
+            type: string
+          nullable: true
+        attachments:
+          type: array
+          items:
+            type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    FailureModel:
+      type: object
+      properties:
+        messageTemplate:
+          type: string
+          description: An informative human readable message describing the verification failure.
+        messageParams:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
+      additionalProperties: false
+      description: An object with a reason message template and an array of params. Can be used to construct a meaningful description of the error. Not set when no errors happened.
+    BaseUserModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of this user.
+          format: uuid
+        email:
+          type: string
+          description: The email of this user.
+        firstName:
+          type: string
+          description: The firstname of this user.
+        lastName:
+          type: string
+          description: The lastname of this user.
+      additionalProperties: false
+    MedicareOptOutDatasetRecord:
+      type: object
+      properties:
+        speciality:
+          type: string
+          nullable: true
+        effectiveDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        eligibleToOrderAndRefer:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        address:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        npiNumber:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    NpiDatasetRecord:
+      type: object
+      properties:
+        enumerationType:
+          type: string
+          nullable: true
+        isDeactivated:
+          type: boolean
+        deactivationReason:
+          type: string
+          nullable: true
+        basic:
+          $ref: '#/components/schemas/NpiProfile.NpiBasicModel'
+        otherNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.OtherName'
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.Address'
+          nullable: true
+        practiceLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.Address'
+          nullable: true
+        taxonomies:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.Taxonomy'
+          nullable: true
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpiProfile.Identifier'
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        npiNumber:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    AbmsExtensibleInfo:
+      type: object
+      properties:
+        disclaimerInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbmsDisclaimerInfo'
+          nullable: true
+      additionalProperties: false
+    NpdbSubjectNotificationFailure:
+      type: object
+      properties:
+        notificationDate:
+          type: string
+          format: date-time
+        address:
+          $ref: '#/components/schemas/NormalizedAddress'
+      additionalProperties: false
+    PersonName:
+      type: object
+      properties:
+        lastName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Degree:
+      type: object
+      properties:
+        nameOnSchoolRecord:
+          $ref: '#/components/schemas/NameOnSchoolRecord'
+        officialNameOfSchool:
+          type: string
+          nullable: true
+        schoolType:
+          type: string
+          nullable: true
+        schoolCode:
+          type: string
+          nullable: true
+        schoolDivision:
+          type: string
+          nullable: true
+        branchCode:
+          type: string
+          nullable: true
+        jointInstitution:
+          type: string
+          nullable: true
+        degreeTitle:
+          type: string
+          nullable: true
+        awardDate:
+          type: string
+          format: date-time
+          nullable: true
+        majorCoursesOfStudy:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseOfStudy'
+          nullable: true
+        minorCoursesOfStudy:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseOfStudy'
+          nullable: true
+        majorOptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+          nullable: true
+        majorConcentrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+          nullable: true
+        academicHonors:
+          type: string
+          nullable: true
+        honorsProgram:
+          type: string
+          nullable: true
+        otherHonors:
+          type: string
+          nullable: true
+        dateOfAttendance:
+          $ref: '#/components/schemas/DateOfAttendance'
+        graduated:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    NpdbAffiliation:
+      type: object
+      properties:
+        entityName:
+          type: string
+          nullable: true
+        entityAddress:
+          $ref: '#/components/schemas/NormalizedAddress'
+        natureOfRelationship:
+          type: string
+          nullable: true
+        otherNatureOfRelationship:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderEmailModel:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
+          type: string
+          description: The type of the email.
+        id:
+          type: string
+          description: Unique identifier for this specific email.
+          format: uuid
+      additionalProperties: false
+    NpdbEnrollmentStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    AbmsCertificateIssuanceNotice:
+      type: object
+      properties:
+        category:
+          type: string
+          nullable: true
+        details:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CertificateDatasetRecord:
+      type: object
+      properties:
+        certificateType:
+          type: string
+          nullable: true
+        certificateNumber:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        certifyingOrganization:
+          type: string
+          nullable: true
+        additionalProperties:
+          $ref: '#/components/schemas/FlexibleDataModel'
+        attachments:
+          type: array
+          items:
+            type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CmsPreclusionDatasetRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        npiNumber:
+          type: integer
+          format: int64
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        businessName:
+          type: string
+          nullable: true
+        general:
+          type: string
+          nullable: true
+        speciality:
+          type: string
+          nullable: true
+        ein:
+          type: integer
+          format: int64
+          nullable: true
+        exclusionDate:
+          type: string
+          format: date-time
+          nullable: true
+        claimRejectionDate:
+          type: string
+          format: date-time
+          nullable: true
+        reinstatedDate:
+          type: string
+          format: date-time
+          nullable: true
+        lastUpdate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    JointCommissionDatasetRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        accreditationProgramName:
+          type: string
+          nullable: true
+        accreditationDecision:
+          type: string
+          nullable: true
+        accreditationEffectiveDate:
+          type: string
+          format: date-time
+          nullable: true
+        facilityName:
+          type: string
+          nullable: true
+        facilityDba:
+          type: string
+          nullable: true
+        facilityAccreditationNumber:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+        accreditationBody:
+          type: string
+          nullable: true
+        additionalProperties:
+          $ref: '#/components/schemas/FlexibleDataModel'
+        attachments:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    DatasetMatchModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        datasetTimestamp:
+          type: string
+          description: The timestamp when the dataset was last updated in our system at the time of this scan.
+          format: date-time
+        recordTimestamp:
+          type: string
+          description: The timestamp when this record was last updated in our system at the time of this scan.
+          format: date-time
+        data:
+          $ref: '#/components/schemas/DatasetMatchData'
+        scanId:
+          type: string
+          description: The identifier of the scan to which this match belongs. Not set if `scan` is populated.
+          format: uuid
+        scan:
+          $ref: '#/components/schemas/DatasetScanModel'
+        userActionNeeded:
+          type: boolean
+          description: Boolean indicating if action is needed for this match.
+        isIgnored:
+          type: boolean
+          description: Set to true if this match was ignored for the associated provider.
+        userActionResolution:
+          enum:
+          - Accept
+          - Reject
+          type: string
+        userActionResolutionNote:
+          type: string
+        matchRelevance:
+          enum:
+          - Low
+          - Medium
+          - High
+          type: string
+        matchScore:
+          description: Indicates a score from 0.0 to 1.0 where 1.0 is the maximum possible score indicating the quality of the match. Note that this feature is in beta and subject to change without notice.
+          deprecated: true
+        createdTimestamp:
+          type: string
+          description: Indicates the time that the match was added to the scan. Only populated for matches on or after January 25th 2024.
+          format: date-time
+        obsoleteTimestamp:
+          type: string
+          description: Indicates the time that the match became obsolete. This only occurs when a scan with a `status` of `Active` determines that the match is now obsolete due to changes in primary source data.
+          format: date-time
+      additionalProperties: false
+    ProviderDeaParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        registrationNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeaDatasetRecord:
+      type: object
+      properties:
+        businessActivityCode:
+          type: string
+          nullable: true
+        drugSchedules:
+          type: string
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+        additionalCompanyInfo:
+          type: string
+          nullable: true
+        address1:
+          type: string
+          nullable: true
+        address2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        zipCode:
+          type: string
+          nullable: true
+        businessActivitySubCode:
+          type: string
+          nullable: true
+        paymentIndicator:
+          enum:
+          - Paid
+          - Exempt
+          type: string
+        active:
+          type: boolean
+        deax:
+          $ref: '#/components/schemas/DeaxModel'
+        degree:
+          type: string
+          nullable: true
+        stateLicenseNumber:
+          type: string
+          nullable: true
+        stateControlledSubstanceLicenseNumber:
+          type: string
+          nullable: true
+        businessActivity:
+          type: string
+          nullable: true
+          readOnly: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        registrationNumber:
+          type: string
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderCertificateParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        certificateType:
+          enum:
+          - AhaBasicLifeSupport
+          - AhaAdvancedCardiacLifeSupport
+          - AhaNeonatalAdvancedLifeSupport
+          - AhaPediatricAdvancedLifeSupport
+          - CaliforniaCertifiedWellnessCoach
+          - AhaAdvancedCardiovascularLifeSupport
+          - AhaAdvancedStrokeLifeSupport
+          - AhaPears
+          - AhaHeartsaver
+          type: string
+          nullable: true
+        certificateNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NscAddress:
+      type: object
+      properties:
+        address1:
+          type: string
+          nullable: true
+        address2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        zipCode:
+          type: string
+          nullable: true
+        province:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderNpiParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        number:
+          type: integer
+          format: int64
+      additionalProperties: false
+    ProviderModel:
+      required:
+      - credentialingStatus
+      - firstName
+      - lastName
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider.
+          format: uuid
+        firstName:
+          minLength: 1
+          type: string
+          description: The first (given) name associated with this provider.
+        lastName:
+          minLength: 1
+          type: string
+          description: The last (family) name associated with this provider.
+        dateOfBirth:
+          type: string
+          description: The date of birth of this provider.
+          format: date-time
+        ssn:
+          type: string
+          description: The social security number of this provider.
+        credentialingStatus:
+          minLength: 1
+          type: string
+          description: The name of credentialing status. The default value is 'Data Collection'.
+        credentialedDate:
+          type: string
+          description: Date this provider was originally credentialed
+          format: date-time
+        nextCredentialingDate:
+          type: string
+          description: Date this provider should be credentialed next
+          format: date
+        npi:
+          type: integer
+          description: The 10 digit National Provider Identifiers (NPI) of this provider.
+          format: int64
+        deactivated:
+          type: boolean
+          description: If set, the provider is deactivated. Verifications and profile imports can't be triggered for the inactive provider.
+        deactivatedAt:
+          type: string
+          format: date-time
+        aliases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderAliasModel'
+          description: A list of aliases that this provider is also known by.
+        primaryPracticeState:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: The primary practice state of the provider.
+        additionalPracticeStates:
+          type: array
+          items:
+            enum:
+            - AL
+            - AK
+            - AZ
+            - AR
+            - CA
+            - CO
+            - CT
+            - DE
+            - DC
+            - FL
+            - GA
+            - HI
+            - ID
+            - IL
+            - IN
+            - IA
+            - KS
+            - KY
+            - LA
+            - ME
+            - MD
+            - MA
+            - MI
+            - MN
+            - MS
+            - MO
+            - MT
+            - NE
+            - NV
+            - NH
+            - NJ
+            - NM
+            - NY
+            - NC
+            - ND
+            - OH
+            - OK
+            - OR
+            - PA
+            - RI
+            - SC
+            - SD
+            - TN
+            - TX
+            - UT
+            - VT
+            - VA
+            - WA
+            - WV
+            - WI
+            - WY
+            - AS
+            - GU
+            - MP
+            - PR
+            - VI
+            type: string
+          description: Additional practice states of the provider. Cannot include the primary practice state.
+        gender:
+          enum:
+          - Unknown
+          - Male
+          - Female
+          - NonBinaryOrThirdGender
+          - Other
+          - PreferNotToSay
+          type: string
+          description: Provider's gender (optional).
+        ethnicity:
+          type: array
+          items:
+            enum:
+            - AmericanIndianOrAlaskaNative
+            - Asian
+            - BlackOrAfricanAmerican
+            - HispanicOrLatino
+            - NativeHawaiianOrOtherPacificIslander
+            - White
+            - PreferNotToSay
+            - NoInformationToAnswer
+            type: string
+          description: Provider's ethnicity (optional).
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderAddressModel'
+          description: If set, the provider's `addresses` will be updated with this value. To remove the addresses pass an empty array.
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderEmailModel'
+          description: If set, the provider's `emails` will be updated with this value. To remove the emails pass an empty array.
+        phone:
+          type: string
+          description: Primary phone number associated with this provider
+        languages:
+          type: array
+          items:
+            type: string
+          description: A list of languages, other than English, this provider speaks.
+        recredentialedDates:
+          type: array
+          items:
+            type: string
+            format: date-time
+          description: A list of dates when this provider was re-credentialed.
+        providerType:
+          $ref: '#/components/schemas/ProviderTypeModel'
+        nuccGroup:
+          $ref: '#/components/schemas/TaxonomyGroupModel'
+        segment:
+          $ref: '#/components/schemas/SegmentModel'
+        createdAt:
+          type: string
+          description: Timestamp when this provider was created.
+          format: date-time
+      additionalProperties: false
+    ProviderReportRequestModel:
+      type: object
+      properties:
+        sections:
+          type: array
+          items:
+            enum:
+            - BasicInfo
+            - NpiNumber
+            - DeaRegistrations
+            - Licenses
+            - BoardCertifications
+            - LiabilityInsurance
+            - EducationAndTraining
+            - WorkHistory
+            - SanctionsAndExclusions
+            - CaqhProfile
+            - MedicaidEnrollment
+            - HospitalAffiliations
+            type: string
+          description: Report sections to generate.
+        datasetTypes:
+          type: array
+          items:
+            enum:
+            - Sam
+            - MedicareOptOut
+            - OigFugitives
+            - OfacSdn
+            - OfacConsolidated
+            - OigExclusions
+            - StateSanctionsAndExclusions
+            - Npdb
+            - Dmf
+            - CmsPreclusion
+            - Tricare
+            type: string
+          description: Source types for `SanctionsAndExclusions` section.
+        deaRecordNumbers:
+          type: array
+          items:
+            type: string
+          description: DEA record numbers associated with the provider to include in the report.
+        licenseIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Unique license identifiers associated with the provider to include in the report.
+        boardCertificateIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Unique board certificate identifiers associated with the provider to include in the report.
+      additionalProperties: false
+      example:
+        sections:
+        - BasicInfo
+        - SanctionsAndExclusions
+        datasetTypes:
+        - Sam
+        - MedicareOptOut
+        - OigFugitives
+        - Tricare
+        deaRecordNumbers:
+        - FM12345678
+        - BA7654321
+        boardCertificateIds:
+        - 006f84a8-939b-45ed-906b-a6eeb883a112
+        - 68b7fbd5-3397-441c-b9f5-ce7d89148a7b
+        licenseIds:
+        - bb6a2d28-b215-4f1c-ba2c-2d4ddb352787
+    DatasetMatchData:
+      type: object
+      properties:
+        positiveParameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/IProviderParameter'
+          description: Array of parameters used in the scan which have an explicit positive hit on this record.
+        negativeParameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/IProviderParameter'
+          description: Array of parameters used in the scan which have an explicit negative hit on this record.
+        record:
+          oneOf:
+          - $ref: '#/components/schemas/TricareDatasetRecord'
+          - $ref: '#/components/schemas/StateSanctionsAndExclusionsRecord'
+          - $ref: '#/components/schemas/SamDatasetRecord'
+          - $ref: '#/components/schemas/OigFugitivesDatasetRecord'
+          - $ref: '#/components/schemas/OigExclusionsDatasetRecord'
+          - $ref: '#/components/schemas/OfacDatasetRecord'
+          - $ref: '#/components/schemas/NscDatasetRecord'
+          - $ref: '#/components/schemas/NpiDatasetRecord'
+          - $ref: '#/components/schemas/NpdbDatasetRecord'
+          - $ref: '#/components/schemas/MedicareOptOutDatasetRecord'
+          - $ref: '#/components/schemas/MedicaidEnrollmentCaliforniaDatasetRecord'
+          - $ref: '#/components/schemas/JointCommissionDatasetRecord'
+          - $ref: '#/components/schemas/FacilityCmsCertificationDatasetRecord'
+          - $ref: '#/components/schemas/DmfDatasetRecord'
+          - $ref: '#/components/schemas/DeaDatasetRecord'
+          - $ref: '#/components/schemas/CmsPreclusionDatasetRecord'
+          - $ref: '#/components/schemas/CertificateDatasetRecord'
+          - $ref: '#/components/schemas/BoardCertificationDatasetRecord'
+          - $ref: '#/components/schemas/AbmsDatasetRecord'
+          description: The matched data. This model is different for each dataset. Refer to [Dataset Records](/references/api/dataset-records) for an overview of models for each dataset. The models are also returned in JSON schema in the [GetDataset](/references/api/datasets/getdataset) operation.
+          discriminator:
+            propertyName: datasetRecordType
+            mapping:
+              Tricare: '#/components/schemas/TricareDatasetRecord'
+              StateSanctionsAndExclusions: '#/components/schemas/StateSanctionsAndExclusionsRecord'
+              Sam: '#/components/schemas/SamDatasetRecord'
+              OigFugitives: '#/components/schemas/OigFugitivesDatasetRecord'
+              OigExclusions: '#/components/schemas/OigExclusionsDatasetRecord'
+              Ofac: '#/components/schemas/OfacDatasetRecord'
+              Nsc: '#/components/schemas/NscDatasetRecord'
+              Npi: '#/components/schemas/NpiDatasetRecord'
+              Npdb: '#/components/schemas/NpdbDatasetRecord'
+              MedicareOptOut: '#/components/schemas/MedicareOptOutDatasetRecord'
+              MedicaidEnrollmentCalifornia: '#/components/schemas/MedicaidEnrollmentCaliforniaDatasetRecord'
+              JointCommission: '#/components/schemas/JointCommissionDatasetRecord'
+              FacilityCmsCertification: '#/components/schemas/FacilityCmsCertificationDatasetRecord'
+              Dmf: '#/components/schemas/DmfDatasetRecord'
+              Dea: '#/components/schemas/DeaDatasetRecord'
+              CmsPreclusion: '#/components/schemas/CmsPreclusionDatasetRecord'
+              Certificate: '#/components/schemas/CertificateDatasetRecord'
+              BoardCertification: '#/components/schemas/BoardCertificationDatasetRecord'
+              Abms: '#/components/schemas/AbmsDatasetRecord'
+      additionalProperties: false
+    TransferNpdbRequestModel:
+      type: object
+      properties:
+        databankSubjectId:
+          type: string
+          description: The Databank Subject ID that identifies the existing NPDB enrollment to transfer, must be 15 digits
+        parameterSetId:
+          type: string
+          description: Indicates which NPDB parameter set should be used for the monitor. If a parameterSetId isn’t specified, we will use the default/preferred parameter set.
+          format: uuid
+      additionalProperties: false
+    NpiProfile.Taxonomy:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+        license:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        isPrimary:
+          type: boolean
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        taxonomyGroup:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderNameParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MonitoringMetadata:
+      type: object
+      properties:
+        monitoringInterval:
+          enum:
+          - Continuous
+          - Daily
+          - Weekly
+          - Monthly
+          - Yearly
+          type: string
+          description: 'The interval at which the data is being monitored.<br/><i>NOTE: Continuous interval is only supported by the `NPDB` dataset at this time.</i>'
+          example: Monthly
+        lastMonitoringDate:
+          type: string
+          description: The previous date on which this data was monitored, if any.
+          format: date-time
+        nextMonitoringDate:
+          type: string
+          description: The next date on which this data is scheduled to be monitored.
+          format: date-time
+        monitorId:
+          type: string
+          description: Unique identifier of the monitor.
+          format: uuid
+      additionalProperties: false
+    DeaxModel:
+      type: object
+      properties:
+        number:
+          type: string
+          nullable: true
+        certifiedPatientLimit:
+          type: integer
+          format: int32
+      additionalProperties: false
+    NpdbCodeDescription:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        specifiedValue:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpiProfile.Address:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          nullable: true
+        addressLine2:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+          nullable: true
+        countryCode:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        telephoneNumber:
+          type: string
+          nullable: true
+        faxNumber:
+          type: string
+          nullable: true
+        purpose:
+          enum:
+          - Location
+          - Mailing
+          - Primary
+          - Secondary
+          type: string
+          nullable: true
+        updateDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    AbmsCertificateRecognition:
+      type: object
+      properties:
+        status:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        duration:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+        issueDateAccuracy:
+          type: string
+          nullable: true
+        expiryDate:
+          type: string
+          format: date-time
+          nullable: true
+        expiryDateAccuracy:
+          type: string
+          nullable: true
+        scheduledUpdate:
+          type: string
+          format: date-time
+          nullable: true
+        scheduledUpdateAccuracy:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderRequestModel:
+      required:
+      - firstName
+      - lastName
+      type: object
+      properties:
+        firstName:
+          minLength: 1
+          type: string
+          description: The first (given) name of the provider.
+        lastName:
+          minLength: 1
+          type: string
+          description: The last (family) name of the provider.
+        dateOfBirth:
+          type: string
+          description: The date of birth of this provider.
+          format: date-time
+        gender:
+          enum:
+          - Unknown
+          - Male
+          - Female
+          - NonBinaryOrThirdGender
+          - Other
+          - PreferNotToSay
+          type: string
+          description: Provider's gender (optional).
+        ethnicity:
+          type: array
+          items:
+            enum:
+            - AmericanIndianOrAlaskaNative
+            - Asian
+            - BlackOrAfricanAmerican
+            - HispanicOrLatino
+            - NativeHawaiianOrOtherPacificIslander
+            - White
+            - PreferNotToSay
+            - NoInformationToAnswer
+            type: string
+          description: Provider's ethnicity (optional).
+        ssn:
+          type: string
+          description: The social security number of this provider.
+        npi:
+          type: integer
+          description: The 10 digit National Provider Identifiers (NPI) of this provider
+          format: int64
+        aliases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderAliasRequestModel'
+          description: A list of aliases that this provider is also known by.
+        primaryPracticeState:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: The primary practice state of the provider.
+        additionalPracticeStates:
+          type: array
+          items:
+            enum:
+            - AL
+            - AK
+            - AZ
+            - AR
+            - CA
+            - CO
+            - CT
+            - DE
+            - DC
+            - FL
+            - GA
+            - HI
+            - ID
+            - IL
+            - IN
+            - IA
+            - KS
+            - KY
+            - LA
+            - ME
+            - MD
+            - MA
+            - MI
+            - MN
+            - MS
+            - MO
+            - MT
+            - NE
+            - NV
+            - NH
+            - NJ
+            - NM
+            - NY
+            - NC
+            - ND
+            - OH
+            - OK
+            - OR
+            - PA
+            - RI
+            - SC
+            - SD
+            - TN
+            - TX
+            - UT
+            - VT
+            - VA
+            - WA
+            - WV
+            - WI
+            - WY
+            - AS
+            - GU
+            - MP
+            - PR
+            - VI
+            type: string
+          description: Additional practice states of the provider. Cannot include the primary practice state.
+        credentialingStatus:
+          type: string
+          description: The name of credentialing status. The default value is 'Data Collection'.
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderEmailRequestModel'
+          description: A list with provider emails.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderAddressRequestModel'
+          description: A list with provider addresses.
+        phone:
+          type: string
+          description: Primary phone number associated with this provider
+        languages:
+          type: array
+          items:
+            type: string
+          description: A list of languages, other than English, this provider speaks.
+        credentialedDate:
+          type: string
+          description: Date this provider was originally credentialed
+          format: date-time
+        recredentialedDates:
+          type: array
+          items:
+            type: string
+            format: date-time
+          description: A list of dates when this provider was re-credentialed.
+        nextCredentialingDate:
+          type: string
+          description: Date this provider should be credentialed next
+          format: date
+        providerTypeId:
+          type: string
+          description: Provider type id associated with this provider.
+          format: uuid
+        nuccGroupId:
+          type: string
+          description: Provider NUCC (National Uniform Claim Committee) Group associated with this provider.
+          format: uuid
+        segmentId:
+          type: string
+          description: The segment identifier to assign this provider to. If not specified, the default segment will be used.
+          format: uuid
+        deactivated:
+          type: boolean
+          description: If set to true, the provider will be deactivated. If set to false, the provider will be activated.
+      additionalProperties: false
+      example:
+        firstName: string
+        lastName: string
+        dateOfBirth: '2000-08-24'
+        ssn: '123456789'
+    NpdbOccupationAndLicensure:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        number:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          nullable: true
+        noLicense:
+          type: boolean
+          nullable: true
+        specialty:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AbmsDatasetRecord:
+      type: object
+      properties:
+        uniqueId:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbmsMemberId'
+          nullable: true
+        name:
+          $ref: '#/components/schemas/AbmsNameRecord'
+        address:
+          $ref: '#/components/schemas/AbmsAddressRecord'
+        educationInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbmsEducationInfo'
+          nullable: true
+        certificationInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbmsCertificationInfo'
+          nullable: true
+        occupationInfo:
+          $ref: '#/components/schemas/AbmsOccupationInfo'
+        personalInfo:
+          $ref: '#/components/schemas/AbmsPersonalInfo'
+        extensibleInfo:
+          $ref: '#/components/schemas/AbmsExtensibleInfo'
+        restrictions:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+      additionalProperties: false
+    NameOnSchoolRecord:
+      type: object
+      properties:
+        suffix:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderDueForRecredentialingModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        ssn:
+          type: string
+          nullable: true
+        credentialingStatus:
+          type: string
+          nullable: true
+        credentialedDate:
+          type: string
+          format: date-time
+          nullable: true
+        nextCredentialingDate:
+          type: string
+          format: date
+          nullable: true
+        npi:
+          type: integer
+          format: int64
+          nullable: true
+        deactivated:
+          type: boolean
+        requestId:
+          type: string
+          format: uuid
+          nullable: true
+        requestType:
+          enum:
+          - Initial
+          - ReCredentialing
+          - OffCycle
+          type: string
+          nullable: true
+        requestCreatedAt:
+          type: string
+          format: date-time
+          nullable: true
+        currentEvent:
+          $ref: '#/components/schemas/CredentialingRequestEventModel'
+        requestPriority:
+          enum:
+          - Low
+          - Medium
+          - High
+          - Urgent
+          type: string
+          nullable: true
+        isSelfManaged:
+          type: boolean
+          nullable: true
+        currentEventStatus:
+          enum:
+          - RequestSubmitted
+          - RequestInProgress
+          - AdditionalInformationRequested
+          - AdditionalInformationSubmitted
+          - CancellationRequested
+          - Cancelled
+          - Completed
+          - CompletedWithConcern
+          - UnableToComplete
+          - SecondAttemptMissingInfo
+          - ThirdAttemptMissingInfo
+          type: string
+          nullable: true
+        currentEventDate:
+          type: string
+          format: date-time
+          nullable: true
+        owner:
+          $ref: '#/components/schemas/BaseUserModel'
+      additionalProperties: false
+    ProviderMonitoringSanctionsAndExclusionsSummaryAggregationsModel:
+      type: object
+      properties:
+        notMonitored:
+          type: integer
+          description: The total number of providers, not monitored under sanctions and exclusions datasets.
+          format: int32
+        partiallyMonitored:
+          type: integer
+          description: The total number of providers, partially monitored under sanctions and exclusions datasets.
+          format: int32
+        fullyMonitored:
+          type: integer
+          description: The total number of providers, fully monitored under sanctions and exclusions datasets.
+          format: int32
+      additionalProperties: false
+    IProviderParameter:
+      oneOf:
+      - $ref: '#/components/schemas/FacilityAccreditationInfoParameter'
+      - $ref: '#/components/schemas/FacilityCmsCertificationInfoParameter'
+      - $ref: '#/components/schemas/FacilityNameParameter'
+      - $ref: '#/components/schemas/ProviderAddressParameter'
+      - $ref: '#/components/schemas/ProviderBoardCertificationNumberParameter'
+      - $ref: '#/components/schemas/ProviderCaqhIdParameter'
+      - $ref: '#/components/schemas/ProviderCertificateParameter'
+      - $ref: '#/components/schemas/ProviderDateOfBirthParameter'
+      - $ref: '#/components/schemas/ProviderDeaParameter'
+      - $ref: '#/components/schemas/ProviderEducationParameter'
+      - $ref: '#/components/schemas/ProviderGenderParameter'
+      - $ref: '#/components/schemas/ProviderLicenseParameter'
+      - $ref: '#/components/schemas/ProviderNameParameter'
+      - $ref: '#/components/schemas/ProviderNccpaBoardCertificateInfoParameter'
+      - $ref: '#/components/schemas/ProviderNpiParameter'
+      - $ref: '#/components/schemas/ProviderSsnParameter'
+      - $ref: '#/components/schemas/ProviderTypeParameter'
+      discriminator:
+        propertyName: type
+        mapping:
+          FacilityAccreditationInfo: '#/components/schemas/FacilityAccreditationInfoParameter'
+          FacilityCmsCertificationInfo: '#/components/schemas/FacilityCmsCertificationInfoParameter'
+          FacilityName: '#/components/schemas/FacilityNameParameter'
+          Address: '#/components/schemas/ProviderAddressParameter'
+          BoardCertificationNumber: '#/components/schemas/ProviderBoardCertificationNumberParameter'
+          CaqhId: '#/components/schemas/ProviderCaqhIdParameter'
+          Certificate: '#/components/schemas/ProviderCertificateParameter'
+          DateOfBirth: '#/components/schemas/ProviderDateOfBirthParameter'
+          Dea: '#/components/schemas/ProviderDeaParameter'
+          Education: '#/components/schemas/ProviderEducationParameter'
+          Gender: '#/components/schemas/ProviderGenderParameter'
+          License: '#/components/schemas/ProviderLicenseParameter'
+          Name: '#/components/schemas/ProviderNameParameter'
+          NccpaBoardCertificateInfo: '#/components/schemas/ProviderNccpaBoardCertificateInfoParameter'
+          Npi: '#/components/schemas/ProviderNpiParameter'
+          Ssn: '#/components/schemas/ProviderSsnParameter'
+          ProviderType: '#/components/schemas/ProviderTypeParameter'
+    SegmentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the segment.
+          format: uuid
+        name:
+          type: string
+          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
+      additionalProperties: false
+      example:
+        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
+        name: acme-corp
+    TransferNpdbResponseModel:
+      type: object
+      properties:
+        monitor:
+          $ref: '#/components/schemas/DatasetMonitorModel'
+      additionalProperties: false
+    DmfDatasetRecord:
+      type: object
+      properties:
+        fullName:
+          type: string
+          nullable: true
+        deceased:
+          type: boolean
+        deceasedStateOnRecord:
+          type: string
+          nullable: true
+        dateOfDeath:
+          type: string
+          format: date-time
+          nullable: true
+        lastKnowState:
+          type: string
+          nullable: true
+        lastKnowZipCode:
+          type: string
+          nullable: true
+        lastKnowCountry:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CredentialingRequestEventUserModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of this user.
+          format: uuid
+        email:
+          type: string
+          description: The email of this user.
+      additionalProperties: false
+    ProviderEmailRequestModel:
+      required:
+      - email
+      - type
+      type: object
+      properties:
+        email:
+          minLength: 1
+          type: string
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
+          type: string
+          description: The type of the email.
+      additionalProperties: false
+    ProviderTypeModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider type.
+          format: uuid
+        name:
+          type: string
+          description: Associated provider type name.
+      additionalProperties: false
+    AbmsNameRecord:
+      type: object
+      properties:
+        givenName:
+          type: array
+          items:
+            type: string
+          nullable: true
+        familyName:
+          type: string
+          nullable: true
+        generationIdentifier:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BoardCertification:
+      type: object
+      properties:
+        boardName:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        isExpired:
+          type: boolean
+          nullable: true
+        issued:
+          type: string
+          format: date-time
+          nullable: true
+        expires:
+          type: string
+          format: date-time
+          nullable: true
+        mocParticipation:
+          type: boolean
+          nullable: true
+        additionalProperties:
+          $ref: '#/components/schemas/FlexibleDataModel'
+      additionalProperties: false
+    ProviderPatchModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: If set, the provider's `firstName` will be updated with this value.
+        lastName:
+          type: string
+          description: If set, the provider's `lastName` will be updated with this value.
+        dateOfBirth:
+          type: string
+          description: If set, the provider's `dateOfBirth` will be updated with this value.
+          format: date-time
+        ssn:
+          type: string
+          description: If set, the provider's `ssn` will be updated with this value.
+        npi:
+          type: integer
+          description: The 10 digit National Provider Identifiers (NPI) of this provider
+          format: int64
+        aliases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderAliasRequestModel'
+          description: If set, the provider's `aliases` will be updated with this value. To remove the aliases pass an empty array.
+        primaryPracticeState:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: The primary practice state of the provider.
+        additionalPracticeStates:
+          type: array
+          items:
+            enum:
+            - AL
+            - AK
+            - AZ
+            - AR
+            - CA
+            - CO
+            - CT
+            - DE
+            - DC
+            - FL
+            - GA
+            - HI
+            - ID
+            - IL
+            - IN
+            - IA
+            - KS
+            - KY
+            - LA
+            - ME
+            - MD
+            - MA
+            - MI
+            - MN
+            - MS
+            - MO
+            - MT
+            - NE
+            - NV
+            - NH
+            - NJ
+            - NM
+            - NY
+            - NC
+            - ND
+            - OH
+            - OK
+            - OR
+            - PA
+            - RI
+            - SC
+            - SD
+            - TN
+            - TX
+            - UT
+            - VT
+            - VA
+            - WA
+            - WV
+            - WI
+            - WY
+            - AS
+            - GU
+            - MP
+            - PR
+            - VI
+            type: string
+          description: Additional practice states of the provider. Cannot include the primary practice state.
+        gender:
+          enum:
+          - Unknown
+          - Male
+          - Female
+          - NonBinaryOrThirdGender
+          - Other
+          - PreferNotToSay
+          type: string
+          description: Provider's gender (optional).
+        ethnicity:
+          type: array
+          items:
+            enum:
+            - AmericanIndianOrAlaskaNative
+            - Asian
+            - BlackOrAfricanAmerican
+            - HispanicOrLatino
+            - NativeHawaiianOrOtherPacificIslander
+            - White
+            - PreferNotToSay
+            - NoInformationToAnswer
+            type: string
+          description: Provider's ethnicity (optional).
+        credentialingStatus:
+          type: string
+          description: If set, the provider's `credentialingStatus` will be updated with this value.
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderEmailRequestModel'
+          description: If set, the provider's `emails` will be updated with this value. To remove the emails pass an empty array.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderAddressRequestModel'
+          description: If set, the provider's `addresses` will be updated with this value. To remove the addresses pass an empty array.
+        phone:
+          type: string
+          description: Primary phone number associated with this provider
+        languages:
+          type: array
+          items:
+            type: string
+          description: A list of languages, other than English, this provider speaks.
+        credentialedDate:
+          type: string
+          description: Date this provider was originally credentialed
+          format: date-time
+        nextCredentialingDate:
+          type: string
+          description: Date this provider should be credentialed next
+          format: date
+        recredentialedDates:
+          type: array
+          items:
+            type: string
+            format: date-time
+          description: A list of dates when this provider was re-credentialed.
+        providerTypeId:
+          type: string
+          description: Provider type id associated with this provider.
+          format: uuid
+        nuccGroupId:
+          type: string
+          description: If set, the provider's NUCC Taxonomy Group will be updated with this value.
+          format: uuid
+        segmentId:
+          type: string
+          description: If set, the provider's segment will be updated to this value. Used to reassign providers between segments in multi-tenant organizations.
+          format: uuid
+        deactivated:
+          type: boolean
+          description: If set to true, the provider will be deactivated. If set to false, the provider will be activated.
+      additionalProperties: false
+    DatasetMetadata:
+      type: object
+      properties:
+        importDate:
+          type: string
+          description: The date of the import file that the dataset scan was compared against.
+          format: date
+        importFileName:
+          type: string
+          description: The original file name of the dataset source.
+      additionalProperties: false
+    Transaction:
+      type: object
+      properties:
+        orderId:
+          type: string
+          nullable: true
+        transactionId:
+          type: string
+          nullable: true
+        transactionStatus:
+          type: string
+          nullable: true
+        transactionDescription:
+          type: string
+          nullable: true
+        dateRequested:
+          type: string
+          format: date-time
+          nullable: true
+        dateNotified:
+          type: string
+          format: date-time
+          nullable: true
+        requestedBy:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpdbQueryInformation:
+      type: object
+      properties:
+        statutesQueried:
+          type: array
+          items:
+            type: string
+          description: The statutes queried on the NPDB verification.
+        queryType:
+          enum:
+          - OneTimeQuery
+          - ContinuousQuery
+          - CancellationQuery
+          - StatusQuery
+          - RenewQuery
+          - UpdateQuery
+          - TransferQuery
+          - HealthCheckQuery
+          type: string
+          description: OneTimeQuery or ContinuousQuery.
+        entityName:
+          type: string
+          description: The entity of the point of contact.
+        entityDbId:
+          type: string
+        authorizedSubmitter:
+          $ref: '#/components/schemas/NpdbSubmitterInformation'
+      additionalProperties: false
+      example:
+        statutesQueried:
+        - Title IV
+        - Section 1921
+        - Section 1128E
+        queryType: OneTimeQuery
+        entityName: Reporting Entity
+        authorizedSubmitter:
+          name: Jane Smith
+          phone: 345-6789
+          title: CEO
+    ProviderAddressParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        addressType:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+        addressLine:
+          type: string
+          nullable: true
+        addressLine2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        zipCode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AbmsMemberId:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        domain:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AbmsCertificationInfo:
+      type: object
+      properties:
+        recognitionOrganization:
+          type: string
+          nullable: true
+        certificationBoard:
+          type: string
+          nullable: true
+        maintenance:
+          type: string
+          nullable: true
+        maintenanceRequired:
+          type: string
+          nullable: true
+        certificateInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbmsCertificateInfo'
+          nullable: true
+      additionalProperties: false
+    ProviderTypeParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+        typeId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ProviderDateOfBirthParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        dateOfBirth:
+          type: string
+          format: date-time
+      additionalProperties: false
+    TricareDatasetRecord:
+      type: object
+      properties:
+        addresses:
+          type: string
+          nullable: true
+        companies:
+          type: string
+          nullable: true
+        excludeDate:
+          type: string
+          format: date-time
+          nullable: true
+        summary:
+          type: string
+          nullable: true
+        term:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    FlexibleDataModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Form
+          - Table
+          - Section
+          type: string
+          description: The schema type for `data`.
+        data:
+          description: The actual data for this property. The schema can change depending on `type`. See the [Flexible Data Model](/references/api/section/common-concepts/flexible-data-model) for more information.
+      additionalProperties: false
+    NpiProfile.OtherName:
+      type: object
+      properties:
+        nameTypeCode:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+        credential:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        organizationName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AbmsCertificateInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        maintenance:
+          type: string
+          nullable: true
+        maintenanceRequired:
+          type: string
+          nullable: true
+        issuance:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbmsCertificateIssuance'
+          nullable: true
+        recognition:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbmsCertificateRecognition'
+          nullable: true
+      additionalProperties: false
+    ProviderPageModel:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Id
+              - LastName
+              - FirstName
+              - CredentialingStatus
+              - CredentialedDate
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderModel'
+          description: The providers in the current page.
+        sortedBy:
+          enum:
+          - Id
+          - LastName
+          - FirstName
+          - CredentialingStatus
+          - CredentialedDate
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          firstName: string
+          lastName: string
+          dateOfBirth: '2019-08-24T14:15:22.0000000Z'
+          ssn: '***'
+          credentialingStatus: string
+          credentialedDate: '2019-08-24T14:15:22.0000000Z'
+          npi: 0
+          aliases:
+          - id: 9b4c12e8-02c5-4107-a524-c02416d43079
+            firstName: string
+            lastName: string
+          addresses:
+          - id: e57c9ee4-807d-456a-bf32-623280064ca5
+            state: AL
+            zipCode: string
+            city: string
+            addressLine1: string
+            addressLine2: string
+            type: Unspecified
+          emails:
+          - id: 1d46ecfe-5ce4-4b9c-aaba-3543e15d36d1
+            email: string
+            type: Unspecified
+          phone: string
+          languages:
+          - string
+          recredentialedDates:
+          - '2019-08-24T14:15:22.0000000Z'
+          providerType:
+            id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+            name: string
+        sortedBy: Id
+        sortDirection: Asc
+        sort:
+          Id: Asc
+          FirstName: Asc
+          LastName: Asc
+          CredentialingStatus: Desc
+    StateSanctionsAndExclusionsProviderAlias:
+      type: object
+      properties:
+        fullName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+          nullable: true
+        suffix:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpdbHospitalAffiliation:
+      type: object
+      properties:
+        hospitalName:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpiProfile.NpiBasicModel:
+      type: object
+      properties:
+        replacementNpi:
+          type: integer
+          format: int64
+          nullable: true
+        ein:
+          type: string
+          nullable: true
+        organizationName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        namePrefix:
+          type: string
+          nullable: true
+        nameSuffix:
+          type: string
+          nullable: true
+        credential:
+          type: string
+          nullable: true
+        enumerationDate:
+          type: string
+          format: date-time
+          nullable: true
+        lastUpdateDate:
+          type: string
+          format: date-time
+          nullable: true
+        certificationDate:
+          type: string
+          format: date-time
+          nullable: true
+        isSoleProprietor:
+          type: boolean
+          nullable: true
+        isOrganizationalSubpart:
+          type: boolean
+          nullable: true
+        parentOrganizationLbn:
+          type: string
+          nullable: true
+        parentOrganizationTin:
+          type: string
+          nullable: true
+        authorizedOfficialNamePrefix:
+          type: string
+          nullable: true
+        authorizedOfficialNameSuffix:
+          type: string
+          nullable: true
+        authorizedOfficialCredential:
+          type: string
+          nullable: true
+        authorizedOfficialFirstName:
+          type: string
+          nullable: true
+        authorizedOfficialLastName:
+          type: string
+          nullable: true
+        authorizedOfficialMiddleName:
+          type: string
+          nullable: true
+        authorizedOfficialTelephoneNumber:
+          type: string
+          nullable: true
+        authorizedOfficialTitleOrPosition:
+          type: string
+          nullable: true
+        deactivationDate:
+          type: string
+          format: date-time
+          nullable: true
+        reactivationDate:
+          type: string
+          format: date-time
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NpdbInformationReported:
+      type: object
+      properties:
+        type:
+          enum:
+          - Aar
+          - Mmpr
+          - Jocr
+          - LegacyMmpr
+          - LegacyAar
+          type: string
+          readOnly: true
+      additionalProperties: false
+    OfacDatasetRecord:
+      type: object
+      properties:
+        identityNumber:
+          type: integer
+          format: int64
+        type:
+          enum:
+          - Individual
+          - Unknown
+          type: string
+        program:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        remarks:
+          type: string
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfacAddressRecord'
+          nullable: true
+        alternateIdentities:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfacAlternateIdentityRecord'
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CredentialingRequestEventFileModel:
+      type: object
+      properties:
+        path:
+          type: string
+          description: The path to the file.
+        type:
+          enum:
+          - CredentialingPacket
+          type: string
+          description: The type of the attachment.
+      additionalProperties: false
+    Enrollment:
+      type: object
+      properties:
+        enrollments:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnrollmentInfo'
+          nullable: true
+        studentAddress:
+          $ref: '#/components/schemas/NscAddress'
+      additionalProperties: false
+    AbmsPersonalInfo:
+      type: object
+      properties:
+        restrictions:
+          type: string
+          nullable: true
+        physicalStatus:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        dateOfBirthAccuracy:
+          type: string
+          nullable: true
+        dateOfBirthRestriction:
+          type: string
+          nullable: true
+        deceasedDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    NpdbReportInformation:
+      type: object
+      properties:
+        transactionType:
+          type: string
+        dcn:
+          type: string
+        previousDcn:
+          type: string
+        previousDcnNote:
+          type: string
+        latestRelatedDcn:
+          type: string
+        reportingEntity:
+          $ref: '#/components/schemas/NpdbReportingEntityInformation'
+        latestReportingEntity:
+          $ref: '#/components/schemas/NpdbLatestReportingEntityInformation'
+        subject:
+          $ref: '#/components/schemas/NpdbReportSubjectInformation'
+        informationReported:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbInformationReported'
+          description: Reported information, depending on the type of report.
+        subjectNotificationFailure:
+          $ref: '#/components/schemas/NpdbSubjectNotificationFailure'
+        subjectStatement:
+          type: string
+          description: Subject statement.
+        subjectStatementDate:
+          type: string
+          format: date-time
+        disputeStatus:
+          enum:
+          - ReportDisputed
+          - ReviewRequested
+          - ReconsiderationRequested
+          - DecisionReached
+          type: string
+          description: Report dispute status.
+        originalSubmission:
+          type: string
+          description: Date of original submission.
+          format: date-time
+        mostRecentChange:
+          type: string
+          description: Date of most recent change.
+          format: date-time
+        notes:
+          type: array
+          items:
+            type: string
+        maintainedUnder:
+          type: array
+          items:
+            $ref: '#/components/schemas/NpdbCodeDescription'
+      additionalProperties: false
+      example:
+        reportingEntity:
+          name: CPMC Van Ness Campus
+          additionalName: Sutter Health
+          address:
+            state: CA
+            zipCode: '94123'
+            city: San Francisco
+            addressLine: The avenue
+          officeOrName: Silver Tower
+          titleOrDepartment: HR
+          phone: '5781234567'
+          entityReference: '00000001'
+        subject:
+          name: Kelly June Washington
+          dateOfBirth: 1988-11-6
+          organizationName: UCSF
+          organizationType: Medical Group/Practice
+          organizationTypeCode: '365'
+          workAddress:
+            state: CA
+            zipCode: '94123'
+            city: San Francisco
+            addressLine: The avenue
+          license: Physician (MD)
+          otherNames: ''
+          deceased: ''
+          ssn: '*****4057'
+          npi: '1234567890'
+          professionalSchools:
+          - name: UC Davis
+            yearOfGraduation: '2008'
+          specialty: ''
+          dea: '123456789012'
+          healthCareEntities: []
+          businessAddress:
+            state: CA
+            zipCode: '94123'
+            city: San Francisco
+            addressLine: The avenue
+          natureOfRelationship: Subject is Owner/Partner of Affiliate or Associate
+        informationReported:
+        - initialAction: Revocation of Clinical Privileges
+          typeOfAdverseAction: Clinical Privilege
+          basisForAction:
+            code: AA
+            description: Failure to Comply With Corrective Action Plan
+          classifications:
+          - code: '1610'
+            description: REVOCATION OF CLINICAL PRIVILEGES
+          dateActionWasTaken: 2009-9-7
+          dateActionBecameEffective: 2009-9-8
+          lengthOfAction:
+            type: indefinite
+          descriptionOfSubjectActs: test report
+        subjectStatement: If the subject identified in Section B of this report has submitted a statement, it appears in this section.
+        disputeStatus: reviewRequested
+        originalSubmission: 2020-10-2
+        mostRecentChange: 2020-10-3
+    FacilityAccreditationInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        accreditationNumber:
+          type: string
+          nullable: true
+        accreditationProgram:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderBoardCertificationNumberParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        boardCertificationNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Course:
+      type: object
+      properties:
+        courseName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DatasetMonitorModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Dataset
+          - License
+          type: string
+          description: Monitoring type for this monitor object. The license identifier and dataset type will be set based on this type.
+        id:
+          type: string
+          format: uuid
+        monitoringInterval:
+          enum:
+          - Continuous
+          - Daily
+          - Weekly
+          - Monthly
+          - Yearly
+          type: string
+          description: 'The interval at which the data is being monitored.<br/><i>NOTE: Continuous interval is only supported by the `NPDB` dataset at this time.</i>'
+          example: Monthly
+        nextMonitoringDate:
+          type: string
+          description: The next date on which this data is scheduled to be monitored.
+          format: date-time
+        lastMonitoringDate:
+          type: string
+          description: The date on which this data was monitored last time.
+          format: date-time
+        providerId:
+          type: string
+          description: The identifier of the provider that is associated with this monitor.
+          format: uuid
+        facilityId:
+          type: string
+          description: The identifier of the facility that is associated with this monitor.
+          format: uuid
+        datasetType:
+          enum:
+          - Sam
+          - MedicareOptOut
+          - OigFugitives
+          - OfacSdn
+          - OfacConsolidated
+          - OigExclusions
+          - StateSanctionsAndExclusions
+          - Npdb
+          - Dmf
+          - Npi
+          - Nsc
+          - Dea
+          - CmsPreclusion
+          - Tricare
+          - AmericanBoardofInternalMedicine
+          - NationalCommissiononCertificationofPhysicianAssistants
+          - Abms
+          - NationalBoardforCertifiedCounselors
+          - AmericanAcademyofNursePractitioners
+          - NationalBoardofCertificationandRecertificationforNurseAnesthetists
+          - AmericanOsteopathicAssociation
+          - AmericanNursesCredentialingCenter
+          - NationalBoardforCertificationinOccupationalTherapy
+          - AmericanSpeechLanguageHearingAssociation
+          - AmericanBoardofFamilyMedicine
+          - AmericanBoardofPsychiatryandNeurology
+          - InternationalBoardofLactationConsultantExaminers
+          - AmericanMidwiferyCertificationBoard
+          - AmericanDentalBoardofAnesthesiology
+          - AmericanBoardofClinicalSocialWork
+          - BoardOfPharmacySpecialties
+          - AmericanBoardofAllergyandImmunology
+          - AmericanBoardofOrthodontics
+          - AmericanBoardofOralMedicine
+          - AmericanBoardofPediatricDentistry
+          - AmericanBoardofOralandMaxillofacialSurgery
+          - AmericanBoardofOralandMaxillofacialRadiology
+          - AmericanBoardofProsthodontics
+          - AmericanBoardofOralandMaxillofacialPathology
+          - AmericanBoardofEndodontics
+          - AmericanBoardofPeriodontology
+          - AmericanBoardofOralImplantology
+          - AmericanBoardofPodiatricMedicine
+          - AmericanBoardofDentalPublicHealth
+          - BehaviorAnalystCertificationBoard
+          - AmericanBoardofGeneralDentistry
+          - NationalAssociationofSchoolPsychologists
+          - AmericanBoardofAddictionMedicine
+          - AmericanBoardofMultipleSpecialtiesinPodiatry
+          - CommissionOnDieteticRegistration
+          - AmericanBoardOfObesityMedicine
+          - NationalCertificationCorporation
+          - NationalCommissionForCertificationOfAnesthesiologistAssistants
+          - AmericanRegistryOfRadiologyTechnologists
+          - AmericanBoardOfAnesthesiology
+          - AmericanRegistryForDiagnosticMedicalSonography
+          - NationalBoardOfPhysiciansAndSurgeons
+          - CardiovascularCredentialingInternational
+          - NationalCenterForCompetencyTesting
+          - NationalAssociationOfPhlebotomyTechnicians
+          - AmericanAlliedHealth
+          - NationalRegistryOfAlliedHealthProfessionals
+          - AmericanMedicalTechnologists
+          - NationalHealthCareerAssociation
+          - DentalAssistingNationalBoard
+          - PediatricNursingCertification
+          - NationalCertificationCommissionForAcupunctureAndOrientalMedicine
+          - CertificationBoardForMusicTherapists
+          - AmericanBoardOfChiropracticInternists
+          - AmericanBoardofPhysicalTherapySpecialties
+          - AmericanBoardofPhysicianSpecialties
+          - AmericanAcademyofOptometry
+          - AmericanBoardofNeurologicalSurgery
+          - AmericanBoardofObstetricsandGynecology
+          - AmericanBoardofOphthalmology
+          - AmericanBoardofOtolaryngologyHeadandNeckSurgery
+          - AmericanBoardofPediatrics
+          - AmericanBoardofOrthopaedicSurgery
+          - AmericanBoardofPhysicalMedicineandRehabilitation
+          - AmericanBoardofPlasticSurgery
+          - AmericanBoardofRadiology
+          - AmericanBoardofSurgery
+          - AmericanBoardofUrology
+          - AmericanBoardofColonandRectalSurgery
+          - AmericanAssociationofCriticalCareNurses
+          - AmericanBoardofFootandAnkleSurgery
+          - PharmacyTechnicianCertificationBoard
+          - NationalBoardofSurgicalTechnologyandSurgicalAssisting
+          - AmericanBoardofPainMedicine
+          - AmericanBoardofOrofacialPain
+          - NuclearMedicineTechnologyCertificationBoard
+          - AmericanBoardofEmergencyMedicine
+          - ArtTherapyCredentialsBoard
+          - AmericanBoardofProfessionalPsychology
+          - NationalRegistryofEmergencyMedicalTechnicians
+          - AmericanBoardofOptometry
+          - BehavioralInterventionCertificationCouncil
+          - AmericanHeartAssociation
+          - InternationalBoardCertifiedLactationConsultant
+          - MedicaidEnrollmentCalifornia
+          - JointCommission
+          - FacilityCmsCertification
+          type: string
+          description: The dataset type that is associated with this monitor, if any.
+        options:
+          $ref: '#/components/schemas/DatasetScanOptions'
+        lastVerification:
+          $ref: '#/components/schemas/DatasetScanModel'
+      additionalProperties: false
+    AbmsEducationInfo:
+      type: object
+      properties:
+        degree:
+          type: string
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDateAccuracy:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TaxonomyGroupModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the taxonomy group.
+          format: uuid
+        name:
+          type: string
+          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
+      additionalProperties: false
+      example:
+        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        name: Allopathic & Osteopathic Physicians
+    AbmsCertificateIssuance:
+      type: object
+      properties:
+        focus:
+          type: string
+          nullable: true
+        duration:
+          type: string
+          nullable: true
+        occurrence:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        issueDateAccuracy:
+          type: string
+          nullable: true
+        expiryDate:
+          type: string
+          format: date-time
+          nullable: true
+        expiryDateAccuracy:
+          type: string
+          nullable: true
+        scheduledUpdate:
+          type: string
+          format: date-time
+          nullable: true
+        scheduledUpdateAccuracy:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        notices:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbmsCertificateIssuanceNotice'
+          nullable: true
+      additionalProperties: false
+    ProviderEducationParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        graduationYear:
+          type: integer
+          format: int32
+          nullable: true
+        schoolName:
+          type: string
+          nullable: true
+        schoolCode:
+          type: string
+          nullable: true
+        branchCode:
+          type: string
+          nullable: true
+        degree:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderAliasRequestModel:
+      required:
+      - firstName
+      - lastName
+      type: object
+      properties:
+        firstName:
+          minLength: 1
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          minLength: 1
+          type: string
+          description: The last (family) name of this alias.
+      additionalProperties: false
+    FacilityNameParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CredentialingRequestEventModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of this credentialing request event.
+          format: uuid
+        description:
+          type: string
+          description: The description of this credentialing request event.
+        note:
+          type: string
+          description: The note of this credentialing request event.
+        timestamp:
+          type: string
+          description: The timestamp when this credentialing request event was created.
+          format: date-time
+        status:
+          enum:
+          - RequestSubmitted
+          - RequestInProgress
+          - AdditionalInformationRequested
+          - AdditionalInformationSubmitted
+          - CancellationRequested
+          - Cancelled
+          - Completed
+          - CompletedWithConcern
+          - UnableToComplete
+          - SecondAttemptMissingInfo
+          - ThirdAttemptMissingInfo
+          type: string
+          description: 'The status of this credentialing request event. Only the following statuses are available for self-managed requests: `"RequestInProgress"`, `"Cancelled"` and `"Completed"`.'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialingRequestEventFileModel'
+          description: Files attached to this credentialing request event.
+        user:
+          $ref: '#/components/schemas/CredentialingRequestEventUserModel'
+      additionalProperties: false
+    NpdbLatestReportingEntityInformation:
+      type: object
+      properties:
+        statusDescription:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        additionalName:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/NormalizedAddress'
+        officeOrName:
+          type: string
+          nullable: true
+        titleOrDepartment:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        lastUpdateDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    MedicaidEnrollmentCaliforniaDatasetRecord:
+      type: object
+      properties:
+        providerSource:
+          type: string
+          nullable: true
+        providerNumber:
+          type: string
+          nullable: true
+        ownerNumber:
+          type: string
+          nullable: true
+        serviceLocationNumber:
+          type: string
+          nullable: true
+        enrollStatusEffectiveDate:
+          type: string
+          format: date-time
+          nullable: true
+        providerTaxonomy:
+          type: string
+          nullable: true
+        nemtNmtProviderType:
+          type: string
+          nullable: true
+        ancProviderType:
+          type: string
+          nullable: true
+        fiProviderTypeCd:
+          type: string
+          nullable: true
+        fiProviderType:
+          type: string
+          nullable: true
+        providerLicense:
+          type: string
+          nullable: true
+        fiProviderSpecialtyCd:
+          type: string
+          nullable: true
+        fiProviderSpecialty:
+          type: string
+          nullable: true
+        outOfStateIndicator:
+          type: string
+          nullable: true
+        inOutState:
+          type: string
+          nullable: true
+        addressAttention:
+          type: string
+          nullable: true
+        dhcsCountyCd:
+          type: string
+          nullable: true
+        fipsCountyCd:
+          type: string
+          nullable: true
+        countyName:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: uuid
+        address:
+          type: string
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+        npiNumber:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    OfacAddressRecord:
+      type: object
+      properties:
+        addressRemarks:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AbmsDisclaimerInfo:
+      type: object
+      properties:
+        certificationBoard:
+          type: string
+          nullable: true
+        disclaimer:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'Enter your bearer token in the format: Bearer {your token}'
+      scheme: bearer
+      bearerFormat: custom
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+- name: Definitions
+  tags:
+  - Definitions
+- name: Providers
+  tags:
+  - Providers
+  - ProvidersInfo
+  - ProviderProfiles
+  - Notes
+  - Files
+- name: Facilities
+  tags:
+  - Facilities
+  - FacilitiesInfo
+  - FacilitiesSpecialties
+- name: Verifications
+  tags:
+  - Licenses
+  - Datasets
+  - DEA
+  - BoardCertifications
+- name: Monitoring
+  tags:
+  - Monitoring
+  - Alerts
+- name: Credentialing
+  tags:
+  - CredentialingRequests
+- name: Integrations
+  tags:
+  - Integrations
+  - Webhooks
+- name: Audits
+  tags:
+  - Audit
+- name: Account
+  tags:
+  - Users
+- name: Organizations
+  tags:
+  - Reports
+- name: Models
+  tags:
+  - Dataset Records
+  - Webhook Callbacks

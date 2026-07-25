@@ -1,0 +1,3181 @@
+openapi: 3.0.1
+info:
+  title: Verifiable API Documentation Alerts Licenses API
+  description: "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n"
+  version: 26.12.1.962
+servers:
+- url: https://discovery.verifiable.com/api
+  description: Production
+- url: https://discovery-staging.verifiable.com/api
+  description: Staging
+tags:
+- name: Licenses
+  description: 'These endpoints allow you to add licenses to a provider and perform license lookups. Please note that a license lookup may take some time depending on the load and performance of the external data source. It is generally recommended to wait at least 2 seconds before polling for an update or use one of the notification mechanisms we provide (TBD).
+
+
+    License verification result will have the basic information about the license such as license number, licenseType,
+
+    status, issued date, expiry date, etc. In addition, the disciplinary actions and other additional information that is
+
+    captured from the source site is represented through the disciplinaryActions and additionalProperties fields. The
+
+    disciplinary actions and additional properties fields describe the type of data that is getting represented and are
+
+    using the [Flexible Data Model](/references/api/section/common-concepts/flexible-data-model).
+
+    '
+paths:
+  /provider-licenses:
+    get:
+      tags:
+      - Licenses
+      summary: 'List provider licenses
+
+        '
+      description: 'Returns a page of provider licenses.
+
+        '
+      operationId: ListProviderLicenses
+      parameters:
+      - name: providerName
+        in: query
+        description: If set, the items will be filtered on providers with the specified (first or last) name.
+        schema:
+          type: string
+      - name: providerCredentialingStatus
+        in: query
+        description: If set, the items will be filtered on providers with the specified credentialing status.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: licenseState
+        in: query
+        description: If set, the items will be filtered on licenses with the specified license state.
+        schema:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+      - name: licenseType
+        in: query
+        description: If set, the items will be filtered on licenses with the specified license type.
+        schema:
+          type: string
+          format: uuid
+      - name: licenseStatus
+        in: query
+        description: If set, the items will be filtered on licenses with the specified license status.
+        schema:
+          enum:
+          - None
+          - Active
+          - Expired
+          - ExpiresSoon
+          - DisciplinaryActions
+          - Found
+          - NotFound
+          - UnableToVerify
+          - NeedsReview
+          - All
+          type: string
+      - name: licenseVerificationStatus
+        in: query
+        description: If set, the items will be filtered on licenses with the verification status.
+        schema:
+          enum:
+          - Verified
+          - Unverified
+          type: string
+      - name: licenseApprovedStatus
+        in: query
+        schema:
+          type: array
+          items:
+            enum:
+            - Pending
+            - 'Yes'
+            - 'No'
+            type: string
+      - name: export
+        in: query
+        schema:
+          enum:
+          - None
+          - Csv
+          type: string
+      - name: providerDeactivated
+        in: query
+        schema:
+          type: boolean
+      - name: sortedBy
+        in: query
+        description: The property by which the returned data will be sorted.
+        schema:
+          enum:
+          - ProviderFirstName
+          - ProviderLastName
+          - LicenseState
+          - LicenseExpirationDate
+          type: string
+      - name: sort
+        in: query
+        description: If set, the properties and directions the returned data will be sorted by.
+        schema:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - ProviderFirstName
+              - ProviderLastName
+              - LicenseState
+              - LicenseExpirationDate
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+      - name: offset
+        in: query
+        description: The offset for the page to start.
+        deprecated: true
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically.
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: The number of items to include in a single page.
+        schema:
+          type: integer
+          format: int32
+      - name: sortDirection
+        in: query
+        description: The direction the returned data will be sorted by.
+        schema:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderLicensePageModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/licenses/{licenseId}/verify:
+    post:
+      tags:
+      - Licenses
+      summary: 'Trigger a new license verification
+
+        '
+      description: 'By executing this endpoint a new license verification is scheduled and executed for the specified license.
+
+        '
+      operationId: TriggerLicenseVerification
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider that holds the license.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: licenseId
+        in: path
+        description: The identifier describing the license to be verified again.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/licenses/verify:
+    post:
+      tags:
+      - Licenses
+      summary: 'Trigger license verifications
+
+        '
+      description: 'By executing this endpoint a license verifications is scheduled and executed for specified licenses for the provider.
+
+        '
+      operationId: TriggerLicenseVerifications
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider that holds the license.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: List with license identifiers to run verifications. If list with identifiers is empty, verifications for all provider licenses will be run.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                title: Unique license identifier to run verififcation.
+                type: string
+                format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/licenses/{licenseId}:
+    delete:
+      tags:
+      - Licenses
+      summary: 'Detach a license from a provider
+
+        '
+      description: 'This will delete the license and associated verification records for the specified provider. This will also delete any related data such as screenshots, attachments, export reports, alerts etc.
+
+        '
+      operationId: DetachLicense
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider to detach the license from.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: licenseId
+        in: path
+        description: The identifier describing the license that you want to detach.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - Licenses
+      summary: 'Get a specific license from a provider
+
+        '
+      description: 'Returns the data and latest verification for a specific license attached to a specific provider.
+
+        '
+      operationId: GetLicense
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider that holds the license.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: licenseId
+        in: path
+        description: The identifier describing the license that you want to get the data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/licenses/{licenseId}/verifications/{verificationId}:
+    get:
+      tags:
+      - Licenses
+      summary: 'Get a specific license verification
+
+        '
+      description: 'Returns the data for a specific previously executed license verification. This endpoint can be used to retrieve historical results on older license verifications.
+
+        '
+      operationId: GetLicenseVerification
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider that holds the license.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: licenseId
+        in: path
+        description: The identifier describing the license that was previously verified.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: verificationId
+        in: path
+        description: The identifier describing the license verification that you want to retrieve.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseVerificationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - Licenses
+      summary: 'Resolve problems with a license verification
+
+        '
+      description: 'After a license verification is executed we sometimes are uncertain about the results we get from the source. For example when the source returns more than 1 match or the name of the license does not match the name that was used for the provider. In such cases we mark the license `status` as `NeedsReview`. It is expected that this status is resolved by the end user. The resolution can be patched by using this endpoint.
+
+        '
+      operationId: ResolveLicenseVerificationProblems
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider that holds the license.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: licenseId
+        in: path
+        description: The identifier describing the license that has a verification problem.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: verificationId
+        in: path
+        description: The identifier describing the license verification that needs to be patched.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LicenseVerificationResolutionModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseVerificationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/licenses/{licenseId}/verifications/{verificationId}/diff:
+    get:
+      tags:
+      - Licenses
+      summary: 'Diff two license verifications
+
+        '
+      description: 'Returns the diff according to [jsondiffpatch format](https://github.com/benjamine/jsondiffpatch) between the specified verification and the previous successful verification.
+
+        '
+      operationId: GetLicenseVerificationDiff
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider that holds the license.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: licenseId
+        in: path
+        description: The identifier describing the license that was previously verified.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: verificationId
+        in: path
+        description: The identifier describing the license verification that you want to diff with the previous one.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseVerificationDiffModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/licenses/{licenseId}/verifications:
+    get:
+      tags:
+      - Licenses
+      summary: 'List all verifications for a license
+
+        '
+      description: 'It is possible to perform more than one verification for any given license. In order to go back in history you can use this endpoint to get a list of all verifications for the specified license.
+
+        '
+      operationId: ListLicenseVerifications
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider that holds the license.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: licenseId
+        in: path
+        description: The identifier describing the license to get the verifications from.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LicenseVerificationModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /licensetypes:
+    get:
+      tags:
+      - Licenses
+      summary: 'List license types
+
+        '
+      description: 'Returns a list of all license types that are currently supported and used for license verifications.
+
+        '
+      operationId: ListSimplifiedLicenseTypes
+      parameters:
+      - name: state
+        in: query
+        description: If set, the items will be filtered on the state specified by this parameter
+        schema:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+      - name: count
+        in: query
+        description: The number of items to include in a single page.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int32
+      - name: sortedBy
+        in: query
+        description: The property by which the returned data will be sorted.
+        schema:
+          enum:
+          - Taxonomy
+          - Name
+          type: string
+      - name: sort
+        in: query
+        description: If set, the properties and directions the returned data will be sorted by.
+        schema:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Taxonomy
+              - Name
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+      - name: offset
+        in: query
+        description: The offset for the page to start.
+        deprecated: true
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically.
+        schema:
+          type: string
+      - name: sortDirection
+        in: query
+        description: The direction the returned data will be sorted by.
+        schema:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimplifiedLicenseTypePageModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /licensetypes/status:
+    get:
+      tags:
+      - Licenses
+      summary: 'List license source status
+
+        '
+      description: 'Returns the license source status information for one or more license types.
+
+        '
+      operationId: ListSimplifiedLicenseTypesStatus
+      parameters:
+      - name: licenseTypeId
+        in: query
+        description: If set, the items will be filtered by the License type id. Please refer to [LicenseTypes](/references/api/licenses/listsimplifiedlicensetypes) for more information on the License type id.
+        schema:
+          type: string
+          format: uuid
+      - name: state
+        in: query
+        description: If set, the items will be filtered by the state specified in this parameter.
+        schema:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+      - name: licenseTypeSearchQuery
+        in: query
+        schema:
+          type: string
+      - name: sourceIssue
+        in: query
+        schema:
+          enum:
+          - PossibleIssue
+          - SourceIssue
+          - AutomationIssue
+          - AutomationDegraded
+          type: string
+      - name: count
+        in: query
+        description: The number of items to include in a single page.
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int32
+      - name: sortedBy
+        in: query
+        description: The property by which the returned data will be sorted.
+        schema:
+          enum:
+          - State
+          type: string
+      - name: sort
+        in: query
+        description: If set, the properties and directions the returned data will be sorted by.
+        schema:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - State
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+      - name: offset
+        in: query
+        description: The offset for the page to start.
+        deprecated: true
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically.
+        schema:
+          type: string
+      - name: sortDirection
+        in: query
+        description: The direction the returned data will be sorted by.
+        schema:
+          enum:
+          - Asc
+          - Desc
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimplifiedLicenseTypeStatusPageModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /providers/{providerId}/licenses:
+    post:
+      tags:
+      - Licenses
+      summary: 'Attach a license to a provider
+
+        '
+      description: 'To perform a license verification you must first attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can reverify the same license without reattaching it. A provider can have more than one license attached.
+
+        '
+      operationId: AttachLicense
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider to attach the license to.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttachLicenseRequestModel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - Licenses
+      summary: 'List all licenses from a provider
+
+        '
+      description: 'Returns a list of all licenses previously attached to the specified provider.
+
+        '
+      operationId: ListLicenses
+      parameters:
+      - name: providerId
+        in: path
+        description: The identifier describing the provider to list all licenses for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LicenseModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /provider-licenses/aggregations:
+    get:
+      tags:
+      - Licenses
+      summary: 'Get provider licenses aggregations
+
+        '
+      description: 'Returns aggregated counts for provider licenses with different statuses.
+
+        '
+      operationId: GetProviderLicensesAggregations
+      parameters:
+      - name: providerDeactivated
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderLicenseAggregationsModel'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+  /licenses/{licenseId}:
+    patch:
+      tags:
+      - Licenses
+      summary: 'Patch an existing license
+
+        '
+      description: 'Allows you to change a license''s restriction or approved status.
+
+        '
+      operationId: PatchLicense
+      parameters:
+      - name: licenseId
+        in: path
+        description: Identifier of the license to patch.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LicensePatchModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseModel'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Server Error
+      security:
+      - Bearer: []
+components:
+  schemas:
+    SimplifiedLicenseTypeSourceModel:
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: The state the verification information relates to for the given license type.
+        requiredParameters:
+          type: array
+          items:
+            enum:
+            - LicenseNumber
+            - Name
+            - Ssn
+            type: string
+          description: List of parameters required to run a license verification. Missing data for a required parameter will result in a failed verification.
+        optionalParameters:
+          type: array
+          items:
+            enum:
+            - LicenseNumber
+            - Name
+            - Ssn
+            type: string
+          description: List of optional parameters that may be used to improve the verification result quality by applying additional filters.
+        hasPassThroughFee:
+          type: boolean
+          description: Indicates whether the source for this state + license type combination charges a pass-through fee for a verification.
+      additionalProperties: false
+    ProviderCaqhIdParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        caqhProviderId:
+          type: integer
+          format: int64
+      additionalProperties: false
+    ProviderLicenseParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        licenseTypeId:
+          type: string
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        number:
+          type: string
+          nullable: true
+        isPrimary:
+          type: boolean
+      additionalProperties: false
+    FlexibleDataModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Form
+          - Table
+          - Section
+          type: string
+          description: The schema type for `data`.
+        data:
+          description: The actual data for this property. The schema can change depending on `type`. See the [Flexible Data Model](/references/api/section/common-concepts/flexible-data-model) for more information.
+      additionalProperties: false
+    ProviderLicenseModel:
+      type: object
+      properties:
+        provider:
+          $ref: '#/components/schemas/ProviderBaseModel'
+        license:
+          $ref: '#/components/schemas/SimpleLicenseBaseModel'
+      additionalProperties: false
+    LicenseSourceStatusModel:
+      type: object
+      properties:
+        issue:
+          enum:
+          - PossibleIssue
+          - SourceIssue
+          - AutomationIssue
+          - AutomationDegraded
+          type: string
+          description: License source issue type. Set only if the license source is presenting any issue during verification.
+        averageProcessingTime:
+          type: number
+          description: Average processing time for a license verification (based on verifications over last 24 hrs).
+          format: double
+        averageFailureRate:
+          type: number
+          description: Average license verification failure rate for a license verification (based on verifications over last 24 hrs).
+          format: double
+      additionalProperties: false
+    FacilityCmsCertificationInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        certificateNumber:
+          type: string
+          nullable: true
+        certificateType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    LicensePatchModel:
+      type: object
+      properties:
+        restrictionStatus:
+          enum:
+          - None
+          - Restricted
+          - Unrestricted
+          type: string
+          description: If set, the license's restriction status will be updated with this value.
+        approvedStatus:
+          enum:
+          - Pending
+          - 'Yes'
+          - 'No'
+          type: string
+          description: If set, the license's approved status will be updated with this value.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/NonVerifiedLicenseInfoModel'
+        isCurrentlyPracticing:
+          type: boolean
+          description: If set, the license's `isCurrentlyPracticing` flag will be updated with this value.
+        isPrimary:
+          type: boolean
+          description: If set, the license's `isPrimary` flag will be updated with this value.
+        prescriptiveAuthority:
+          enum:
+          - RequiredMet
+          - RequiredNotMet
+          - NotRequired
+          type: string
+        collaboratingProviderId:
+          type: string
+          format: uuid
+      additionalProperties: false
+      example:
+        restrictionStatus: NotRestricted
+        approvedStatus: 'Yes'
+    SimplifiedLicenseTypeStatusModel:
+      type: object
+      properties:
+        licenseTypeName:
+          type: string
+        sourceName:
+          type: string
+        licenseTypeId:
+          type: string
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        status:
+          $ref: '#/components/schemas/LicenseSourceStatusModel'
+        maintenanceWindows:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaintenanceDowntimeCronDescription'
+          description: Array with the CRON descriptions that explain when this license type will be in maintenance window. When a license type is in a maintenance window the requests sent to it will be delayed until it is over.
+      additionalProperties: false
+    ProviderGenderParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        gender:
+          enum:
+          - Unknown
+          - Male
+          - Female
+          - NonBinaryOrThirdGender
+          - Other
+          - PreferNotToSay
+          type: string
+      additionalProperties: false
+    LicenseVerificationDiffModel:
+      type: object
+      properties:
+        old:
+          $ref: '#/components/schemas/LicenseVerificationModel'
+        new:
+          $ref: '#/components/schemas/LicenseVerificationModel'
+        diff:
+          description: Diff in [jsondiffpatch](https://github.com/benjamine/jsondiffpatch) format.
+      additionalProperties: false
+    SimpleLicenseBaseModel:
+      type: object
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        number:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        isPrimary:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+        isCurrentlyPracticing:
+          type: boolean
+        status:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expiryDate:
+          type: string
+          format: date-time
+          nullable: true
+        verificationStatus:
+          enum:
+          - Verified
+          - Unverified
+          type: string
+          nullable: true
+        licenseTypeId:
+          type: string
+          format: uuid
+        licenseTypeName:
+          type: string
+          nullable: true
+        approvedStatus:
+          enum:
+          - Pending
+          - 'Yes'
+          - 'No'
+          type: string
+        restrictionStatus:
+          enum:
+          - None
+          - Restricted
+          - Unrestricted
+          type: string
+        nonVerifiedInfoIssueDate:
+          type: string
+          format: date-time
+          nullable: true
+        nonVerifiedInfoExpirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        nonVerifiedInfoStatus:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SimplifiedLicenseTypeStatusPageModel:
+      type: object
+      properties:
+        previousCursor:
+          type: string
+          nullable: true
+        nextCursor:
+          type: string
+          nullable: true
+        nextOffset:
+          type: integer
+          format: int32
+          nullable: true
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimplifiedLicenseTypeStatusModel'
+          nullable: true
+        sortedBy:
+          enum:
+          - State
+          type: string
+          nullable: true
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          nullable: true
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - State
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          nullable: true
+      additionalProperties: false
+    MaintenanceDowntimeCronDescription:
+      type: object
+      properties:
+        expression:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        isUnderMaintenanceInTheNextHour:
+          type: boolean
+        trigger:
+          enum:
+          - Manual
+          - Automated
+          type: string
+        expiresIn:
+          type: string
+          format: timespan
+          nullable: true
+        isExpired:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    FailureModel:
+      type: object
+      properties:
+        messageTemplate:
+          type: string
+          description: An informative human readable message describing the verification failure.
+        messageParams:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
+      additionalProperties: false
+      description: An object with a reason message template and an array of params. Can be used to construct a meaningful description of the error. Not set when no errors happened.
+    LicenseVerificationModel:
+      type: object
+      properties:
+        originalStatus:
+          enum:
+          - Found
+          - Failed
+          - NeedsReview
+          - NotFound
+          - Pending
+          - Working
+          type: string
+          description: The original status as our license verification process determined. Unlike `status` the `originalStatus` can never change.
+        status:
+          enum:
+          - Found
+          - Failed
+          - NeedsReview
+          - NotFound
+          - Pending
+          - Working
+          type: string
+          description: The current status for this license verification. If you patch the license verification status (in case the status is `NeedsReview`) this property will be updated, but `originalStatus` will remain the same.
+        trigger:
+          enum:
+          - Manual
+          - Monitor
+          type: string
+          description: Set to `Manual` if the verification is triggered by a user or `Monitor` if the verification was triggered by the monitoring system.
+        started:
+          type: string
+          description: Timestamp of when the license verification started processing.
+          format: date-time
+        processingTime:
+          type: integer
+          description: The duration in milliseconds it took to process the license verification from start to end.
+          format: int64
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LicenseVerificationResultModel'
+          description: Array of verification records returned by the source that match the license number.
+        additionalVerificationParameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/IProviderParameter'
+          description: List of additional parameters required for a select number of sources. Missing data for select sources will result in a failed verification.
+        verificationSource:
+          $ref: '#/components/schemas/VerificationSourceModel'
+        failureReason:
+          $ref: '#/components/schemas/FailureModel'
+        correctResultIndex:
+          type: integer
+          description: In case there is more than 1 result you can patch the verification and specify which of the records is the correct match by setting `correctResultIndex` to the appropriate index matching the index in the `results` array.
+          format: int32
+        export:
+          type: string
+          description: Once a license verification is in an 'end state' a PDF export will be generated. Once the PDF is generated this property will contain the path to that export. That path can be used to [download the file](/references/api/files/downloadfile). Please note that the process to generate an export is asynchronous and it can take several seconds after a verification is completed before the export is ready.
+        exportSuccess:
+          type: boolean
+          description: Flag to indicate the success or failure of a verification export. If not set, the export is still in progress or has not been requested.
+        exportError:
+          type: string
+          description: Export failure reason. if the export has failed, this field will have a short explanation.
+        id:
+          type: string
+          description: Unique identifier for this license verification.
+          format: uuid
+        monitoringMetadata:
+          $ref: '#/components/schemas/MonitoringMetadata'
+      additionalProperties: false
+    ProviderSsnParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        ssn:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IProviderParameter:
+      oneOf:
+      - $ref: '#/components/schemas/FacilityAccreditationInfoParameter'
+      - $ref: '#/components/schemas/FacilityCmsCertificationInfoParameter'
+      - $ref: '#/components/schemas/FacilityNameParameter'
+      - $ref: '#/components/schemas/ProviderAddressParameter'
+      - $ref: '#/components/schemas/ProviderBoardCertificationNumberParameter'
+      - $ref: '#/components/schemas/ProviderCaqhIdParameter'
+      - $ref: '#/components/schemas/ProviderCertificateParameter'
+      - $ref: '#/components/schemas/ProviderDateOfBirthParameter'
+      - $ref: '#/components/schemas/ProviderDeaParameter'
+      - $ref: '#/components/schemas/ProviderEducationParameter'
+      - $ref: '#/components/schemas/ProviderGenderParameter'
+      - $ref: '#/components/schemas/ProviderLicenseParameter'
+      - $ref: '#/components/schemas/ProviderNameParameter'
+      - $ref: '#/components/schemas/ProviderNccpaBoardCertificateInfoParameter'
+      - $ref: '#/components/schemas/ProviderNpiParameter'
+      - $ref: '#/components/schemas/ProviderSsnParameter'
+      - $ref: '#/components/schemas/ProviderTypeParameter'
+      discriminator:
+        propertyName: type
+        mapping:
+          FacilityAccreditationInfo: '#/components/schemas/FacilityAccreditationInfoParameter'
+          FacilityCmsCertificationInfo: '#/components/schemas/FacilityCmsCertificationInfoParameter'
+          FacilityName: '#/components/schemas/FacilityNameParameter'
+          Address: '#/components/schemas/ProviderAddressParameter'
+          BoardCertificationNumber: '#/components/schemas/ProviderBoardCertificationNumberParameter'
+          CaqhId: '#/components/schemas/ProviderCaqhIdParameter'
+          Certificate: '#/components/schemas/ProviderCertificateParameter'
+          DateOfBirth: '#/components/schemas/ProviderDateOfBirthParameter'
+          Dea: '#/components/schemas/ProviderDeaParameter'
+          Education: '#/components/schemas/ProviderEducationParameter'
+          Gender: '#/components/schemas/ProviderGenderParameter'
+          License: '#/components/schemas/ProviderLicenseParameter'
+          Name: '#/components/schemas/ProviderNameParameter'
+          NccpaBoardCertificateInfo: '#/components/schemas/ProviderNccpaBoardCertificateInfoParameter'
+          Npi: '#/components/schemas/ProviderNpiParameter'
+          Ssn: '#/components/schemas/ProviderSsnParameter'
+          ProviderType: '#/components/schemas/ProviderTypeParameter'
+    LicenseVerificationResultModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the provider as indicated by the source.
+        licenseType:
+          type: string
+          description: Textual description of the license type as indicated by the source.
+        licenseStatus:
+          type: string
+          description: Textual description of the license status as indicated by the source.
+        licenseNumber:
+          type: string
+          description: License number as indicated by the source.
+        address:
+          type: string
+          description: Address of the license holder as indicated by the source.
+        issued:
+          type: string
+          description: Timestamp when the license was issued as indicated by the source.
+          format: date-time
+        expires:
+          type: string
+          description: Timestamp when the license expires as indicated by the source.
+          format: date-time
+        screenshots:
+          type: array
+          items:
+            type: string
+          description: Array of paths to screenshots that were taken as proof of the license verification.
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/LicenseVerificationAttachmentModel'
+          description: Array of attachments related to the verification that were taken from the source.
+        disciplinaryActions:
+          $ref: '#/components/schemas/FlexibleDataModel'
+        additionalProperties:
+          $ref: '#/components/schemas/FlexibleDataModel'
+        problems:
+          type: array
+          items:
+            enum:
+            - NameMismatch
+            - LicenseTypeMismatch
+            type: string
+          description: Array of problems that resulted in a `NeedsReview` status for the license verification.
+        prescriptiveAuthority:
+          type: string
+          description: Indicates whether the provider is legally authorized to prescribe medications, as reported by the licensing authority.
+        compactStatus:
+          type: string
+          description: Indicates whether the provider holds a multistate/interstate practice privilege under an applicable compact, as reported by the licensing authority.
+      additionalProperties: false
+    LicenseVerificationResolutionModel:
+      type: object
+      properties:
+        status:
+          enum:
+          - Found
+          - Failed
+          - NeedsReview
+          - NotFound
+          - Pending
+          - Working
+          type: string
+          description: The correct status for this license verification.
+        correctResultIndex:
+          type: integer
+          description: The correct result index for this license verification (if applicable).
+          format: int32
+      additionalProperties: false
+      example:
+        status: Found
+        correctResultIndex: 0
+    AttachLicenseRequestModel:
+      required:
+      - licenseTypeId
+      - state
+      type: object
+      properties:
+        licenseNumber:
+          type: string
+          description: A license number from one of the licenses of the provider.
+        licenseTypeId:
+          type: string
+          description: License type id for one of the license type supported. Please refer to [LicenseTypes](/references/api/licenses/listsimplifiedlicensetypes) for more information.
+          format: uuid
+        firstName:
+          type: string
+          description: Specify a first name that will be used during the license verification. If not specified, first name will be used from the provider basic info.
+        lastName:
+          type: string
+          description: Specify a last name that will be used during the license verification. If not specified, last name will be used from the provider basic info.
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: State for which license type needs to be attached.
+        restrictionStatus:
+          enum:
+          - None
+          - Restricted
+          - Unrestricted
+          type: string
+          description: Restriction status for the license. `None` is a default value.
+        approvedStatus:
+          enum:
+          - Pending
+          - 'Yes'
+          - 'No'
+          type: string
+          description: Approval status for the license. `Pending` is a default value.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/NonVerifiedLicenseInfoModel'
+        skipVerification:
+          type: boolean
+          description: If the flag is set, verification wouldn't be run right after attaching license to the provider.
+        isCurrentlyPracticing:
+          type: boolean
+        isPrimary:
+          type: boolean
+          description: If the flag is set, the license will be set as primary for the provider.
+        prescriptiveAuthority:
+          enum:
+          - RequiredMet
+          - RequiredNotMet
+          - NotRequired
+          type: string
+        collaboratingProviderId:
+          type: string
+          format: uuid
+      additionalProperties: false
+      example:
+        licenseNumber: '123456'
+        state: AL
+        licenseTypeId: 25cb4aee-c0c2-419b-b7c0-fd37169e9efb
+    FileModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this file.
+          format: uuid
+        providerId:
+          type: string
+          description: If set, the provider to which this file is associated.
+          format: uuid
+        facilityId:
+          type: string
+          description: If set, the facility to which this file is associated.
+          format: uuid
+        createdAt:
+          type: string
+          description: The time when the file was created.
+          format: date-time
+        createdByUserId:
+          type: string
+          description: The identifier of the user who created the file.
+          format: uuid
+        createdByUserEmail:
+          type: string
+          description: The e-mail of the user who created the file.
+        path:
+          type: string
+          description: Path to the file.
+        size:
+          type: integer
+          description: The size of the file.
+          format: int32
+      additionalProperties: false
+    ProviderBaseModel:
+      required:
+      - credentialingStatus
+      - firstName
+      - lastName
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          minLength: 1
+          type: string
+        lastName:
+          minLength: 1
+          type: string
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        ssn:
+          type: string
+          nullable: true
+        credentialingStatus:
+          minLength: 1
+          type: string
+        credentialedDate:
+          type: string
+          format: date-time
+          nullable: true
+        nextCredentialingDate:
+          type: string
+          format: date
+          nullable: true
+        npi:
+          type: integer
+          format: int64
+          nullable: true
+        deactivated:
+          type: boolean
+        deactivatedAt:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    SimplifiedLicenseTypePageModel:
+      type: object
+      properties:
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimplifiedLicenseTypeModel'
+          description: The providers in the current page.
+        sortedBy:
+          enum:
+          - Taxonomy
+          - Name
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Taxonomy
+              - Name
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          taxonomy: string
+          name: string
+          aliases:
+          - string
+          abbreviations:
+          - string
+          states:
+          - AL
+          verificationParameters:
+            AL:
+              requiredParameters:
+              - LicenseNumber
+              optionalParameters: []
+          sources:
+          - state: AL
+            requiredParameters:
+            - LicenseNumber
+            optionalParameters: []
+            hasPassThroughFee: true
+        sortedBy: Taxonomy
+        sortDirection: Asc
+        sort:
+          Taxonomy: Asc
+          Name: Desc
+    FacilityAccreditationInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        accreditationNumber:
+          type: string
+          nullable: true
+        accreditationProgram:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NonVerifiedLicenseInfoModel:
+      type: object
+      properties:
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderBoardCertificationNumberParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        boardCertificationNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    VerificationSourceModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the licensing organization.
+        url:
+          type: string
+          description: The URL used to fetch the license data for this source.
+        hasPassThroughFee:
+          type: boolean
+          description: Indicates whether the source charges a pass-through fee for a verification.
+        hasPrescriptiveAuthorityStatus:
+          type: boolean
+        hasCompactStatus:
+          type: boolean
+      additionalProperties: false
+    LicenseVerificationAttachmentModel:
+      type: object
+      properties:
+        file:
+          $ref: '#/components/schemas/FileModel'
+        type:
+          enum:
+          - DisciplinaryAction
+          - VerificationLetter
+          - AdditionalDocument
+          type: string
+        source:
+          type: string
+          description: The original url for the file, taken from the verification source.
+        downloadStatus:
+          enum:
+          - Downloaded
+          - Failed
+          type: string
+          description: The status of the download. ´Downloaded´ or ´Failed´
+        failureReason:
+          $ref: '#/components/schemas/FailureModel'
+      additionalProperties: false
+    ProviderDeaParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        registrationNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderCertificateParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        certificateType:
+          enum:
+          - AhaBasicLifeSupport
+          - AhaAdvancedCardiacLifeSupport
+          - AhaNeonatalAdvancedLifeSupport
+          - AhaPediatricAdvancedLifeSupport
+          - CaliforniaCertifiedWellnessCoach
+          - AhaAdvancedCardiovascularLifeSupport
+          - AhaAdvancedStrokeLifeSupport
+          - AhaPears
+          - AhaHeartsaver
+          type: string
+          nullable: true
+        certificateNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderAddressParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        addressType:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+        addressLine:
+          type: string
+          nullable: true
+        addressLine2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        zipCode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderLicenseAggregationsModel:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of provider licenses.
+          format: int32
+        aggregations:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          description: For each state that a provider license can have, a count of provider licenses in that state.
+      additionalProperties: false
+      example:
+        total: 100
+        aggregations:
+          Active: 2
+          Expired: 10
+          ExpiresSoon: 5
+          DisciplinaryActions: 15
+          Found: 80
+          NotFound: 20
+          UnableToVerify: 40
+          NeedsReview: 30
+    LicenseVerificationParameters:
+      type: object
+      properties:
+        requiredParameters:
+          type: array
+          items:
+            enum:
+            - LicenseNumber
+            - Name
+            - Ssn
+            type: string
+          description: List of parameters required to run a license verification. Missing data for a required parameter will result into a failed verification.
+        optionalParameters:
+          type: array
+          items:
+            enum:
+            - LicenseNumber
+            - Name
+            - Ssn
+            type: string
+          description: List of optional parameters that may be used to improve the verification result quality by applying additional filters.
+      additionalProperties: false
+    ProviderNccpaBoardCertificateInfoParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        number:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProviderEducationParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        graduationYear:
+          type: integer
+          format: int32
+          nullable: true
+        schoolName:
+          type: string
+          nullable: true
+        schoolCode:
+          type: string
+          nullable: true
+        branchCode:
+          type: string
+          nullable: true
+        degree:
+          type: string
+          nullable: true
+      additionalProperties: false
+    FacilityNameParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SimplifiedLicenseTypeModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this license type.
+          format: uuid
+        taxonomy:
+          type: string
+          description: Unique taxonomy code associated with this license type.
+        name:
+          type: string
+          description: Descriptive name for this license type.
+        aliases:
+          type: array
+          items:
+            type: string
+          description: Aliases used by different sources.
+        abbreviations:
+          type: array
+          items:
+            type: string
+          description: License type name abbreviations.
+        states:
+          type: array
+          items:
+            enum:
+            - AL
+            - AK
+            - AZ
+            - AR
+            - CA
+            - CO
+            - CT
+            - DE
+            - DC
+            - FL
+            - GA
+            - HI
+            - ID
+            - IL
+            - IN
+            - IA
+            - KS
+            - KY
+            - LA
+            - ME
+            - MD
+            - MA
+            - MI
+            - MN
+            - MS
+            - MO
+            - MT
+            - NE
+            - NV
+            - NH
+            - NJ
+            - NM
+            - NY
+            - NC
+            - ND
+            - OH
+            - OK
+            - OR
+            - PA
+            - RI
+            - SC
+            - SD
+            - TN
+            - TX
+            - UT
+            - VT
+            - VA
+            - WA
+            - WV
+            - WI
+            - WY
+            - AS
+            - GU
+            - MP
+            - PR
+            - VI
+            type: string
+          description: List of states for which license verification is supported.
+          deprecated: true
+        verificationParameters:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/LicenseVerificationParameters'
+          description: Description of parameters required to run verifications.
+          deprecated: true
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimplifiedLicenseTypeSourceModel'
+          description: A list of parameters and other verification-related information per state.
+      additionalProperties: false
+    ProviderNpiParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        number:
+          type: integer
+          format: int64
+      additionalProperties: false
+    ProviderTypeParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+        typeId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ProviderLicensePageModel:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - ProviderFirstName
+              - ProviderLastName
+              - LicenseState
+              - LicenseExpirationDate
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderLicenseModel'
+          description: The providers licenses in the current page.
+        sortedBy:
+          enum:
+          - ProviderFirstName
+          - ProviderLastName
+          - LicenseState
+          - LicenseExpirationDate
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - provider:
+            id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+            firstName: string
+            lastName: string
+            dateOfBirth: '2019-08-24T14:15:22.0000000Z'
+            ssn: '***'
+            credentialingStatus: string
+            credentialedDate: '2019-08-24T14:15:22.0000000Z'
+            npi: 0
+          license:
+            providerId: 4834bcdc-4a64-444d-966b-1a6fe381da24
+            number: string
+            state: AL
+            isPrimary: true
+            id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+            isCurrentlyPracticing: true
+            status: string
+            expiryDate: '2019-08-24T14:15:22.0000000Z'
+            verificationStatus: Verified
+            licenseTypeId: acac9426-ab93-4f79-a277-f4ccd1b60206
+            licenseTypeName: string
+            approvedStatus: Pending
+        sortedBy: ProviderFirstName
+        sortDirection: Asc
+        sort:
+          ProviderFirstName: Asc
+          ProviderLastName: Desc
+    LicenseModel:
+      type: object
+      properties:
+        providerId:
+          type: string
+          description: Identifier of the provider associated with this license.
+          format: uuid
+        licenseNumber:
+          type: string
+          description: The license number used when attaching this license to the provider.
+        firstName:
+          type: string
+          description: Provider first name number used when attaching this license to the provider.
+        lastName:
+          type: string
+          description: Provider last name used when attaching this license to the provider.
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: State associated with the license.
+        jobStatus:
+          enum:
+          - Idle
+          - Pending
+          - Working
+          type: string
+          description: If the `jobStatus` is `Pending` or `Working` it means that we are busy performing the license verification. Once the status is `Idle` the verification is done.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/NonVerifiedLicenseInfoModel'
+        currentVerificationStatus:
+          enum:
+          - Found
+          - Failed
+          - NeedsReview
+          - NotFound
+          - Pending
+          - Working
+          type: string
+          description: Status of the last requested verification for this license.
+        currentVerification:
+          $ref: '#/components/schemas/LicenseVerificationModel'
+        restrictionStatus:
+          enum:
+          - None
+          - Restricted
+          - Unrestricted
+          type: string
+          description: Restriction status for the license. `None` is a default value.
+        approvedStatus:
+          enum:
+          - Pending
+          - 'Yes'
+          - 'No'
+          type: string
+          description: Approval status for the license. `Pending` is a default value.
+        isPrimary:
+          type: boolean
+          description: If the flag is set, license will be set as primary for the provider.
+        id:
+          type: string
+          description: Unique identifier for this specific license.
+          format: uuid
+        isCurrentlyPracticing:
+          type: boolean
+          description: Indicates whether the provider is currently practicing in this state.
+        prescriptiveAuthority:
+          enum:
+          - RequiredMet
+          - RequiredNotMet
+          - NotRequired
+          type: string
+          description: The prescriptive authority status identifying whether the license requires a collaborative practice agreement or protocol, and whether the requirement has been met.
+        collaboratingProviderId:
+          type: string
+          description: Identifier describing the provider who fulfills the license's collaborative practice agreement or protocol requirement.
+          format: uuid
+        licenseType:
+          $ref: '#/components/schemas/SimplifiedLicenseTypeModel'
+      additionalProperties: false
+    ProviderNameParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MonitoringMetadata:
+      type: object
+      properties:
+        monitoringInterval:
+          enum:
+          - Continuous
+          - Daily
+          - Weekly
+          - Monthly
+          - Yearly
+          type: string
+          description: 'The interval at which the data is being monitored.<br/><i>NOTE: Continuous interval is only supported by the `NPDB` dataset at this time.</i>'
+          example: Monthly
+        lastMonitoringDate:
+          type: string
+          description: The previous date on which this data was monitored, if any.
+          format: date-time
+        nextMonitoringDate:
+          type: string
+          description: The next date on which this data is scheduled to be monitored.
+          format: date-time
+        monitorId:
+          type: string
+          description: Unique identifier of the monitor.
+          format: uuid
+      additionalProperties: false
+    ProviderDateOfBirthParameter:
+      type: object
+      properties:
+        type:
+          enum:
+          - Name
+          - Npi
+          - DateOfBirth
+          - Ssn
+          - License
+          - Address
+          - Education
+          - BoardCertificationNumber
+          - Dea
+          - Certificate
+          - CaqhId
+          - ProviderType
+          - FacilityName
+          - FacilityAccreditationInfo
+          - FacilityCmsCertificationInfo
+          - NccpaBoardCertificateInfo
+          - Gender
+          type: string
+          readOnly: true
+        dateOfBirth:
+          type: string
+          format: date-time
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'Enter your bearer token in the format: Bearer {your token}'
+      scheme: bearer
+      bearerFormat: custom
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+- name: Definitions
+  tags:
+  - Definitions
+- name: Providers
+  tags:
+  - Providers
+  - ProvidersInfo
+  - ProviderProfiles
+  - Notes
+  - Files
+- name: Facilities
+  tags:
+  - Facilities
+  - FacilitiesInfo
+  - FacilitiesSpecialties
+- name: Verifications
+  tags:
+  - Licenses
+  - Datasets
+  - DEA
+  - BoardCertifications
+- name: Monitoring
+  tags:
+  - Monitoring
+  - Alerts
+- name: Credentialing
+  tags:
+  - CredentialingRequests
+- name: Integrations
+  tags:
+  - Integrations
+  - Webhooks
+- name: Audits
+  tags:
+  - Audit
+- name: Account
+  tags:
+  - Users
+- name: Organizations
+  tags:
+  - Reports
+- name: Models
+  tags:
+  - Dataset Records
+  - Webhook Callbacks
