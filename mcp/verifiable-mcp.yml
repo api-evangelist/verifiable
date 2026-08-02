@@ -1,0 +1,52 @@
+generated: '2026-07-21'
+method: searched
+status: published
+source: https://docs.discovery.verifiable.com/references/api/section/getting-started
+server:
+  name: verifiable-docs
+  kind: documentation
+  transport: http
+  url: https://docs.discovery.verifiable.com/mcp
+  notes: >-
+    The Verifiable API documentation site advertises an official hosted MCP
+    server ("Install MCP server on Cursor" / "Install MCP server on VS Code")
+    that exposes the API documentation to MCP-capable clients. It is a docs
+    assistant, not an execution surface over the API operations themselves.
+candidate_api_tools:
+  status: candidate
+  source: openapi/verifiable-openapi-original.json
+  notes: >-
+    Verifiable does not publish an operational MCP server that wraps the API's
+    253 operations. The following are candidate tools derived from marquee
+    OpenAPI operations, for a future generated server.
+  tools:
+  - name: create_provider
+    description: Create a new healthcare provider record
+    source_operation: openapi/verifiable-openapi-original.json#CreateProvider
+  - name: list_providers
+    description: List and filter provider records
+    source_operation: openapi/verifiable-openapi-original.json#ListProviders
+  - name: attach_license
+    description: Attach a license to a provider
+    source_operation: openapi/verifiable-openapi-original.json#AttachLicense
+  - name: trigger_license_verification
+    description: Trigger primary-source verification of a provider license
+    source_operation: openapi/verifiable-openapi-original.json#TriggerLicenseVerification
+  - name: start_dataset_scan
+    description: Start an asynchronous scan of a monitored dataset
+    source_operation: openapi/verifiable-openapi-original.json#StartDatasetScan
+  - name: list_dataset_matches
+    description: Read matches resulting from a dataset scan
+    source_operation: openapi/verifiable-openapi-original.json#ListDatasetMatches
+  - name: create_monitor
+    description: Create a continuous monitor over provider credentials/sanctions
+    source_operation: openapi/verifiable-openapi-original.json#CreateMonitor
+  - name: list_alerts
+    description: List monitoring alerts
+    source_operation: openapi/verifiable-openapi-original.json#ListAlerts
+  - name: create_credentialing_request
+    description: Open a credentialing request for a provider
+    source_operation: openapi/verifiable-openapi-original.json#CreateCredentialingRequest
+  - name: create_webhook
+    description: Register a webhook for event delivery
+    source_operation: openapi/verifiable-openapi-original.json#CreateWebhook

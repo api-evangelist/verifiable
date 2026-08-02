@@ -1,0 +1,29 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Verifiable API
+  version: 1.0.0
+extends: openapi/verifiable-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: verifiable
+    x-apievangelist-industry: health
+    x-apievangelist-capabilities:
+    - provider-data-management
+    - credentialing
+    - primary-source-verification
+    - continuous-monitoring
+    - payer-enrollment
+    x-apievangelist-auth: bearer-token
+    x-apievangelist-rate-limit: 10000 per 5 minutes
+    x-apievangelist-pagination: cursor
+    x-apievangelist-error-envelope: rfc7807-problem-details
+    x-apievangelist-webhooks: true
+    x-apievangelist-compliance:
+    - soc2
+- target: $.servers
+  update:
+  - url: https://discovery.verifiable.com/api
+    description: Production
+  - url: https://discovery-staging.verifiable.com/api
+    description: Staging (request access from Verifiable support)

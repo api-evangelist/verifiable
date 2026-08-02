@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: verifiable.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  3 18:30:44 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: discovery.verifiable.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Mar 15 23:59:59 2027 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: discovery-staging.verifiable.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb 15 23:59:59 2027 GMT
+  hsts: true
+  hsts_max_age: 31536000
+domains:
+- domain: verifiable.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

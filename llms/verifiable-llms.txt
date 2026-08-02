@@ -1,0 +1,9 @@
+# Verifiable API documentation
+
+> Verifiable API documentation
+
+## Table of contents
+
+ - [API reference](https://docs.discovery.verifiable.com/index.html.md)
+ - [Verifiable API Documentation](https://docs.discovery.verifiable.com/references/api.md)
+ - [Verifiable API Documentation](https://docs.discovery.verifiable.com/references/deprecated/api.md)

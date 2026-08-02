@@ -1,0 +1,47 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/verifiable-openapi-original.json
+docs: https://docs.discovery.verifiable.com/references/api/section/common-concepts/overview
+format: rfc7807
+envelope:
+  schema: ProblemDetails
+  content_type: application/json
+  fields:
+    type: URI reference identifying the problem type (nullable)
+    title: short human-readable summary (nullable)
+    status: HTTP status code (nullable int32)
+    detail: human-readable explanation specific to this occurrence (nullable)
+    instance: URI reference identifying the specific occurrence (nullable)
+  notes: >-
+    RFC 7807 ProblemDetails object shape, served as application/json (not
+    application/problem+json). additionalProperties are allowed for
+    validation/field-level detail.
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Malformed request, invalid field, or a rejected value (e.g. new password equal to current password).
+- status: 401
+  title: Unauthorized
+  meaning: Missing, expired, or invalidated Bearer access token.
+- status: 403
+  title: Forbidden
+  meaning: Authenticated but not permitted (e.g. wrong current password on password change).
+- status: 404
+  title: Not Found
+  meaning: Referenced provider, facility, license, or other resource does not exist.
+- status: 409
+  title: Conflict
+  meaning: State conflict, e.g. a password change is required before authentication can complete.
+- status: 429
+  title: Too Many Requests
+  meaning: Global rate limit exceeded (10,000 requests per 5 minutes). Retry after the window.
+  remediation: Back off and retry after the 5-minute window; see conventions/verifiable-conventions.yml.
+- status: 500
+  title: Internal Server Error
+  meaning: Unexpected server-side error.
+- status: 502
+  title: Bad Gateway
+  meaning: Upstream/primary-source dependency returned an invalid response.
+- status: 503
+  title: Service Unavailable
+  meaning: Service temporarily unavailable.

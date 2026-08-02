@@ -1,0 +1,22 @@
+generated: '2026-07-21'
+method: searched
+source: https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json
+notes: >-
+  Verifiable publishes its OpenAPI descriptions under the /.well-known/openapi/
+  path on the API host. security.txt and OIDC discovery documents were probed
+  and are not published (absence is recorded, not fabricated).
+hosts:
+- host: https://api.discovery.verifiable.com
+  documents:
+  - path: /.well-known/openapi/vCurrent.json   # current OpenAPI 3.0 description
+    status: 200
+    file: ../openapi/verifiable-openapi-original.json
+  - path: /.well-known/openapi/vDeprecated.json # deprecated OpenAPI 3.0 description
+    status: 200
+    file: ../openapi/verifiable-openapi-deprecated.json
+- host: https://verifiable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404

@@ -1,0 +1,76 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.discovery.verifiable.com/references/api/section/common-concepts/overview
+api: openapi/verifiable-openapi-original.json
+summary: >-
+  Cross-cutting request/response semantics for the Verifiable API. RESTful over
+  HTTPS, Bearer-token auth, cursor-based pagination with filtering and sorting,
+  an RFC 7807-shaped error envelope, and a global 10,000-request / 5-minute rate
+  limit. The API does not document an idempotency-key contract.
+authentication:
+  style: bearer-token
+  header: Authorization
+  scheme: Bearer
+  token_exchange: >-
+    Access tokens are obtained by exchanging credentials at the /auth endpoints
+    (password, Google Sign-In, OAuth client credentials [premium], or SSO).
+  docs: https://docs.discovery.verifiable.com/references/api/authentication
+  see_also: authentication/verifiable-authentication.yml
+idempotency:
+  supported: false
+  notes: >-
+    No Idempotency-Key header or idempotent-replay contract is documented or
+    present in the OpenAPI. Creates use POST and return 201 with a Location
+    header to the new resource.
+pagination:
+  style: cursor
+  params:
+    cursor: cursor        # opaque cursor; omit for the first page
+    sort: sort            # field to sort by
+    sortedBy: sortedBy    # alternate sort field parameter
+    sortDirection: sortDirection  # asc | desc
+    offset: offset        # DEPRECATED offset-based paging
+  response_fields:
+    nextCursor: cursor for the next page
+    previousCursor: cursor for the previous page
+    nextOffset: DEPRECATED next-page offset
+  filtering: >-
+    List endpoints support filtering and sorting query parameters; see the
+    Pagination, filtering and sorting concept page.
+  docs: https://docs.discovery.verifiable.com/references/api/section/common-concepts/overview
+error_envelope:
+  shape: rfc7807-problem-details
+  content_type: application/json
+  fields: [type, title, status, detail, instance]
+  notes: >-
+    Errors use the RFC 7807 ProblemDetails object shape (type/title/status/
+    detail/instance) but are served as application/json, not
+    application/problem+json.
+  see_also: errors/verifiable-problem-types.yml
+rate_limiting:
+  limit: 10000
+  window: 5 minutes
+  scope: global
+  on_exceed: HTTP 429 Too Many Requests with a ProblemDetails body (title, status)
+  docs: https://docs.discovery.verifiable.com/references/api/section/common-concepts/rate-limits
+versioning:
+  scheme: calver-build
+  current: 26.12.1.962
+  deprecated_channel: >-
+    A separate "Deprecated" API version is published alongside the current one
+    (see lifecycle/verifiable-lifecycle.yml).
+  docs: https://docs.discovery.verifiable.com/references/api/section/getting-started
+tracing:
+  request_id: null
+  webhook_headers: [X-WebhookType, X-WebhookId, X-Secret, X-TraceId]
+  notes: >-
+    No request-id response header is documented for API calls. Webhook callbacks
+    carry X-TraceId (stable per message) plus X-WebhookType/X-WebhookId/X-Secret.
+    See asyncapi/verifiable-webhooks.yml.
+data_model:
+  nullable_properties: >-
+    The API distinguishes explicitly-null from absent properties ("Nullable
+    properties" concept); PATCH semantics honor this.
+  flexible_data_model: >-
+    A "flexible data model" allows partial/extensible provider and facility
+    records.

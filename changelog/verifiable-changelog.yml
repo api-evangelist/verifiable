@@ -1,0 +1,18 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.discovery.verifiable.com/references/api/section/getting-started
+scheme: calver-build
+current_version: 26.12.1.962
+channels:
+  release_notes: Verifiable Help Center (customer sign-in required)
+  api_versions:
+    current: https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json
+    deprecated: https://api.discovery.verifiable.com/.well-known/openapi/vDeprecated.json
+notes: >-
+  Verifiable versions its API as a build-style CalVer string (major tracks the
+  year, e.g. 26.x = 2026). Dated, structured release notes are published behind
+  the Verifiable Help Center for signed-in customers, so per-entry history is not
+  publicly harvestable; the current version and the current/deprecated OpenAPI
+  descriptions are captured here. Breaking changes are communicated to
+  integrating partners ahead of time.
+entries: []

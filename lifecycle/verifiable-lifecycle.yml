@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.discovery.verifiable.com/references/api/section/getting-started
+versioning:
+  scheme: calver-build
+  current: 26.12.1.962
+  docs: https://docs.discovery.verifiable.com/references/api/section/getting-started
+  notes: >-
+    A single evolving RESTful API. The documentation warns that the product and
+    API "are still subject to significant and potentially breaking changes" and
+    that any breaking change will be communicated ahead of time to integrating
+    partners.
+deprecation:
+  policy: >-
+    Verifiable maintains a distinct "Deprecated" API version alongside the
+    current version. Both a current (vCurrent) and a deprecated (vDeprecated)
+    OpenAPI description are published under /.well-known/openapi/ so integrators
+    can migrate off deprecated behavior.
+  current_spec: https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json
+  deprecated_spec: https://api.discovery.verifiable.com/.well-known/openapi/vDeprecated.json
+  sunset_header: null
+status_page: https://status.verifiable.com
+release_notes:
+  location: Verifiable Help Center (customer sign-in required)
+  url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+  notes: Dated release notes are published to the Verifiable Help Center for customers.
+sla:
+  url: null
+deprecated_operations: []

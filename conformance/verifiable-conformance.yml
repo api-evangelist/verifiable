@@ -1,0 +1,40 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/verifiable-openapi-original.json
+docs: https://docs.discovery.verifiable.com/references/api
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: Official OpenAPI 3.0.1 description published at /.well-known/openapi/vCurrent.json
+- id: rest
+  conforms: true
+  evidence: Resource-oriented HTTP API using conventional GET/POST/PATCH/PUT/DELETE methods
+- id: oauth2-client-credentials
+  conforms: true
+  evidence: >-
+    Machine-to-machine OAuth 2.0 client credentials flow documented at
+    POST /auth/oauth/token (premium add-on, provisioned by Verifiable)
+- id: http-bearer-auth
+  conforms: true
+  evidence: components.securitySchemes.Bearer (type http, scheme bearer)
+- id: rfc7807-problem-details
+  conforms: partial
+  evidence: >-
+    Errors use the RFC 7807 ProblemDetails object shape (type/title/status/
+    detail/instance) but are served as application/json, not
+    application/problem+json
+- id: cursor-pagination
+  conforms: true
+  evidence: List endpoints support cursor/nextCursor/previousCursor paging
+- id: soc2
+  conforms: true
+  evidence: SOC 2 attestation referenced on the Verifiable security page (https://verifiable.com/legal/security)
+- id: fhir
+  conforms: false
+  evidence: Provider/facility credentialing domain model; not a FHIR resource API
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Uses the older RFC 7807 shape without the application/problem+json media type
+compliance:
+  soc2: true
+  page: https://verifiable.com/legal/security

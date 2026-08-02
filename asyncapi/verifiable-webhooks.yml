@@ -1,0 +1,50 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.discovery.verifiable.com/references/api/section/integrations/webhooks
+spec_type: Webhooks
+summary: >-
+  Verifiable delivers events as outbound HTTP POST callbacks. A webhook is
+  registered for a specific event type; when that event occurs Verifiable POSTs
+  a JSON payload to the configured URL. The event type is carried in the
+  X-WebhookType header so multiple webhook types can share one endpoint. Failed
+  deliveries are retried up to 3 times. There is no published AsyncAPI document.
+delivery:
+  transport: http-webhook
+  method: POST
+  retries: 3
+  expects: HTTP success status code from the receiver
+  security:
+    https_required: true
+    insecure_urls: Optional, for testing only
+    headers:
+    - name: X-WebhookType
+      purpose: Event/payload type discriminator
+    - name: X-WebhookId
+      purpose: The webhook id (known only to the creator)
+    - name: X-Secret
+      purpose: Optional shared secret set at webhook creation
+    - name: X-TraceId
+      purpose: Stable per-message id (constant across delivery attempts) for idempotent processing
+management_operations:
+- CreateWebhook       # POST /webhooks
+- ListWebhooks        # GET /webhooks
+- GetWebhook          # GET /webhooks/{webhookId}
+- PatchWebhook        # PATCH /webhooks/{webhookId}
+- DeleteWebhook       # DELETE /webhooks/{webhookId}
+- ListWebhooksLog     # GET /webhookslog
+callbacks:
+  reference: https://docs.discovery.verifiable.com/references/api/webhook-callbacks/
+  known_types:
+  - NpdbUpdateRequestRejectedWebhook
+  notes: >-
+    The full webhook callback payload models are documented under the "Webhook
+    Callbacks" section of the API reference; the payload model varies by
+    X-WebhookType.
+inbound_integration_webhooks:
+  notes: >-
+    Verifiable also exposes inbound webhook receivers for partner integrations
+    (Fountain, Cognito Forms, WorkOS, Salesforce) under /integrations and /auth.
+  operations:
+  - FountainWebhook        # POST /integrations/fountain/webhook/{organizationId}
+  - CognitoFormsWebhook    # POST /integrations/cognito-forms/webhook/{type}
+  - WorkOsWebhook          # POST /auth/workos/webhook

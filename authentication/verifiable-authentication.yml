@@ -1,0 +1,56 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/verifiable-openapi-original.json
+docs: https://docs.discovery.verifiable.com/references/api/authentication
+summary:
+  types:
+  - http
+  http_schemes:
+  - bearer
+  token_exchange_flows:
+  - password
+  - google-signin
+  - oauth-client-credentials
+  - sso
+schemes:
+- name: Bearer
+  type: http
+  scheme: bearer
+  bearerFormat: custom
+  header: Authorization
+  description: 'Enter your bearer token in the format: Bearer {your token}'
+  sources:
+  - openapi/verifiable-openapi-deprecated.json
+  - openapi/verifiable-openapi-original.json
+token_endpoints:
+- flow: password
+  operation: PasswordAuth
+  path: POST /auth/token/password
+  description: Exchange a registered email + password for an access token.
+- flow: google-signin
+  operation: GoogleAuth
+  path: POST /auth/token/google
+  description: Server-side Google Sign-In flow; exchange a Google auth code for an access token.
+- flow: oauth-client-credentials
+  operation: OAuthToken
+  path: POST /auth/oauth/token
+  premium: true
+  description: >-
+    Machine-to-machine OAuth 2.0 client credentials flow (client_id +
+    client_secret, grant_type=client_credentials). Premium add-on that must be
+    enabled per organization by the Verifiable team. No scopes are documented.
+- flow: sso
+  operation: SsoAuth
+  path: POST /auth/token/oauth
+  description: SSO-based authentication (premium/provisioned).
+token_management:
+- operation: ListActiveAccessTokens
+  path: GET /auth/token
+- operation: InvalidateAccessToken
+  path: POST /auth/token/{tokenId}/invalidate
+- operation: InvalidateAccessTokens
+  path: POST /auth/token/invalidate
+notes: >-
+  No official first-party SDK is published; Verifiable recommends generating a
+  client from the OpenAPI description or using any HTTP client. There is no
+  OAuth scope surface, so scopes/ is intentionally omitted.

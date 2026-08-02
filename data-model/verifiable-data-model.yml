@@ -1,0 +1,104 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/verifiable-openapi-original.json
+docs: https://docs.discovery.verifiable.com/references/api
+summary: >-
+  Entity-relationship graph derived from the Verifiable OpenAPI path structure
+  and id-reference parameters. The domain centers on Providers and Facilities,
+  each carrying rich "Info" sub-records, with Licenses/Verifications, continuous
+  Monitoring, Datasets, Credentialing Requests, Payers/Plans, Groups and
+  Enrollments layered on top.
+entities:
+- name: Provider
+  root: true
+  relationships:
+  - {type: has_many, target: ProviderInfo, via: providerId}
+  - {type: has_many, target: License, via: providerId}
+  - {type: has_many, target: Note, via: providerId}
+  - {type: has_many, target: ProviderSpecialty, via: providerId}
+  - {type: has_many, target: ProviderEnrollment, via: providerId}
+  - {type: has_many, target: CredentialingRequest, via: providerId}
+- name: ProviderInfo
+  description: >-
+    Provider credential/attribute sub-records: CAQH, aliases, board
+    certifications, certificates, liability insurances, educations, trainings,
+    work history, specialties, hospital affiliations, DEA registrations,
+    addresses, emails, medicaid enrollments.
+  relationships:
+  - {type: belongs_to, target: Provider, via: providerId}
+- name: License
+  relationships:
+  - {type: belongs_to, target: Provider, via: providerId}
+  - {type: has_many, target: LicenseVerification, via: licenseId}
+- name: LicenseVerification
+  relationships:
+  - {type: belongs_to, target: License, via: licenseId}
+- name: Facility
+  root: true
+  relationships:
+  - {type: has_many, target: FacilityInfo, via: facilityId}
+  - {type: has_many, target: FacilitySpecialty, via: facilityId}
+- name: FacilityInfo
+  description: >-
+    Facility credential sub-records: NPIs, DEAs, liability insurances, licenses,
+    accreditations, CMS certifications, medicare enrollments.
+  relationships:
+  - {type: belongs_to, target: Facility, via: facilityId}
+- name: FacilitySpecialty
+  relationships:
+  - {type: belongs_to, target: Facility, via: facilityId}
+- name: Monitor
+  relationships:
+  - {type: has_many, target: Alert, via: monitorId}
+- name: Alert
+  relationships:
+  - {type: belongs_to, target: Monitor, via: monitorId}
+- name: CredentialingRequest
+  relationships:
+  - {type: has_many, target: CredentialingRequestEvent, via: requestId}
+  - {type: has_one, target: CredentialingRequestChecklist, via: requestId}
+  - {type: belongs_to, target: Provider, via: providerId}
+- name: Payer
+  relationships:
+  - {type: has_many, target: PayerPlan, via: payerId}
+- name: PayerPlan
+  relationships:
+  - {type: belongs_to, target: Payer, via: payerId}
+- name: Group
+  relationships:
+  - {type: has_many, target: Provider, via: groupId}
+  - {type: has_many, target: PayerPlan, via: groupId}
+  - {type: has_many, target: ProviderEnrollment, via: groupId}
+- name: ProviderEnrollment
+  relationships:
+  - {type: belongs_to, target: Provider, via: providerId}
+  - {type: belongs_to, target: PayerPlan, via: payerPlanId}
+- name: Dataset
+  relationships:
+  - {type: has_many, target: DatasetScan, via: datasetType}
+  - {type: has_many, target: DatasetMatch, via: datasetType}
+  - {type: has_many, target: DatasetRecord, via: datasetType}
+- name: DatasetScan
+  relationships:
+  - {type: belongs_to, target: Dataset, via: datasetType}
+  - {type: has_many, target: DatasetMatch, via: scanId}
+- name: DatasetMatch
+  relationships:
+  - {type: belongs_to, target: DatasetScan, via: scanId}
+- name: Webhook
+  relationships:
+  - {type: has_many, target: WebhookLog, via: webhookId}
+- name: Note
+  relationships:
+  - {type: belongs_to, target: Provider, via: providerId}
+- name: Organization
+  root: true
+  relationships:
+  - {type: has_many, target: OAuthCredentials, via: clientId}
+  - {type: has_many, target: Report, via: organizationId}
+  - {type: has_many, target: User, via: organizationId}
+- name: User
+  relationships:
+  - {type: belongs_to, target: Organization, via: organizationId}
+- name: File
+  description: Uploaded and export files addressed by path or id.

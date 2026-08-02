@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.discovery.verifiable.com/references/api/section/getting-started/environments
+summary: >-
+  Verifiable separates a staging environment from production. Integrators are
+  asked to build against staging and only move to production once the
+  integration is stable and tested. Access to each environment is granted by
+  Verifiable support (no self-serve keys); there are no synthetic test cards
+  because this is not a payments API.
+environments:
+- name: staging
+  base_url: https://discovery-staging.verifiable.com/api
+  purpose: Development and testing
+  access: Granted by Verifiable support
+- name: production
+  base_url: https://discovery.verifiable.com/api
+  purpose: Live provider/credentialing data
+  access: Granted by Verifiable support once the integration is validated
+webhook_testing:
+  insecure_urls: >-
+    Webhooks normally require HTTPS callback URLs; a webhook may optionally be
+    created that allows insecure (HTTP) URLs for testing purposes only.
+notes: >-
+  Contact https://verifiable.com/contact to be granted access to environments.
+  No published magic test identifiers or hosted test fixtures.

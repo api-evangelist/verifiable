@@ -1,27 +1,828 @@
 aid: verifiable
 name: Verifiable
-description: 'Verifiable is a company surfaced as a portfolio company of craft-ventures and added to the
-  API Evangelist network as a stub for enrichment. Sector: health. This profile is a lead awaiting the
-  enrichment pipeline.'
+description: >-
+  Verifiable is an API-first provider network management and credentialing
+  platform for healthcare. Its RESTful API lets health plans, credentialing
+  vendors, and digital health companies programmatically manage provider and
+  facility records, run real-time primary-source verifications of licenses and
+  credentials, continuously monitor providers for sanctions and exclusions, scan
+  reference datasets, manage payers, payer plans, groups, and provider
+  enrollments, drive credentialing requests, and receive events via webhooks.
+  The platform is built API-first (Verifiable builds its own product on the same
+  API) and is used as underlying credentialing infrastructure across healthcare.
+  Backed by Craft Ventures.
 url: https://raw.githubusercontent.com/api-evangelist/verifiable/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - craft-ventures
-x-tier: stub
-x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://cdn.prod.website-files.com/5f274600ac3de0cf25b08be9/699f3ecc7486361f3611e7f8_Homepage.jpg
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
 - Health
-apis: []
+- Healthcare
+- Credentialing
+- Provider Data
+- Primary Source Verification
+- Compliance
+- Monitoring
+- API
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: verifiable:verifiable-alerts-api
+  name: Verifiable Alerts API
+  description: >-
+    Endpoints to list and dismiss active alerts. Alerts are triggered when an important event occurs that
+    warrants user involvement. An alert can be considered dismissed if it has a dismissal timestamp and
+    note.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Alerts
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-alerts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-audit-api
+  name: Verifiable Audit API
+  description: >-
+    Each API call that results in data being created, updated or deleted will result in one or more entries
+    in the audit log. Using the endpoints provided in this section it is possible to list entries in this
+    log.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Audit
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-audit-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-authentication-api
+  name: Verifiable Authentication API
+  description: >-
+    These endpoint allow you to create and manage access tokens to be used in API calls. Unlike most other
+    endpoints, when creating an access token, these do not require an access token to be used. Instead
+    you authenticate via another secure mechanism and in exchange you retrieve an access token.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-boardcertifications-api
+  name: Verifiable BoardCertifications API
+  description: >-
+    These endpoints allow you to add board certifications to a provider and perform certification lookups.
+    Please note that a lookup may take some time depending on the load and performance of the external
+    data source. It is generally recommended to wait at least 2 seconds before polling for an update or
+    use one of the notification mechanisms we provide (TBD).
+
+
+    Board certification verification result will have the basic information about the certification such
+    as name, issued date, expiry date, etc. In addition, other additional information that is captured
+    from the source site is represented through the additionalProperties fields. The additional properties
+    fields describe the type of data that is getting represented and are using the [Flexible Data Model](references/api/section/common-concepts/flexible-data-model).
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - BoardCertifications
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-boardcertifications-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-cognitoformswebhook-api
+  name: Verifiable CognitoFormsWebhook API
+  description: The CognitoFormsWebhook API from Verifiable — 1 operation(s) for cognitoformswebhook.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - CognitoFormsWebhook
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-cognitoformswebhook-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-createoauthcredentialsclientsecret-api
+  name: Verifiable CreateOAuthCredentialsClientSecret API
+  description: >-
+    The CreateOAuthCredentialsClientSecret API from Verifiable — 1 operation(s) for createoauthcredentialsclientsecret.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - CreateOAuthCredentialsClientSecret
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-createoauthcredentialsclientsecret-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-credentialingrequests-api
+  name: Verifiable CredentialingRequests API
+  description: >-
+    These endpoints allow you to create and get credentialing requests. A credentialing request is a workflow
+    that supports
+
+    the creation of a credentialing packet. You can create a request for Verifiable's NCQA-certified CVO
+    services to process
+
+    or you can choose to self manage the workflow. By default, a CVO credentialing request will be created
+    unless self
+
+    managed is specified. Once a request has been created you cannot change between self managed and CVO.
+    Multiple
+
+    credentialing events can be created and managed for a provider.
+
+
+    When a CVO credentialing request is created, the request will be sent directly to the Verifiable CVO
+    team to begin
+
+    processing. You can check the status of the request by querying
+
+    the [GetCredentialingRequest](/references/api/credentialingrequests/getcredentialingrequest)
+
+    or [ListCredentialingRequests](/references/api/credentialingrequests/listcredentialingrequests) operations.
+
+
+    To keep track of the request, events are created to manage each stage of the credentialing request
+    process using
+
+    the [CreateCredentialingRequestEvent](/references/api/credentialingrequests/createcredentialingrequestevent)
+    operation. You can also fetch specific
+
+    events using the [GetCredentialingRequestEvent](/references/api/credentialingrequests/getcredentialingrequestevent)
+    operation.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - CredentialingRequests
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-credentialingrequests-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-datasets-api
+  name: Verifiable Datasets API
+  description: >-
+    Endpoints related to scanning datasets and reading resulting matches. The supported datasets will
+    grow over time and can be discovered via the [ListDatasets](/references/api/datasets/listdatasets)
+    endpoint. A dataset scan is asynchronous, but most scans will result in near immediate completion.
+    A webhook of type [DatasetScanCompleted](/references/api/webhook-callbacks/datasetscancompleted#webhook-callbacks/DatasetScanCompleted)
+    is triggered upon completion, but you can also check the completion status by querying the [GetDatasetScan](/references/api/datasets/getdatasetscan)
+    operation.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Datasets
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-datasets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-dea-api
+  name: Verifiable DEA API
+  description: >-
+    These endpoints allow you to add DEA registration numbers to a provider and perform DEA registration
+    lookups. Unlike license verifications a DEA registration lookup is done immediately.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - DEA
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-dea-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-definitions-api
+  name: Verifiable Definitions API
+  description: Definitions for static data
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Definitions
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-definitions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-deleteoauthcredentialsclientsecret-api
+  name: Verifiable DeleteOAuthCredentialsClientSecret API
+  description: >-
+    The DeleteOAuthCredentialsClientSecret API from Verifiable — 1 operation(s) for deleteoauthcredentialsclientsecret.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - DeleteOAuthCredentialsClientSecret
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-deleteoauthcredentialsclientsecret-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-facilities-api
+  name: Verifiable Facilities API
+  description: >-
+    Endpoints related to managing and retrieving Facility data. These APIs allow you to create, update,
+    and retrieve facilities and their associated metadata. Each facility record includes key identifiers
+    such as address, group tax ID, contact information, Medicaid number, and Medicare number. This data
+    can be used for lookups, verification, and detecting inconsistencies in facility records or affiliations.
+    In addition to core facility management, these endpoints support retrieving reference data related
+    to facilities, such as license types, accreditations, Medicare enrollment types, and taxonomies.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Facilities
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-facilities-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-facilitiesinfo-api
+  name: Verifiable FacilitiesInfo API
+  description: >-
+    Endpoints related to managing and retrieving detailed Facility Info. These APIs allow you to manage
+    key information associated with a facility, including NPI numbers, DEA registrations, liability insurance
+    policies, licenses, accreditations, CMS certifications, and Medicare enrollments. Most Facility Info
+    types can have multiple entries per facility and support full CRUD operations via standard HTTP methods
+    (POST, PATCH, DELETE, and GET).
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - FacilitiesInfo
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-facilitiesinfo-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-facilitiesspecialties-api
+  name: Verifiable FacilitiesSpecialties API
+  description: >-
+    Endpoints related to managing and retrieving Facility Specialties. These APIs allow you to associate
+    specialties with a specific facility, retrieve a list of assigned specialties, view details for an
+    individual specialty, and remove specialties as needed. Each specialty is linked to a facility using
+    unique identifiers in the API path. In addition to specialty management, the APIs support retrieving
+    detailed information linked to each facility specialty. This includes endpoints for listing all associated
+    info items, with optional filtering by type to support more targeted queries.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - FacilitiesSpecialties
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-facilitiesspecialties-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-files-api
+  name: Verifiable Files API
+  description: >-
+    Endpoints for binary file access. When any of the other APIs return file paths, these file paths are
+    referring to the `path` parameter in the following API's. File paths are unique per organization,
+    but the same path can exist in multiple organizations.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-files-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-groups-api
+  name: Verifiable Groups API
+  description: >-
+    Endpoints related to managing and listing groups. Providers and payers can be associated with groups.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-groups-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-integrations-api
+  name: Verifiable Integrations API
+  description: >-
+    These endpoints are used for our integrations with 3rd party services. They are not intended to be
+    consumed directly by most clients. Please contact us for more information on our integration possibilities.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-integrations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-licenses-api
+  name: Verifiable Licenses API
+  description: >-
+    These endpoints allow you to add licenses to a provider and perform license lookups. Please note that
+    a license lookup may take some time depending on the load and performance of the external data source.
+    It is generally recommended to wait at least 2 seconds before polling for an update or use one of
+    the notification mechanisms we provide (TBD).
+
+
+    License verification result will have the basic information about the license such as license number,
+    licenseType,
+
+    status, issued date, expiry date, etc. In addition, the disciplinary actions and other additional
+    information that is
+
+    captured from the source site is represented through the disciplinaryActions and additionalProperties
+    fields. The
+
+    disciplinary actions and additional properties fields describe the type of data that is getting represented
+    and are
+
+    using the [Flexible Data Model](/references/api/section/common-concepts/flexible-data-model).
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Licenses
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-licenses-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-listoauthcredentials-api
+  name: Verifiable ListOAuthCredentials API
+  description: The ListOAuthCredentials API from Verifiable — 1 operation(s) for listoauthcredentials.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - ListOAuthCredentials
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-listoauthcredentials-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-monitoring-api
+  name: Verifiable Monitoring API
+  description: >-
+    Endpoints to allow you to enable/disable monitoring or update monitoring settings for monitorable
+    data.
+
+
+    ## License Expiration Monitoring
+
+    License Expiration Monitoring is a process that automatically performs verifications of licenses as
+    they approach their expiration date. This process operates independently of a license's configured
+    monitoring interval (e.g., Monthly, Yearly). Its purpose is to ensure timely updates and proactive
+    management of expiring licenses.
+
+
+    ### License Expiration Monitoring for Free Sources
+
+    For licenses verified via free sources (those without pass-through fees), the Verifiable Platform
+    follows a more frequent and proactive monitoring to ensure timely updates. This increased frequency
+    applies regardless of the license's general monitoring interval. Verifications are performed at the
+    following intervals, relative to the license expiration date:
+
+    - Before license expiration: 90, 60, 28, 14, 7, 3, and 0 days
+
+    - After license expiration: 3 days
+
+
+    This means the Verifiable Platform will check the license 90 days before it expires, then 60 days
+    before, and so on, until the day of expiration (0 days). A final check is performed 3 days after the
+    expiration date.
+
+
+    ### License Expiration Monitoring for Paid Sources
+
+    For licenses verified via paid sources (those with pass-through fees), the Verifiable Platform follows
+    a more streamlined monitoring for efficient management to minimize costs incurred to users.
+
+    - After license expiration: 1 day
+
+
+    As with free verification sources, these licenses will also continue to be monitored at their scheduled
+    cadence regardless of this expiration check.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Monitoring
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-monitoring-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-notes-api
+  name: Verifiable Notes API
+  description: These endpoints allow you to create and manage provider notes.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Notes
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-notes-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-payerplans-api
+  name: Verifiable PayerPlans API
+  description: Endpoints related to managing and listing payer plans.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - PayerPlans
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-payerplans-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-payers-api
+  name: Verifiable Payers API
+  description: >-
+    Endpoints related to managing and listing payers. Each payer can have zero or more payer plans.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Payers
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-payers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-providerenrollments-api
+  name: Verifiable ProviderEnrollments API
+  description: >-
+    Endpoints related to managing and listing provider enrollments. Providers in a group can be associated
+    to payer plans via provider enrollments.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - ProviderEnrollments
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-providerenrollments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-providerprofiles-api
+  name: Verifiable ProviderProfiles API
+  description: "These endpoints let you import a provider’s profile data from different sources (such\
+    \ as a provider’s National Provider Identifier (NPI) record). This allows you to build a more complete\
+    \ picture of a provider within Verifiable and gives you easy access to the latest provider profile\
+    \ data across multiple sources. \n\nIn order to import an external profile, each source has its own\
+    \ list of required parameters. A provider must first have the required data in their Verifiable profile\
+    \ before you can run an import.\n\nOnce a request is created, fetching a profile is fast and typically\
+    \ takes seconds to return. You can check the status of an import request using the \"Get an existing\
+    \ provider profile import\" endpoint."
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - ProviderProfiles
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-providerprofiles-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-providers-api
+  name: Verifiable Providers API
+  description: >-
+    Endpoints related to managing and listing providers. A provider must be created and associated with
+    license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated
+    data for this provider. The data registered on the provider will be matched against the data returned
+    by these lookups and used to detect inconsistencies or problems in the data or licenses.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Providers
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-providers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-providersinfo-api
+  name: Verifiable ProvidersInfo API
+  description: >-
+    Endpoints related to managing and listing providers' info. Education, insurance, training and CAQH
+    login info can be added to providers. Education, liability insurance, and training can have multiple
+    entries. They can be created via POST, modified by PATCH, and removed by DELETE methods. CAQH login
+    info is a single entry per provider and can be created or replaced by PUT, removed by DELETE and modified
+    by PATCH method.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - ProvidersInfo
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-providersinfo-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-reports-api
+  name: Verifiable Reports API
+  description: The Reports API from Verifiable — 4 operation(s) for reports.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-reports-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-ssoadminportal-api
+  name: Verifiable SsoAdminPortal API
+  description: The SsoAdminPortal API from Verifiable — 1 operation(s) for ssoadminportal.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - SsoAdminPortal
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-ssoadminportal-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-ssoauth-api
+  name: Verifiable SsoAuth API
+  description: The SsoAuth API from Verifiable — 1 operation(s) for ssoauth.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - SsoAuth
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-ssoauth-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-users-api
+  name: Verifiable Users API
+  description: Endpoints related to managing and listing users.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-users-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-webhooks-api
+  name: Verifiable Webhooks API
+  description: >-
+    Endpoints to allow you to create and manage webhooks that will be called when a special event occurs.
+    On this special event Verifiable will attempt to make an HTTP POST to the URL specified in the webhook.
+    The payload of this request can vary, depending on the `type`. The `type` is included in the `X-WebhookType`
+    header. This allows you to register multiple webhooks on the same endpoint and still be able to distinguish
+    the webhook types. The webhook dispatcher expects the remote server to return an HTTP success status
+    code. If it cannot be delivered, it will retry the callback a maximum of 3 times.
+
+
+    By default, we do not allow you to use insecure URLs for callbacks. You can optionally create a webhook
+    that allows insecure URLs for testing purposes. We recommend you to use an HTTPS callback with a valid
+    SSL certificate so that the integrity of the callback is ensured. For added security we will pass
+    the webhook id (which is only known to the creator) in the `X-WebhookId` header, and we will pass
+    an optional secret in the `X-Secret` header.
+
+
+    To be able to uniquely track webhook messages we also include the `X-TraceId` header. This will contain
+    a unique value that doesn't change for every attempt we make to send a specific message. You can use
+    this to keep a log of all messages that you have successfully processed.
+
+
+    You can refer to [Webhook Callbacks](/references/api/webhook-callbacks/) to find the model that is
+    included in the payload of the HTTP request to the callback URL.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- aid: verifiable:verifiable-workoswebhook-api
+  name: Verifiable WorkOsWebhook API
+  description: The WorkOsWebhook API from Verifiable — 1 operation(s) for workoswebhook.
+  humanURL: https://docs.discovery.verifiable.com/references/api
+  baseURL: https://discovery.verifiable.com/api
+  tags:
+  - WorkOsWebhook
+  properties:
+  - type: OpenAPI
+    url: openapi/verifiable-workoswebhook-api-openapi.yml
+  - type: Documentation
+    url: https://docs.discovery.verifiable.com/
+  - type: APIReference
+    url: https://docs.discovery.verifiable.com/references/api
+  - type: GettingStarted
+    url: https://docs.discovery.verifiable.com/references/api/section/getting-started
 common:
 - type: Website
   url: https://verifiable.com
+- type: DeveloperPortal
+  url: https://docs.discovery.verifiable.com/
+- type: Documentation
+  url: https://docs.discovery.verifiable.com/
+- type: APIReference
+  url: https://docs.discovery.verifiable.com/references/api
+- type: GettingStarted
+  url: https://docs.discovery.verifiable.com/references/api/section/getting-started
+- type: Blog
+  url: https://verifiable.com/blog
+- type: StatusPage
+  url: https://status.verifiable.com
+- type: Support
+  url: https://verifiable.com/contact
+- type: PrivacyPolicy
+  url: https://verifiable.com/legal/privacy-policy
+- type: TermsOfService
+  url: https://verifiable.com/legal/terms-of-use
+- type: Compliance
+  url: https://verifiable.com/legal/security
+- type: Security
+  url: https://verifiable.com/legal/security
+- type: Authentication
+  url: authentication/verifiable-authentication.yml
+- type: AgenticAccess
+  url: agentic-access/verifiable-agentic-access.yml
+- type: DomainSecurity
+  url: security/verifiable-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/verifiable-vulnerability-disclosure.yml
+- type: Conventions
+  url: conventions/verifiable-conventions.yml
+- type: ErrorCatalog
+  url: errors/verifiable-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/verifiable-lifecycle.yml
+- type: Deprecation
+  url: lifecycle/verifiable-lifecycle.yml
+- type: ChangeLog
+  url: changelog/verifiable-changelog.yml
+- type: Conformance
+  url: conformance/verifiable-conformance.yml
+- type: DataModel
+  url: data-model/verifiable-data-model.yml
+- type: Sandbox
+  url: sandbox/verifiable-sandbox.yml
+- type: MCPServer
+  url: mcp/verifiable-mcp.yml
+- type: Webhooks
+  url: asyncapi/verifiable-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/verifiable-llms.txt
+- type: WellKnown
+  url: well-known/verifiable-well-known.yml
+- type: Overlay
+  url: overlays/verifiable-openapi-overlay.yaml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v1

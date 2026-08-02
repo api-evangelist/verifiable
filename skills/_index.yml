@@ -1,0 +1,20 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/verifiable-openapi-original.json
+skills:
+- file: verifiable-credential-a-provider.md
+  name: Credential a healthcare provider
+  api: openapi/verifiable-openapi-original.json
+  operations: [PasswordAuth, CreateProvider, ListSimplifiedLicenseTypes, AttachLicense, TriggerLicenseVerification, ListLicenseVerifications, GetLicenseVerification]
+- file: verifiable-monitor-sanctions-and-exclusions.md
+  name: Continuously monitor a provider for sanctions and exclusions
+  api: openapi/verifiable-openapi-original.json
+  operations: [CreateProvider, BulkCreateSanctionsAndExclusionsMonitors, CreateMonitor, ListMonitors, ListAlerts, GetAlert, DismissAlert, ListProviderMonitoringSanctionsAndExclusionsSummary]
+- file: verifiable-manage-webhooks.md
+  name: Register and manage event webhooks
+  api: openapi/verifiable-openapi-original.json
+  operations: [CreateWebhook, ListWebhooks, GetWebhook, PatchWebhook, DeleteWebhook, ListWebhooksLog]
+- file: verifiable-scan-datasets.md
+  name: Scan datasets for provider/facility matches
+  api: openapi/verifiable-openapi-original.json
+  operations: [ListDatasets, GetProviderDatasetScanParameters, StartDatasetScan, GetDatasetScan, ListDatasetMatches, PatchDatasetMatch]
