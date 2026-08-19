@@ -1,0 +1,1690 @@
+{
+  "item": [
+    {
+      "id": "9322bb05-626c-466a-b9fc-da213f636837",
+      "name": "Alerts",
+      "description": {
+        "content": "Endpoints to list and dismiss active alerts. Alerts are triggered when an important event occurs that warrants user involvement. An alert can be considered dismissed if it has a dismissal timestamp and note.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8ea28f19-2a8e-4825-8fda-783b3a606169",
+          "name": "Get an existing alert\n",
+          "request": {
+            "name": "Get an existing alert\n",
+            "description": {
+              "content": "Returns the data for a specific alert.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "alerts",
+                ":alertId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "alertId",
+                  "description": "(Required) Identifier of the alert to get the data for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "10c7dfaf-6620-4b87-b74e-ea160adeacf7",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"LicenseChanged\",\n  \"providerId\": \"5f93634f-52ad-7fd4-cabe-7254fa94f166\",\n  \"provider\": {\n    \"credentialingStatus\": \"string\",\n    \"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"id\": \"8ffb7a0e-9ad1-a052-64b7-c5292d1925e8\",\n    \"dateOfBirth\": \"1997-05-16T16:37:40.663Z\",\n    \"ssn\": \"string\",\n    \"credentialedDate\": \"1950-10-09T21:51:13.845Z\",\n    \"nextCredentialingDate\": \"1989-03-14\",\n    \"npi\": 1562,\n    \"deactivated\": false,\n    \"deactivatedAt\": \"1965-04-26T08:17:13.235Z\",\n    \"aliases\": [\n      {\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"id\": \"4c3676ae-5aa7-02c7-049c-f1892bc309d1\"\n      },\n      {\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"id\": \"6fc79915-9134-deab-b40c-f8f4f33211fc\"\n      }\n    ],\n    \"primaryPracticeState\": \"VI\",\n    \"additionalPracticeStates\": [\n      \"WY\",\n      \"MD\"\n    ],\n    \"gender\": \"Male\",\n    \"ethnicity\": [\n      \"NativeHawaiianOrOtherPacificIslander\",\n      \"HispanicOrLatino\"\n    ],\n    \"addresses\": [\n      {\n        \"addressLine1\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"RI\",\n        \"zipCode\": \"string\",\n        \"addressLine2\": \"string\",\n        \"type\": \"Work\",\n        \"id\": \"c3652613-4da6-d505-ad49-ecbc30d92478\"\n      },\n      {\n        \"addressLine1\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"MT\",\n        \"zipCode\": \"string\",\n        \"addressLine2\": \"string\",\n        \"type\": \"Unspecified\",\n        \"id\": \"c04e4258-0a65-feb6-57ab-485d3b42dd88\"\n      }\n    ],\n    \"emails\": [\n      {\n        \"email\": \"string\",\n        \"type\": \"Personal\",\n        \"id\": \"7da2a44a-f276-e948-8217-6897d73788de\"\n      },\n      {\n        \"email\": \"string\",\n        \"type\": \"Personal\",\n        \"id\": \"5b188f33-a040-c4ca-6472-e0e22d0a9f41\"\n      }\n    ],\n    \"phone\": \"string\",\n    \"languages\": [\n      \"string\",\n      \"string\"\n    ],\n    \"recredentialedDates\": [\n      \"1986-08-13T18:58:12.544Z\",\n      \"1968-03-31T12:53:30.472Z\"\n    ],\n    \"providerType\": {\n      \"id\": \"d3a125a4-611a-4a1b-d044-8ca926d65b72\",\n      \"name\": \"string\"\n    },\n    \"nuccGroup\": {\n      \"name\": \"Allopathic & Osteopathic Physicians\"\n    },\n    \"segment\": {\n      \"name\": \"acme-corp\"\n    },\n    \"createdAt\": \"1998-08-19T09:17:58.712Z\"\n  },\n  \"entityType\": \"BoardCertificationVerification\",\n  \"entityId\": \"5a68e59e-ed6e-73dc-5e8c-6873313d9a17\",\n  \"data\": {\n    \"messageTemplate\": \"string\",\n    \"messageParams\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\",\n      \"key_3\": \"string\",\n      \"key_4\": \"string\"\n    },\n    \"data\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    }\n  },\n  \"timestamp\": \"1962-09-13T08:40:04.756Z\",\n  \"dismissalTimestamp\": \"1950-08-01T10:34:25.639Z\",\n  \"dismissalNote\": \"string\",\n  \"id\": \"4e71b42f-de78-6f80-8ac1-5f071ea01090\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b4d7270-5b9d-4db6-8195-d6701d253ddf",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1aa61069-45df-4d75-be9d-5ba754818520",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "473ed75a-6f30-4e8b-b9a9-b419cee244f4",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "972b34f2-81ae-4c29-8ee1-53c7f811334b",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "32b2cf5f-2d3e-4f34-a72f-2f95fe811f91",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b45c4987-6774-419c-be3b-40c7ac9f3c0c",
+          "name": "Dismiss an alert\n",
+          "request": {
+            "name": "Dismiss an alert\n",
+            "description": {
+              "content": "Dismisses a specific alert.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "alerts",
+                ":alertId",
+                "dismiss"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "alertId",
+                  "description": "(Required) Identifier of the alert to dismiss."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dismissalNote\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bf40838b-cea7-48d2-a03f-1f7a6f3f359b",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId",
+                    "dismiss"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to dismiss."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dismissalNote\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"LicenseExpiresSoon\",\n  \"providerId\": \"926ad66b-4b4a-37d0-843c-a511b2607d21\",\n  \"provider\": {\n    \"credentialingStatus\": \"string\",\n    \"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"id\": \"b76add13-410e-d7b0-9083-85336f3e20ef\",\n    \"dateOfBirth\": \"1983-01-03T19:36:57.585Z\",\n    \"ssn\": \"string\",\n    \"credentialedDate\": \"2018-04-19T23:49:07.963Z\",\n    \"nextCredentialingDate\": \"2012-11-18\",\n    \"npi\": 4050,\n    \"deactivated\": false,\n    \"deactivatedAt\": \"1991-02-22T17:56:57.462Z\",\n    \"aliases\": [\n      {\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"id\": \"b17253bd-e506-4411-3375-5f98f7c2549f\"\n      },\n      {\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"id\": \"c8d8d164-33f0-4987-5820-41be38fb0218\"\n      }\n    ],\n    \"primaryPracticeState\": \"VI\",\n    \"additionalPracticeStates\": [\n      \"NJ\",\n      \"GU\"\n    ],\n    \"gender\": \"PreferNotToSay\",\n    \"ethnicity\": [\n      \"AmericanIndianOrAlaskaNative\",\n      \"White\"\n    ],\n    \"addresses\": [\n      {\n        \"addressLine1\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"HI\",\n        \"zipCode\": \"string\",\n        \"addressLine2\": \"string\",\n        \"type\": \"Home\",\n        \"id\": \"51512178-69b7-fc13-5edd-b0a8f35c9451\"\n      },\n      {\n        \"addressLine1\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"IL\",\n        \"zipCode\": \"string\",\n        \"addressLine2\": \"string\",\n        \"type\": \"Work\",\n        \"id\": \"459423f2-02aa-a564-b846-1bd60bc95552\"\n      }\n    ],\n    \"emails\": [\n      {\n        \"email\": \"string\",\n        \"type\": \"Personal\",\n        \"id\": \"bfffbbff-129c-dd93-14a2-526e05f30b22\"\n      },\n      {\n        \"email\": \"string\",\n        \"type\": \"Work\",\n        \"id\": \"71b3f534-f87a-142d-c292-49abc9981294\"\n      }\n    ],\n    \"phone\": \"string\",\n    \"languages\": [\n      \"string\",\n      \"string\"\n    ],\n    \"recredentialedDates\": [\n      \"1994-01-13T04:40:25.979Z\",\n      \"2001-05-01T04:31:59.303Z\"\n    ],\n    \"providerType\": {\n      \"id\": \"95164918-e186-19bc-00d0-0a46fc95ee5f\",\n      \"name\": \"string\"\n    },\n    \"nuccGroup\": {\n      \"name\": \"Allopathic & Osteopathic Physicians\"\n    },\n    \"segment\": {\n      \"name\": \"acme-corp\"\n    },\n    \"createdAt\": \"1969-08-28T23:43:51.358Z\"\n  },\n  \"entityType\": \"File\",\n  \"entityId\": \"34ce871e-8008-2fc6-aecd-cf8740513795\",\n  \"data\": {\n    \"messageTemplate\": \"string\",\n    \"messageParams\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"data\": {\n      \"key_0\": \"string\"\n    }\n  },\n  \"timestamp\": \"2015-03-05T02:47:51.008Z\",\n  \"dismissalTimestamp\": \"1988-12-26T09:03:31.995Z\",\n  \"dismissalNote\": \"string\",\n  \"id\": \"964ee25d-5c72-0f1a-c92b-34ae3a8bef10\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d639089b-b2ae-4d58-b88e-4debfb2aabe1",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId",
+                    "dismiss"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to dismiss."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dismissalNote\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "904bbdfe-1412-4f1e-a10a-eae87cf81a37",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId",
+                    "dismiss"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to dismiss."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dismissalNote\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1aa1e207-d05d-4fb5-b645-b894350a4cbe",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId",
+                    "dismiss"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to dismiss."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dismissalNote\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "59288ea4-79a3-4019-acac-2db7159414d1",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId",
+                    "dismiss"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to dismiss."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dismissalNote\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cb3ae7d8-7e58-4dea-96cd-e2cde5300f3f",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId",
+                    "dismiss"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to dismiss."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dismissalNote\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5a57ae61-da97-4162-b458-723d45031f31",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    ":alertId",
+                    "dismiss"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "alertId",
+                      "description": "(Required) Identifier of the alert to dismiss."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dismissalNote\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1705c83e-48f3-43b8-94dd-0b3e04331872",
+          "name": "Get alert aggregations\n",
+          "request": {
+            "name": "Get alert aggregations\n",
+            "description": {
+              "content": "Returns aggregated counts for alerts either in active or dismissed state.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "alerts",
+                "aggregations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "providerDeactivated",
+                  "value": "<boolean>",
+                  "description": "If set, the items will be filtered on providers with the specified deactivated status."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "acb2190a-c250-4b4a-aa71-e8b6ad5e9fbf",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    "aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active\": 9173,\n  \"dismissed\": 1339,\n  \"licenseChanged\": 2295,\n  \"licenseExpiresSoon\": 4321,\n  \"licenseExpired\": 8258,\n  \"profileImportCompleted\": 2541\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aee3e604-e6ae-4d2d-805d-a37dc54ef7d7",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    "aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "733772ad-20bc-486d-8677-dbf78e0ce85b",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    "aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6dd45a55-63fb-47c2-9976-b7b732fe99c8",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts",
+                    "aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a10ac90f-e63f-4824-88c3-169f3fab0ac2",
+          "name": "List alerts\n",
+          "request": {
+            "name": "List alerts\n",
+            "description": {
+              "content": "Returns a page of alerts.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "alerts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "providerId",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on provider with the specified identifier."
+                },
+                {
+                  "disabled": false,
+                  "key": "providerName",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "providerNpi",
+                  "value": "<long>"
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "If set, the items will be filtered on alerts of the specified type"
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "If set, the items will be filtered on alerts of the specified type"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "If set, filter the items by the dismissal status."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "<string>",
+                  "description": "The direction the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "providerDeactivated",
+                  "value": "<boolean>",
+                  "description": "If set, the items will be filtered on providers with the specified deactivated status."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortedBy",
+                  "value": "<string>",
+                  "description": "The property by which the returned data will be sorted."
+                },
+                {
+                  "disabled": false,
+                  "key": "Keys",
+                  "value": "<string>",
+                  "description": "If set, the properties and directions the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "Values",
+                  "value": "<string>",
+                  "description": "If set, the properties and directions the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset for the page to start."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "<integer>",
+                  "description": "The number of items to include in a single page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f695571a-607e-4db7-825b-4100778f6726",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerNpi",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"previousCursor\": \"string\",\n  \"nextCursor\": \"string\",\n  \"nextOffset\": 0,\n  \"pageSize\": 0,\n  \"count\": 0,\n  \"totalCount\": 0,\n  \"items\": [\n    {\n      \"type\": \"LicenseChanged\",\n      \"providerId\": \"4834bcdc-4a64-444d-966b-1a6fe381da24\",\n      \"entityType\": \"License\",\n      \"entityId\": \"156e622c-6cdf-4c27-9bc9-2f2db69919f5\",\n      \"data\": {\n        \"messageTemplate\": \"string\",\n        \"messageParams\": {\n          \"property1\": \"string\",\n          \"property2\": \"string\"\n        },\n        \"data\": {\n          \"property1\": \"string\",\n          \"property2\": \"string\"\n        }\n      },\n      \"timestamp\": \"2019-08-24T14:15:22.0000000Z\",\n      \"dismissalTimestamp\": \"2019-08-24T14:15:22.0000000Z\",\n      \"dismissalNote\": \"string\"\n    }\n  ],\n  \"sortedBy\": \"Timestamp\",\n  \"sortDirection\": \"Asc\",\n  \"sort\": {\n    \"Timestamp\": \"Asc\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2d5d50a-1a30-41f7-936e-3620f203e77d",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerNpi",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "33328110-46b1-4713-93ee-a9cdbb9ef8df",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerNpi",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0a9eec1b-5302-4583-b764-c42d3385f805",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerNpi",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "32e1d629-e21f-4765-9984-ac6c7ce92a52",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerNpi",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "providerDeactivated",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://discovery.verifiable.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "242e270b-b7d8-4060-b8bb-0290d5179ef1",
+    "name": "Verifiable API Documentation Alerts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n",
+      "type": "text/plain"
+    }
+  }
+}

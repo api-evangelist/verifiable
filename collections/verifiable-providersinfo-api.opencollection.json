@@ -1,0 +1,1872 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts ProvidersInfo API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ProvidersInfo",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider to get the data for."
+              },
+              {
+                "name": "providerInfoType",
+                "value": "",
+                "type": "query",
+                "description": "If not specified, will return all data for the provider. Info types can be combined, ex.: `providerInfoType=licenses&providerInfoType=deaRegistrations`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the info for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get CAQH login info for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/caqh",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the CAQH login info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create or replace caqh login info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/caqh",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates or replaces the CAQH login info for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's CAQH login info\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/caqh",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing CAQH login info associated with the specified provider.\n\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing CAQH login info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/caqh",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing CAQH login info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's alias\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/aliases/:aliasId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "aliasId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing alias associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get alias for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/aliases/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the alias for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing alias for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/aliases/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing alias associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List board certifications\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/boardCertifications",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all board certifications associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create board certification info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/boardCertifications",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a board certification info for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get board certification for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/boardCertifications/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the board certification for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's board certification info\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/boardCertifications/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing board certification info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing board certification info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/boardCertifications/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing board certification info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List certificates\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/certificates",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all certificates associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create certificate info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/certificates",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a certificate info for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get certificate for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/certificates/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the certificate for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's certificate info\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/certificates/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing certificate info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing certificate info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/certificates/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing certificate info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List liability insurances\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/liabilityInsurances",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all liability insurances associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create liability insurance info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/liabilityInsurances",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates the liability insurance info for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get liability insurance for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/liabilityInsurances/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the liability insurance for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's liability insurance\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/liabilityInsurances/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing liability insurance associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing liability insurance info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/liabilityInsurances/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing insurance info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List educations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/educations",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all educations associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create education info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/educations",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates the education info for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get education for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/educations/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the education for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's education info\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/educations/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing education info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing education info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/educations/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing education info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List trainings\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/trainings",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all trainings associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create training info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/trainings",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates the training info for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get training for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/trainings/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the training for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's training info\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/trainings/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing training info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing training info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/trainings/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing training info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List work history entries\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/workHistory",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all work history entries associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create work history info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/workHistory",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates the work history info for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get work history for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/workHistory/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the work history for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's work history info\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/workHistory/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing work history info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing work history info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/workHistory/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing work history info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List all specialties for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/specialties",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves all specialties for a specific provider. A provider can have one Primary, one Secondary, and multiple Additional specialties.\n"
+        },
+        {
+          "info": {
+            "name": "Create specialty for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/specialties",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a specialty for a specific provider. Each provider can have one Primary specialty, one Secondary specialty, and multiple Additional specialties. The same taxonomy cannot be used across multiple specialties for the same provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get specialty by identifier\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/specialties/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a specific specialty for a provider by its identifier.\n"
+        },
+        {
+          "info": {
+            "name": "Update specialty for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/specialties/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates a specific specialty for a provider. The same taxonomy cannot be used across multiple specialties for the same provider. Only one Primary and one Secondary specialty is allowed per provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete specialty for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/specialties/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a specific specialty for a provider by its identifier.\n"
+        },
+        {
+          "info": {
+            "name": "List hospital affiliations for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/hospitalAffiliations",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all hospital affiliations for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create hospital affiliation for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/hospitalAffiliations",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a hospital affiliation for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get a hospital affiliation for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/hospitalAffiliations/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a specific hospital affiliation for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Update a hospital affiliation for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/hospitalAffiliations/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing hospital affiliation associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a hospital affiliation for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/hospitalAffiliations/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing hospital affiliation associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List DEA registrations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/dea",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all DEA registrations associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create DEA registration info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/dea",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a DEA registration info for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List addresses\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/addresses",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all addresses associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create address for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/addresses",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add an address for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List aliases\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/aliases",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all aliases associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create alias for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/aliases",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add an alias for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List emails\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/emails",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all emails associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create email for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/emails",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add an email for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List Medicaid enrollments\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/medicaidEnrollments",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all medicaid enrollments associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create medicaid enrollment info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/medicaidEnrollments",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates the medicaid enrollment info for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get DEA registration for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/dea/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the DEA registration for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's DEA registration info\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/dea/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing DEA registration info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing DEA registration info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/dea/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing DEA registration info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get address for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/addresses/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the address for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's address\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/addresses/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing address associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing address for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/addresses/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing address associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get email for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/emails/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the email for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's email\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/emails/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing email associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing email for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/emails/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing email associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get medicaid enrollment info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/medicaidEnrollments/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the medicaid enrollment for a specific provider\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider's Medicaid enrollment info\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/medicaidEnrollments/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing Medicaid enrollment info associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing Medicaid enrollment info for the existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/info/medicaidEnrollments/:id",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing Medicaid enrollment info associated with the specified provider.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

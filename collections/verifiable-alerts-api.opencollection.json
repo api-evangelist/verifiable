@@ -1,0 +1,178 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Alerts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an existing alert\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/alerts/:alertId",
+            "params": [
+              {
+                "name": "alertId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the alert to get the data for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data for a specific alert.\n"
+        },
+        {
+          "info": {
+            "name": "Dismiss an alert\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/alerts/:alertId/dismiss",
+            "params": [
+              {
+                "name": "alertId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the alert to dismiss."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Dismisses a specific alert.\n"
+        },
+        {
+          "info": {
+            "name": "Get alert aggregations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/alerts/aggregations",
+            "params": [
+              {
+                "name": "providerDeactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified deactivated status."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns aggregated counts for alerts either in active or dismissed state.\n"
+        },
+        {
+          "info": {
+            "name": "List alerts\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/alerts",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on provider with the specified identifier."
+              },
+              {
+                "name": "providerName",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "providerNpi",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on alerts of the specified type"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "If set, filter the items by the dismissal status."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              },
+              {
+                "name": "providerDeactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified deactivated status."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of alerts.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

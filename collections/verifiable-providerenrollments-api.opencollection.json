@@ -1,0 +1,208 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts ProviderEnrollments API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ProviderEnrollments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List provider enrollments\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/enrollments",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the group to get enrollments for."
+              },
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified provider."
+              },
+              {
+                "name": "payerPlanId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified payer plan."
+              },
+              {
+                "name": "networkStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified network status."
+              },
+              {
+                "name": "enrollmentStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified enrollment status."
+              },
+              {
+                "name": "specialistType",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified specialist type."
+              },
+              {
+                "name": "submissionDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "effectiveDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of provider enrollments.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new provider enrollment\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/enrollments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new enrollment of provider to payer plan.\n"
+        },
+        {
+          "info": {
+            "name": "Get an existing provider enrollment\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/enrollments/:providerEnrollmentId",
+            "params": [
+              {
+                "name": "providerEnrollmentId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider enrollment to get the data for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data for a specific provider enrollment.\n"
+        },
+        {
+          "info": {
+            "name": "Patch an existing provider enrollment\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/enrollments/:providerEnrollmentId",
+            "params": [
+              {
+                "name": "providerEnrollmentId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider enrollment to patch."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Allows you to change a provider enrollment's data properties.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an existing provider enrollment\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/enrollments/:providerEnrollmentId",
+            "params": [
+              {
+                "name": "providerEnrollmentId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider enrollment to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This will delete the provider enrollment.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

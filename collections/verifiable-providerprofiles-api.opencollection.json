@@ -1,0 +1,223 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts ProviderProfiles API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ProviderProfiles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List provider profile import sources\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/profiles/import/sources",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "The source of the import to get profiles."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of sources where you can import provider profile data from. You can choose a source to import from and select the parameters required for a successful request.\n"
+        },
+        {
+          "info": {
+            "name": "List provider profile imports\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/profiles/import",
+            "params": [
+              {
+                "name": "latest",
+                "value": "",
+                "type": "query",
+                "description": "If set, returns only the most recent import of each source type for a given provider."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "If set, returns only the profiles with this status."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "If set, returns only the profiles of this source."
+              },
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "query",
+                "description": "If set, returns only the imports for a given provider."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all the provider profiles that have been imported so far. You can filter the selection by source, status, providerId, get only latest record for each provider, and change the sorting and pages.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new provider profile import\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/profiles/import",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "To import a profile from an external source, you must first create an import request. When the request is initiated, the provider profile record will be created with a “Pending” status. When complete, the status will change to “Completed”. \n\nIf the request is successful, the provider profile will have a “Profile\" value. If an error occurs, the profile will have a \"FailureCode\" and \"FailureDescription\" value.\n"
+        },
+        {
+          "info": {
+            "name": "Get an existing provider profile import\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/profiles/import/:importId",
+            "params": [
+              {
+                "name": "importId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider profile import to get the data for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a specific provider profile import model, allowing you to check the model status and get the profile value. \n"
+        },
+        {
+          "info": {
+            "name": "Get profile import parameters for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/profiles/imports/:source/parameters/:providerId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the provider for which the parameters should be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "path",
+                "description": "The source of the import to get profiles."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the list of provider profile import parameters that will be used during a profile import.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

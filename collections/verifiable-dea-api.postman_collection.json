@@ -1,0 +1,4054 @@
+{
+  "item": [
+    {
+      "id": "c615bbf3-74a9-45cf-bfae-fd44ad21e144",
+      "name": "DEA",
+      "description": {
+        "content": "These endpoints allow you to add DEA registration numbers to a provider and perform DEA registration lookups. Unlike license verifications a DEA registration lookup is done immediately.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c52d52e5-03d7-4568-ba6c-4f12cbb880a1",
+          "name": "Attach a DEA registration number to a provider\n",
+          "request": {
+            "name": "Attach a DEA registration number to a provider\n",
+            "description": {
+              "content": "To perform a DEA registration lookup you must first attach a DEA registration number to a provider. Everytime you call this endpoint a new verification will be made.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "dea",
+                ":registrationNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) The identifier describing the provider to attach the DEA registration number to."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "registrationNumber",
+                  "description": "(Required) The DEA registration number to attach to the provider."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b43f001c-bac5-4251-91fc-307216c0bf38",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to attach the DEA registration number to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to attach to the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"2b290a16-d853-a6bc-d4be-31f587f73d9c\",\n  \"providerId\": \"7381bd8f-a6fd-098d-3567-c774fad5374f\",\n  \"registrationNumber\": \"string\",\n  \"currentVerification\": {\n    \"id\": \"c6ee17e0-f183-84f9-4d48-92c66ab6e63f\",\n    \"timestamp\": \"2020-03-26T10:16:10.922Z\",\n    \"lastUpdated\": \"2000-07-08T01:17:00.240Z\",\n    \"lastSync\": \"1955-01-26T05:25:23.239Z\",\n    \"status\": \"NotFound\",\n    \"originalStatus\": \"Working\",\n    \"results\": {\n      \"businessActivityCode\": \"string\",\n      \"drugSchedules\": [\n        \"string\",\n        \"string\"\n      ],\n      \"expirationDate\": \"1987-08-22T05:02:00.756Z\",\n      \"name\": \"string\",\n      \"additionalCompanyInfo\": \"string\",\n      \"address1\": \"string\",\n      \"address2\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"zipCode\": \"string\",\n      \"businessActivitySubCode\": \"string\",\n      \"paymentIndicator\": \"Paid\",\n      \"active\": true,\n      \"problems\": [\n        \"NameMismatch\",\n        \"NameMismatch\"\n      ],\n      \"businessActivity\": \"string\"\n    },\n    \"deaxResults\": {\n      \"number\": \"string\",\n      \"certifiedPatientLimit\": 7095\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21ac8646-d604-4fd7-8884-6361d1bf1b40",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to attach the DEA registration number to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to attach to the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "26008ec9-b5a4-481c-bce9-248cd8c98296",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to attach the DEA registration number to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to attach to the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8d8033c7-3ed8-4ddc-b4c6-2624dd4dcd9a",
+              "name": "Client Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to attach the DEA registration number to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to attach to the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "66cc64e4-31bb-4005-b85f-e96aa755ab48",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to attach the DEA registration number to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to attach to the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "91481b9b-6ae6-42b3-b855-e290c28f9122",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to attach the DEA registration number to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to attach to the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "089838a8-8b36-4add-931b-d1b3fd9888b7",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to attach the DEA registration number to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to attach to the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "737a1799-a570-4d19-bd3c-377e217ad8fb",
+          "name": "Get a specific DEA registration from a provider\n",
+          "request": {
+            "name": "Get a specific DEA registration from a provider\n",
+            "description": {
+              "content": "Returns the data and latest verification for a specific DEA registration attached to a specific provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "dea",
+                ":registrationNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "registrationNumber",
+                  "description": "(Required) The DEA registration number to get the data for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f89461b5-916a-4134-8243-b34c2a175dff",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"ceefccba-c118-e030-9260-cfcfacbbc41c\",\n  \"providerId\": \"b6391731-2728-5f6d-35c9-b438099339c2\",\n  \"registrationNumber\": \"string\",\n  \"currentVerification\": {\n    \"id\": \"38d68efe-0514-7ba5-38e4-92453338ce76\",\n    \"timestamp\": \"1958-03-27T00:34:56.654Z\",\n    \"lastUpdated\": \"2023-04-26T20:47:21.938Z\",\n    \"lastSync\": \"2002-04-24T19:41:01.260Z\",\n    \"status\": \"Found\",\n    \"originalStatus\": \"Found\",\n    \"results\": {\n      \"businessActivityCode\": \"string\",\n      \"drugSchedules\": [\n        \"string\",\n        \"string\"\n      ],\n      \"expirationDate\": \"1972-01-18T04:06:38.382Z\",\n      \"name\": \"string\",\n      \"additionalCompanyInfo\": \"string\",\n      \"address1\": \"string\",\n      \"address2\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"zipCode\": \"string\",\n      \"businessActivitySubCode\": \"string\",\n      \"paymentIndicator\": \"Exempt\",\n      \"active\": false,\n      \"problems\": [\n        \"NameMismatch\",\n        \"NameMismatch\"\n      ],\n      \"businessActivity\": \"string\"\n    },\n    \"deaxResults\": {\n      \"number\": \"string\",\n      \"certifiedPatientLimit\": 3696\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db026e1b-3b0a-4ed6-ac20-ddcd1f961d92",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "81de310a-7936-4ba8-82f2-34521c8c43e9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9ab95a6f-7d60-48ce-ba7e-2381710c26fc",
+              "name": "Client Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5e863b4c-0d6f-4a1d-b508-d453bce5f9fe",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "630f19af-5a6e-446b-828b-d62b4946036c",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d578888-8657-4473-a9ce-8a8ac76752ea",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3705df5a-b1bc-44ad-915e-1e8956052bcc",
+          "name": "Detach a DEA registration number from a provider\n",
+          "request": {
+            "name": "Detach a DEA registration number from a provider\n",
+            "description": {
+              "content": "This will delete the DEA registration lookup record for the specified provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "dea",
+                ":registrationNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) The identifier describing the provider to detach the DEA registration number from."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "registrationNumber",
+                  "description": "(Required) The DEA registration number to detach from the provider."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "adf0f912-410b-4639-82f4-df10b7a4eec0",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to detach the DEA registration number from."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to detach from the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8bdd97f4-e972-418d-a8eb-407f23b8d57f",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to detach the DEA registration number from."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to detach from the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b78cec6c-2a4c-46f0-8092-813590cfb8e2",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to detach the DEA registration number from."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to detach from the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "be5f8bcb-cef6-462d-8435-970cf5939718",
+              "name": "Client Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to detach the DEA registration number from."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to detach from the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3579ca19-38fe-4341-8779-c94eaac2998d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to detach the DEA registration number from."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to detach from the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bd97ade0-9870-4455-8695-d9b9e5cb24a3",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to detach the DEA registration number from."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to detach from the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a0b33bd5-ccad-4ef3-b6f1-b040af124a0d",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to detach the DEA registration number from."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to detach from the provider."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d9ba204-1a15-47cc-a255-0a5f9fed1d81",
+          "name": "Get a specific DEA registration verification\n",
+          "request": {
+            "name": "Get a specific DEA registration verification\n",
+            "description": {
+              "content": "Returns the data for a specific previously executed DEA registration verification. This endpoint can be used to retrieve historical results on older verifications.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "dea",
+                ":registrationNumber",
+                "verifications",
+                ":verificationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "registrationNumber",
+                  "description": "(Required) The registration number that was previously verified."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "verificationId",
+                  "description": "(Required) The identifier describing the verification that you want to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9807ef47-027c-4f16-8cbb-d8d2991c08df",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"16bb4f11-f41b-01ec-13f8-ff42527f4b6b\",\n  \"timestamp\": \"2002-05-03T16:25:07.954Z\",\n  \"lastUpdated\": \"1983-10-18T02:53:56.666Z\",\n  \"lastSync\": \"1977-12-09T02:08:45.347Z\",\n  \"status\": \"Failed\",\n  \"originalStatus\": \"Failed\",\n  \"results\": {\n    \"businessActivityCode\": \"string\",\n    \"drugSchedules\": [\n      \"string\",\n      \"string\"\n    ],\n    \"expirationDate\": \"2012-12-28T09:40:37.200Z\",\n    \"name\": \"string\",\n    \"additionalCompanyInfo\": \"string\",\n    \"address1\": \"string\",\n    \"address2\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"zipCode\": \"string\",\n    \"businessActivitySubCode\": \"string\",\n    \"paymentIndicator\": \"Exempt\",\n    \"active\": false,\n    \"problems\": [\n      \"NameMismatch\",\n      \"NameMismatch\"\n    ],\n    \"businessActivity\": \"string\"\n  },\n  \"deaxResults\": {\n    \"number\": \"string\",\n    \"certifiedPatientLimit\": 5303\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbc30ab6-dcfe-4721-9601-843de478ea3a",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fe114719-739c-4443-8779-9b953b9ff3a1",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "204c58f9-a610-49e7-a0fa-8f1f8b431169",
+              "name": "Client Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b8d3fca1-96a4-4917-be5b-39c9e09367f4",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "75cb2229-a000-483d-b5c8-b2830725ddf6",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5577500-5924-44ef-90d4-ba3701f94d15",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d0b21653-663b-49a6-b0ad-f1952060fb13",
+          "name": "Resolve problems with a DEA registration verification\n",
+          "request": {
+            "name": "Resolve problems with a DEA registration verification\n",
+            "description": {
+              "content": "After a verification is executed we sometimes are uncertain about the results we get from the source. For example when the name of the DEA registration does not match the name that was used for the provider. In such cases we mark the verification `status` as `NeedsReview`. It is expected that this status is resolved by the end user. The resolution can be patched by using this endpoint.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "dea",
+                ":registrationNumber",
+                "verifications",
+                ":verificationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "registrationNumber",
+                  "description": "(Required) The DEA registration number that has a verification problem."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "verificationId",
+                  "description": "(Required) The identifier describing the verification that needs to be patched."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8cca36fd-b445-4268-baf3-920a494a624a",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number that has a verification problem."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that needs to be patched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"16bb4f11-f41b-01ec-13f8-ff42527f4b6b\",\n  \"timestamp\": \"2002-05-03T16:25:07.954Z\",\n  \"lastUpdated\": \"1983-10-18T02:53:56.666Z\",\n  \"lastSync\": \"1977-12-09T02:08:45.347Z\",\n  \"status\": \"Failed\",\n  \"originalStatus\": \"Failed\",\n  \"results\": {\n    \"businessActivityCode\": \"string\",\n    \"drugSchedules\": [\n      \"string\",\n      \"string\"\n    ],\n    \"expirationDate\": \"2012-12-28T09:40:37.200Z\",\n    \"name\": \"string\",\n    \"additionalCompanyInfo\": \"string\",\n    \"address1\": \"string\",\n    \"address2\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"zipCode\": \"string\",\n    \"businessActivitySubCode\": \"string\",\n    \"paymentIndicator\": \"Exempt\",\n    \"active\": false,\n    \"problems\": [\n      \"NameMismatch\",\n      \"NameMismatch\"\n    ],\n    \"businessActivity\": \"string\"\n  },\n  \"deaxResults\": {\n    \"number\": \"string\",\n    \"certifiedPatientLimit\": 5303\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "87246236-fef5-4d0b-9bd3-6ea7bb07e24c",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number that has a verification problem."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that needs to be patched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c3c536b2-cdd6-411b-a224-5a428bb57a3a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number that has a verification problem."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that needs to be patched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "93841c74-2c56-4dcd-bb85-c3edfb92c7fe",
+              "name": "Client Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number that has a verification problem."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that needs to be patched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9da4dcf7-5fca-4015-b4c2-141ced89bb28",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number that has a verification problem."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that needs to be patched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0e89c010-d548-42ff-b2f2-4d0e5c1ed2ad",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number that has a verification problem."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that needs to be patched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d0552f57-96c8-4894-99fc-8d20aea03759",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number that has a verification problem."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that needs to be patched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "02c1aa05-87c7-4506-9041-3baa5e26f9d7",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number that has a verification problem."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that needs to be patched."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5ff4a967-6bad-44d9-8ab2-a33780bf010e",
+          "name": "Diff two DEA registration verifications\n",
+          "request": {
+            "name": "Diff two DEA registration verifications\n",
+            "description": {
+              "content": "Returns the diff according to [jsondiffpatch format](https://github.com/benjamine/jsondiffpatch) between the specified verification and the previous successful verification.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "dea",
+                ":registrationNumber",
+                "verifications",
+                ":verificationId",
+                "diff"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "registrationNumber",
+                  "description": "(Required) The registration number that was previously verified."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "verificationId",
+                  "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2c98beee-3f14-4aa5-82fb-c4239fce0f56",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId",
+                    "diff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"old\": {\n    \"id\": \"9a6bd610-ce46-196b-117c-09eaac1c4648\",\n    \"timestamp\": \"1955-12-08T00:13:39.764Z\",\n    \"lastUpdated\": \"1955-08-13T22:08:26.908Z\",\n    \"lastSync\": \"1979-03-09T23:32:16.110Z\",\n    \"status\": \"NotFound\",\n    \"originalStatus\": \"NeedsReview\",\n    \"results\": {\n      \"businessActivityCode\": \"string\",\n      \"drugSchedules\": [\n        \"string\",\n        \"string\"\n      ],\n      \"expirationDate\": \"2014-02-09T03:36:56.188Z\",\n      \"name\": \"string\",\n      \"additionalCompanyInfo\": \"string\",\n      \"address1\": \"string\",\n      \"address2\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"zipCode\": \"string\",\n      \"businessActivitySubCode\": \"string\",\n      \"paymentIndicator\": \"Exempt\",\n      \"active\": true,\n      \"problems\": [\n        \"NameMismatch\",\n        \"NameMismatch\"\n      ],\n      \"businessActivity\": \"string\"\n    },\n    \"deaxResults\": {\n      \"number\": \"string\",\n      \"certifiedPatientLimit\": 7465\n    }\n  },\n  \"new\": {\n    \"id\": \"d0bf6af5-c7f0-dca8-2a6b-97a2523a1236\",\n    \"timestamp\": \"1982-03-15T10:29:45.331Z\",\n    \"lastUpdated\": \"2018-03-23T02:41:54.462Z\",\n    \"lastSync\": \"1996-05-18T06:01:57.438Z\",\n    \"status\": \"Found\",\n    \"originalStatus\": \"Working\",\n    \"results\": {\n      \"businessActivityCode\": \"string\",\n      \"drugSchedules\": [\n        \"string\",\n        \"string\"\n      ],\n      \"expirationDate\": \"1999-03-16T20:52:19.860Z\",\n      \"name\": \"string\",\n      \"additionalCompanyInfo\": \"string\",\n      \"address1\": \"string\",\n      \"address2\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"zipCode\": \"string\",\n      \"businessActivitySubCode\": \"string\",\n      \"paymentIndicator\": \"Paid\",\n      \"active\": true,\n      \"problems\": [\n        \"NameMismatch\",\n        \"NameMismatch\"\n      ],\n      \"businessActivity\": \"string\"\n    },\n    \"deaxResults\": {\n      \"number\": \"string\",\n      \"certifiedPatientLimit\": 2474\n    }\n  },\n  \"diff\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00a09ee8-d1c3-4875-b802-093be02248c1",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId",
+                    "diff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ef72e16c-2880-41e3-9063-28fd725296ce",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId",
+                    "diff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9261ed99-198c-4a6f-abc5-130b8eec23a8",
+              "name": "Client Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId",
+                    "diff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6a4e3107-f557-42ac-9be2-9ae99e58ddea",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId",
+                    "diff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b08fab7a-0d53-4a39-b3c2-ae3d08d9ca64",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId",
+                    "diff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0b2c4089-e1a7-455c-bcb0-c7af851e80bd",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId",
+                    "diff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d0fffe7e-c6e9-4354-861f-61cca79474ad",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications",
+                    ":verificationId",
+                    "diff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The registration number that was previously verified."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "verificationId",
+                      "description": "(Required) The identifier describing the verification that you want to diff with the previous one."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "80da5d5f-f2c1-4334-8820-930e76e90b78",
+          "name": "List all DEA registrations from a provider\n",
+          "request": {
+            "name": "List all DEA registrations from a provider\n",
+            "description": {
+              "content": "Returns a list of all DEA registrations previously attached to the specified provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "dea"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) The identifier describing the provider to list all DEA registrations for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f28a6b2f-9459-4cee-adfa-0d7e1a0337ed",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to list all DEA registrations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"38f46ba4-43c9-1ccb-830d-9863965aed12\",\n    \"providerId\": \"19d8d9cb-9372-b8a9-2cdc-8b5cc561ddeb\",\n    \"registrationNumber\": \"string\",\n    \"currentVerification\": {\n      \"id\": \"091cd322-2500-ddf3-a79d-c159d93764a5\",\n      \"timestamp\": \"2025-04-22T19:51:59.088Z\",\n      \"lastUpdated\": \"1989-05-10T23:15:14.643Z\",\n      \"lastSync\": \"2022-02-15T04:40:01.440Z\",\n      \"status\": \"Failed\",\n      \"originalStatus\": \"NotFound\",\n      \"results\": {\n        \"businessActivityCode\": \"string\",\n        \"drugSchedules\": [\n          \"string\",\n          \"string\"\n        ],\n        \"expirationDate\": \"1962-10-17T03:05:31.398Z\",\n        \"name\": \"string\",\n        \"additionalCompanyInfo\": \"string\",\n        \"address1\": \"string\",\n        \"address2\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"string\",\n        \"zipCode\": \"string\",\n        \"businessActivitySubCode\": \"string\",\n        \"paymentIndicator\": \"Exempt\",\n        \"active\": false,\n        \"problems\": [\n          \"NameMismatch\",\n          \"NameMismatch\"\n        ],\n        \"businessActivity\": \"string\"\n      },\n      \"deaxResults\": {\n        \"number\": \"string\",\n        \"certifiedPatientLimit\": 3169\n      }\n    }\n  },\n  {\n    \"id\": \"6a570fc0-540d-299d-2da3-c9b525a704fa\",\n    \"providerId\": \"8f057b3d-3094-dda8-2de0-3b0a6f538da9\",\n    \"registrationNumber\": \"string\",\n    \"currentVerification\": {\n      \"id\": \"a35bbd54-b70b-68e1-2eaf-4fa06a7876f3\",\n      \"timestamp\": \"1965-12-19T18:07:19.363Z\",\n      \"lastUpdated\": \"1963-09-13T02:14:30.034Z\",\n      \"lastSync\": \"1961-02-16T22:35:53.661Z\",\n      \"status\": \"NeedsReview\",\n      \"originalStatus\": \"Working\",\n      \"results\": {\n        \"businessActivityCode\": \"string\",\n        \"drugSchedules\": [\n          \"string\",\n          \"string\"\n        ],\n        \"expirationDate\": \"1983-08-04T12:47:08.406Z\",\n        \"name\": \"string\",\n        \"additionalCompanyInfo\": \"string\",\n        \"address1\": \"string\",\n        \"address2\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"string\",\n        \"zipCode\": \"string\",\n        \"businessActivitySubCode\": \"string\",\n        \"paymentIndicator\": \"Paid\",\n        \"active\": true,\n        \"problems\": [\n          \"NameMismatch\",\n          \"NameMismatch\"\n        ],\n        \"businessActivity\": \"string\"\n      },\n      \"deaxResults\": {\n        \"number\": \"string\",\n        \"certifiedPatientLimit\": 8757\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9fdedc82-35b1-42ed-a562-cf0ba672d4f4",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to list all DEA registrations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9e2fd805-d261-400b-ba6f-38b97bf1a436",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to list all DEA registrations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2c814f1c-cc18-4af6-8c44-777868eb665c",
+              "name": "Client Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to list all DEA registrations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e5c9c6d5-2e86-4a2c-ac50-b4eadf6da8ad",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to list all DEA registrations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "77df37f7-e035-4849-be3d-4c407edacfd3",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to list all DEA registrations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f77039df-fd19-4f26-8842-ae4c640d17e5",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider to list all DEA registrations for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b156d511-0a30-4e41-991f-cd388d48868d",
+          "name": "List all verifications for a DEA registration\n",
+          "request": {
+            "name": "List all verifications for a DEA registration\n",
+            "description": {
+              "content": "It is possible to perform more than one verification for any given DEA registration. In order to go back in history you can use this endpoint to get a list of all verifications for the specified DEA registration.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "dea",
+                ":registrationNumber",
+                "verifications"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "registrationNumber",
+                  "description": "(Required) The DEA registration number to get the verifications from."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "60cb2f1e-2be1-4f8c-90e1-d99060358987",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the verifications from."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"7a71576e-9237-bbaa-b183-2cbddb5d692b\",\n    \"timestamp\": \"1961-07-12T14:57:20.234Z\",\n    \"lastUpdated\": \"2009-12-25T19:52:31.861Z\",\n    \"lastSync\": \"2023-07-30T05:07:41.340Z\",\n    \"status\": \"Failed\",\n    \"originalStatus\": \"Working\",\n    \"results\": {\n      \"businessActivityCode\": \"string\",\n      \"drugSchedules\": [\n        \"string\",\n        \"string\"\n      ],\n      \"expirationDate\": \"2018-01-07T12:49:19.136Z\",\n      \"name\": \"string\",\n      \"additionalCompanyInfo\": \"string\",\n      \"address1\": \"string\",\n      \"address2\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"zipCode\": \"string\",\n      \"businessActivitySubCode\": \"string\",\n      \"paymentIndicator\": \"Paid\",\n      \"active\": false,\n      \"problems\": [\n        \"NameMismatch\",\n        \"NameMismatch\"\n      ],\n      \"businessActivity\": \"string\"\n    },\n    \"deaxResults\": {\n      \"number\": \"string\",\n      \"certifiedPatientLimit\": 7200\n    }\n  },\n  {\n    \"id\": \"a8e6b0c1-f406-ae2d-93d4-5337fb0ec2a3\",\n    \"timestamp\": \"2024-04-11T00:22:31.576Z\",\n    \"lastUpdated\": \"1956-02-03T17:18:01.000Z\",\n    \"lastSync\": \"2011-04-08T19:47:46.383Z\",\n    \"status\": \"Working\",\n    \"originalStatus\": \"Found\",\n    \"results\": {\n      \"businessActivityCode\": \"string\",\n      \"drugSchedules\": [\n        \"string\",\n        \"string\"\n      ],\n      \"expirationDate\": \"1992-05-17T07:07:20.197Z\",\n      \"name\": \"string\",\n      \"additionalCompanyInfo\": \"string\",\n      \"address1\": \"string\",\n      \"address2\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"string\",\n      \"zipCode\": \"string\",\n      \"businessActivitySubCode\": \"string\",\n      \"paymentIndicator\": \"Exempt\",\n      \"active\": true,\n      \"problems\": [\n        \"NameMismatch\",\n        \"NameMismatch\"\n      ],\n      \"businessActivity\": \"string\"\n    },\n    \"deaxResults\": {\n      \"number\": \"string\",\n      \"certifiedPatientLimit\": 9128\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7e0f2fc-8015-4341-9884-f1b1866b310a",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the verifications from."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ce62960c-2433-462a-bc6b-56e8ae254d24",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the verifications from."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "44e2aadc-6ca1-4ee4-8597-872749a4716b",
+              "name": "Client Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the verifications from."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7d540608-b607-4903-9435-a2b11ea22852",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the verifications from."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5dffc75-6323-47c1-b72e-1cb924e989ab",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "dea",
+                    ":registrationNumber",
+                    "verifications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) The identifier describing the provider that holds the DEA registration."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "registrationNumber",
+                      "description": "(Required) The DEA registration number to get the verifications from."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://discovery.verifiable.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fbbc3284-731b-46f3-89f8-953d6abf474a",
+    "name": "Verifiable API Documentation Alerts DEA API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n",
+      "type": "text/plain"
+    }
+  }
+}

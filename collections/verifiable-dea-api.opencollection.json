@@ -1,0 +1,266 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts DEA API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "DEA",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific DEA registration from a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/dea/:registrationNumber",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the DEA registration."
+              },
+              {
+                "name": "registrationNumber",
+                "value": "",
+                "type": "path",
+                "description": "The DEA registration number to get the data for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data and latest verification for a specific DEA registration attached to a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Attach a DEA registration number to a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/dea/:registrationNumber",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider to attach the DEA registration number to."
+              },
+              {
+                "name": "registrationNumber",
+                "value": "",
+                "type": "path",
+                "description": "The DEA registration number to attach to the provider."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "To perform a DEA registration lookup you must first attach a DEA registration number to a provider. Everytime you call this endpoint a new verification will be made.\n"
+        },
+        {
+          "info": {
+            "name": "Detach a DEA registration number from a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/dea/:registrationNumber",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider to detach the DEA registration number from."
+              },
+              {
+                "name": "registrationNumber",
+                "value": "",
+                "type": "path",
+                "description": "The DEA registration number to detach from the provider."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This will delete the DEA registration lookup record for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get a specific DEA registration verification\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/dea/:registrationNumber/verifications/:verificationId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the DEA registration."
+              },
+              {
+                "name": "registrationNumber",
+                "value": "",
+                "type": "path",
+                "description": "The registration number that was previously verified."
+              },
+              {
+                "name": "verificationId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the verification that you want to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data for a specific previously executed DEA registration verification. This endpoint can be used to retrieve historical results on older verifications.\n"
+        },
+        {
+          "info": {
+            "name": "Resolve problems with a DEA registration verification\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/dea/:registrationNumber/verifications/:verificationId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the DEA registration."
+              },
+              {
+                "name": "registrationNumber",
+                "value": "",
+                "type": "path",
+                "description": "The DEA registration number that has a verification problem."
+              },
+              {
+                "name": "verificationId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the verification that needs to be patched."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "After a verification is executed we sometimes are uncertain about the results we get from the source. For example when the name of the DEA registration does not match the name that was used for the provider. In such cases we mark the verification `status` as `NeedsReview`. It is expected that this status is resolved by the end user. The resolution can be patched by using this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Diff two DEA registration verifications\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/dea/:registrationNumber/verifications/:verificationId/diff",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the DEA registration."
+              },
+              {
+                "name": "registrationNumber",
+                "value": "",
+                "type": "path",
+                "description": "The registration number that was previously verified."
+              },
+              {
+                "name": "verificationId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the verification that you want to diff with the previous one."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the diff according to [jsondiffpatch format](https://github.com/benjamine/jsondiffpatch) between the specified verification and the previous successful verification.\n"
+        },
+        {
+          "info": {
+            "name": "List all DEA registrations from a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/dea",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider to list all DEA registrations for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all DEA registrations previously attached to the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List all verifications for a DEA registration\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/dea/:registrationNumber/verifications",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the DEA registration."
+              },
+              {
+                "name": "registrationNumber",
+                "value": "",
+                "type": "path",
+                "description": "The DEA registration number to get the verifications from."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "It is possible to perform more than one verification for any given DEA registration. In order to go back in history you can use this endpoint to get a list of all verifications for the specified DEA registration.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

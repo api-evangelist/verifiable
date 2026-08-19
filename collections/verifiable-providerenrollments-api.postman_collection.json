@@ -1,0 +1,2179 @@
+{
+  "item": [
+    {
+      "id": "700be6bd-0126-4955-9cc6-d6c4fbdad605",
+      "name": "ProviderEnrollments",
+      "description": {
+        "content": "Endpoints related to managing and listing provider enrollments. Providers in a group can be associated to payer plans via provider enrollments.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ef3b318d-f4a9-4199-95b9-503c5b12c649",
+          "name": "Create a new provider enrollment\n",
+          "request": {
+            "name": "Create a new provider enrollment\n",
+            "description": {
+              "content": "Creates a new enrollment of provider to payer plan.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                "enrollments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": \"<uuid>\",\n  \"payerPlanId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "61b16dfd-fa49-4e44-a365-9d2759bb6914",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"groupId\": \"<uuid>\",\n  \"payerPlanId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"eade64ef-f71c-1bc2-0a4c-648936d30c71\",\n  \"payerPlanId\": \"21c8cded-85f3-776f-37e1-611c99585b25\",\n  \"groupId\": \"a7203b8d-3b82-edd4-ebdf-975dbcadcd9f\",\n  \"providerId\": \"b0f01108-4ac1-72b7-12dc-379122201075\",\n  \"enrollmentStatus\": \"Submitted\",\n  \"submissionDate\": \"1968-02-07T05:40:34.368Z\",\n  \"closedDate\": \"2003-07-30T19:21:48.583Z\",\n  \"effectiveDate\": \"1952-08-29T12:12:52.372Z\",\n  \"networkStatus\": \"NonPar\",\n  \"specialistType\": \"None\",\n  \"externalProviderPlanId\": \"string\",\n  \"comments\": \"string\",\n  \"payerPlanModel\": {\n    \"id\": \"e006ffd0-0500-d09e-e257-d99b5d9bd6dd\",\n    \"name\": \"string\",\n    \"payerId\": \"68acabf0-6bdd-792e-b161-238782d42418\",\n    \"state\": \"KY\",\n    \"displayName\": \"string\"\n  },\n  \"groupModel\": {\n    \"name\": \"string\",\n    \"id\": \"f5c95c74-9849-6f0b-c1ce-9218305020d6\",\n    \"npi\": 771,\n    \"taxId\": \"string\",\n    \"remitAddress\": {\n      \"addressLine1\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"CT\",\n      \"zipCode\": \"string\",\n      \"addressLine2\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1a27f83-afa3-4147-8710-32163122ff13",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"groupId\": \"<uuid>\",\n  \"payerPlanId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b7bbfca9-cf1f-4d61-818f-6a78d55eb57b",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"groupId\": \"<uuid>\",\n  \"payerPlanId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c7b88271-e0c5-45ae-b48a-45f6bfc9388b",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"groupId\": \"<uuid>\",\n  \"payerPlanId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "af7d76fa-090a-4d36-8bbe-7988f34acb1d",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"groupId\": \"<uuid>\",\n  \"payerPlanId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "39ee9e72-909a-4475-a9bd-be2dcf3805ad",
+          "name": "List provider enrollments\n",
+          "request": {
+            "name": "List provider enrollments\n",
+            "description": {
+              "content": "Returns a page of provider enrollments.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                "enrollments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "groupId",
+                  "value": "<uuid>",
+                  "description": "The unique identifier of the group to get enrollments for."
+                },
+                {
+                  "disabled": false,
+                  "key": "providerId",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on enrollments with the specified provider."
+                },
+                {
+                  "disabled": false,
+                  "key": "payerPlanId",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on enrollments with the specified payer plan."
+                },
+                {
+                  "disabled": false,
+                  "key": "networkStatus",
+                  "value": "<string>",
+                  "description": "If set, the items will be filtered on enrollments with the specified network status."
+                },
+                {
+                  "disabled": false,
+                  "key": "enrollmentStatus",
+                  "value": "<string>",
+                  "description": "If set, the items will be filtered on enrollments with the specified enrollment status."
+                },
+                {
+                  "disabled": false,
+                  "key": "specialistType",
+                  "value": "<string>",
+                  "description": "If set, the items will be filtered on enrollments with the specified specialist type."
+                },
+                {
+                  "disabled": false,
+                  "key": "submissionDate",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "effectiveDate",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortedBy",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "Keys",
+                  "value": "<string>",
+                  "description": "If set, the properties and directions the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "Values",
+                  "value": "<string>",
+                  "description": "If set, the properties and directions the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset for the page to start."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "<integer>",
+                  "description": "The number of items to include in a single page."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "<string>",
+                  "description": "The direction the returned data will be sorted by."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f8c08a4b-4750-4923-bc94-6633b5c49ae7",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "payerPlanId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "networkStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "enrollmentStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialistType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "submissionDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "effectiveDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"sort\": {\n    \"Keys\": \"NetworkStatus\",\n    \"Values\": \"Desc\"\n  },\n  \"previousCursor\": \"string\",\n  \"nextCursor\": \"string\",\n  \"nextOffset\": 6675,\n  \"pageSize\": 4653,\n  \"count\": 8712,\n  \"totalCount\": 9912,\n  \"items\": [\n    {\n      \"id\": \"c2bf4d3e-ea2e-db0c-541a-a1c4ebb76003\",\n      \"payerPlanId\": \"ce66f6a6-87d7-cb01-f36f-7f5cf8fe6a66\",\n      \"groupId\": \"30ad1d6c-3a64-2cb7-711a-c38dfa0de42a\",\n      \"providerId\": \"2e317c85-4b35-bed2-ac04-9f0099c9a6ea\",\n      \"enrollmentStatus\": \"Submitted\",\n      \"submissionDate\": \"1947-04-11T23:37:55.633Z\",\n      \"closedDate\": \"2012-03-10T04:08:54.740Z\",\n      \"effectiveDate\": \"2023-08-17T05:33:53.280Z\",\n      \"networkStatus\": \"None\",\n      \"specialistType\": \"None\",\n      \"externalProviderPlanId\": \"string\",\n      \"comments\": \"string\",\n      \"payerPlanModel\": {\n        \"id\": \"bfe5d7ca-447f-be30-fd1e-4683117d8aea\",\n        \"name\": \"string\",\n        \"payerId\": \"00987dfb-96e8-1e17-36aa-590d5a5fa8d1\",\n        \"state\": \"RI\",\n        \"displayName\": \"string\"\n      },\n      \"groupModel\": {\n        \"name\": \"string\",\n        \"id\": \"237b8ead-4921-b2a6-349b-a6723d38781f\",\n        \"npi\": 1118,\n        \"taxId\": \"string\",\n        \"remitAddress\": {\n          \"addressLine1\": \"string\",\n          \"city\": \"string\",\n          \"state\": \"ID\",\n          \"zipCode\": \"string\",\n          \"addressLine2\": \"string\"\n        }\n      }\n    },\n    {\n      \"id\": \"877409c3-cba1-90d1-4f12-5ee3d68cbabd\",\n      \"payerPlanId\": \"91d54ade-6623-1eec-42cb-b56c7e75071a\",\n      \"groupId\": \"861e919d-bc25-9a3a-4eb6-91e6843112bd\",\n      \"providerId\": \"5f9b6c67-e8e1-182f-c152-250b5b8832a4\",\n      \"enrollmentStatus\": \"Submitted\",\n      \"submissionDate\": \"2016-03-15T10:48:19.735Z\",\n      \"closedDate\": \"1950-01-15T23:53:17.382Z\",\n      \"effectiveDate\": \"2010-01-19T07:19:23.265Z\",\n      \"networkStatus\": \"None\",\n      \"specialistType\": \"None\",\n      \"externalProviderPlanId\": \"string\",\n      \"comments\": \"string\",\n      \"payerPlanModel\": {\n        \"id\": \"0c9c9c79-e22d-686d-2e80-9d38ac2ed44a\",\n        \"name\": \"string\",\n        \"payerId\": \"92c20fdd-7cb4-a232-50b2-c06df86e0e31\",\n        \"state\": \"AZ\",\n        \"displayName\": \"string\"\n      },\n      \"groupModel\": {\n        \"name\": \"string\",\n        \"id\": \"e176497b-ba09-5443-a6ea-86354db8bdad\",\n        \"npi\": 8157,\n        \"taxId\": \"string\",\n        \"remitAddress\": {\n          \"addressLine1\": \"string\",\n          \"city\": \"string\",\n          \"state\": \"RI\",\n          \"zipCode\": \"string\",\n          \"addressLine2\": \"string\"\n        }\n      }\n    }\n  ],\n  \"sortedBy\": \"PayerPlanName\",\n  \"sortDirection\": \"Asc\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3591d9f1-91d7-439f-a776-8b48884f7e91",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "payerPlanId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "networkStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "enrollmentStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialistType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "submissionDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "effectiveDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ea0a4208-c478-40b2-87f4-65045a2d5730",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "payerPlanId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "networkStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "enrollmentStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialistType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "submissionDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "effectiveDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c2a3ffdd-67c5-464c-9936-513c39957c9d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "payerPlanId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "networkStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "enrollmentStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialistType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "submissionDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "effectiveDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4c3c8115-bb2a-4fbb-a5dd-c3c2570c9524",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "payerPlanId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "networkStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "enrollmentStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialistType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "submissionDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "effectiveDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "401ed964-f450-444e-bdd5-ac408f9f547e",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "payerPlanId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "networkStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "enrollmentStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialistType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "submissionDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "effectiveDate",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "27e34918-392e-4607-ac87-4d3af5c12f05",
+          "name": "Get an existing provider enrollment\n",
+          "request": {
+            "name": "Get an existing provider enrollment\n",
+            "description": {
+              "content": "Returns the data for a specific provider enrollment.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                "enrollments",
+                ":providerEnrollmentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerEnrollmentId",
+                  "description": "(Required) Identifier of the provider enrollment to get the data for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e9822a13-166a-497f-ab49-4e5dceb0f163",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"eade64ef-f71c-1bc2-0a4c-648936d30c71\",\n  \"payerPlanId\": \"21c8cded-85f3-776f-37e1-611c99585b25\",\n  \"groupId\": \"a7203b8d-3b82-edd4-ebdf-975dbcadcd9f\",\n  \"providerId\": \"b0f01108-4ac1-72b7-12dc-379122201075\",\n  \"enrollmentStatus\": \"Submitted\",\n  \"submissionDate\": \"1968-02-07T05:40:34.368Z\",\n  \"closedDate\": \"2003-07-30T19:21:48.583Z\",\n  \"effectiveDate\": \"1952-08-29T12:12:52.372Z\",\n  \"networkStatus\": \"NonPar\",\n  \"specialistType\": \"None\",\n  \"externalProviderPlanId\": \"string\",\n  \"comments\": \"string\",\n  \"payerPlanModel\": {\n    \"id\": \"e006ffd0-0500-d09e-e257-d99b5d9bd6dd\",\n    \"name\": \"string\",\n    \"payerId\": \"68acabf0-6bdd-792e-b161-238782d42418\",\n    \"state\": \"KY\",\n    \"displayName\": \"string\"\n  },\n  \"groupModel\": {\n    \"name\": \"string\",\n    \"id\": \"f5c95c74-9849-6f0b-c1ce-9218305020d6\",\n    \"npi\": 771,\n    \"taxId\": \"string\",\n    \"remitAddress\": {\n      \"addressLine1\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"CT\",\n      \"zipCode\": \"string\",\n      \"addressLine2\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe56f8cb-1191-437d-a872-7ad623f7c2e6",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "05b02556-995b-443e-9767-b82bc023e074",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "71ffe8a2-6576-4985-83a9-db4d7de3694a",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "71c57a4b-eade-4dfb-9661-b8eefae28d32",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dddfbbbf-cda6-448a-956c-2828ca4bfc8d",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to get the data for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a4fe6023-5b73-483c-9350-bca6395d2917",
+          "name": "Patch an existing provider enrollment\n",
+          "request": {
+            "name": "Patch an existing provider enrollment\n",
+            "description": {
+              "content": "Allows you to change a provider enrollment's data properties.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                "enrollments",
+                ":providerEnrollmentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerEnrollmentId",
+                  "description": "(Required) Identifier of the provider enrollment to patch."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payerPlanId\": \"<uuid>\",\n  \"groupId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6616e2c1-63ce-4370-a5cd-da03fc76d216",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to patch."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payerPlanId\": \"<uuid>\",\n  \"groupId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"eade64ef-f71c-1bc2-0a4c-648936d30c71\",\n  \"payerPlanId\": \"21c8cded-85f3-776f-37e1-611c99585b25\",\n  \"groupId\": \"a7203b8d-3b82-edd4-ebdf-975dbcadcd9f\",\n  \"providerId\": \"b0f01108-4ac1-72b7-12dc-379122201075\",\n  \"enrollmentStatus\": \"Submitted\",\n  \"submissionDate\": \"1968-02-07T05:40:34.368Z\",\n  \"closedDate\": \"2003-07-30T19:21:48.583Z\",\n  \"effectiveDate\": \"1952-08-29T12:12:52.372Z\",\n  \"networkStatus\": \"NonPar\",\n  \"specialistType\": \"None\",\n  \"externalProviderPlanId\": \"string\",\n  \"comments\": \"string\",\n  \"payerPlanModel\": {\n    \"id\": \"e006ffd0-0500-d09e-e257-d99b5d9bd6dd\",\n    \"name\": \"string\",\n    \"payerId\": \"68acabf0-6bdd-792e-b161-238782d42418\",\n    \"state\": \"KY\",\n    \"displayName\": \"string\"\n  },\n  \"groupModel\": {\n    \"name\": \"string\",\n    \"id\": \"f5c95c74-9849-6f0b-c1ce-9218305020d6\",\n    \"npi\": 771,\n    \"taxId\": \"string\",\n    \"remitAddress\": {\n      \"addressLine1\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"CT\",\n      \"zipCode\": \"string\",\n      \"addressLine2\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "82e15ac8-32bb-4537-9572-0a6deba1e74e",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to patch."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payerPlanId\": \"<uuid>\",\n  \"groupId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e3059d4f-a08f-42a9-8a16-3745553e4769",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to patch."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payerPlanId\": \"<uuid>\",\n  \"groupId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e04ecd55-19e4-4604-8bd8-af9816798e81",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to patch."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payerPlanId\": \"<uuid>\",\n  \"groupId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a14ea431-7b6a-40da-9fdb-6c4198c8e0e7",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to patch."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payerPlanId\": \"<uuid>\",\n  \"groupId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "55ec12d1-a67f-4a9b-8c12-650e3ef40f57",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to patch."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payerPlanId\": \"<uuid>\",\n  \"groupId\": \"<uuid>\",\n  \"providerId\": \"<uuid>\",\n  \"enrollmentStatus\": \"<string>\",\n  \"submissionDate\": \"<dateTime>\",\n  \"closedDate\": \"<dateTime>\",\n  \"effectiveDate\": \"<dateTime>\",\n  \"networkStatus\": \"<string>\",\n  \"specialistType\": \"<string>\",\n  \"externalProviderPlanId\": \"<string>\",\n  \"comments\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "344a01dd-689a-4083-953d-631a6079c2af",
+          "name": "Delete an existing provider enrollment\n",
+          "request": {
+            "name": "Delete an existing provider enrollment\n",
+            "description": {
+              "content": "This will delete the provider enrollment.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                "enrollments",
+                ":providerEnrollmentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerEnrollmentId",
+                  "description": "(Required) Identifier of the provider enrollment to delete."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0937926d-17a2-4c9a-abe3-b6f606156e54",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3c0c0fab-be26-4321-84f9-ac0b68cac2b7",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "134a526d-c3ed-4e85-8302-3c094e5a69ad",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "14b66c0c-eee8-4b4c-9590-3b86a83f3d15",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "30ca5e72-8889-4572-9c38-69953595b8ee",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "86b4b974-05ad-468f-b801-f1171f9b923d",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    "enrollments",
+                    ":providerEnrollmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerEnrollmentId",
+                      "description": "(Required) Identifier of the provider enrollment to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://discovery.verifiable.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9d429b1d-0385-4fd9-85a6-8fc73af45071",
+    "name": "Verifiable API Documentation Alerts ProviderEnrollments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n",
+      "type": "text/plain"
+    }
+  }
+}

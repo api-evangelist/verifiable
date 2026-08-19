@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts PayerPlans API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "PayerPlans",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List payer plans\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/payer-plans",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query",
+                "description": "Identifier of the group to get the payer plans for."
+              },
+              {
+                "name": "payerId",
+                "value": "",
+                "type": "query",
+                "description": "Identifier of the payer to get the payer plans for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns payer plans\n"
+        },
+        {
+          "info": {
+            "name": "Create a new payer plan\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/payer-plans",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new payer plan.\n"
+        },
+        {
+          "info": {
+            "name": "Get an existing payer plan\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/payer-plans/:payerPlanId",
+            "params": [
+              {
+                "name": "payerPlanId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the payer plan to get the data for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data for a specific payer plan.\n"
+        },
+        {
+          "info": {
+            "name": "Patch an existing payer plan\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/payer-plans/:payerPlanId",
+            "params": [
+              {
+                "name": "payerPlanId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the payer plan to patch."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Allows you to change a payer plan's name or other data properties.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an existing payer plan\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/payer-plans/:payerPlanId",
+            "params": [
+              {
+                "name": "payerPlanId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the payer plan to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This will delete the payer plan.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

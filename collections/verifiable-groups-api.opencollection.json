@@ -1,0 +1,391 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Groups API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List groups\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/groups",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by `providerId`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns groups\n"
+        },
+        {
+          "info": {
+            "name": "Create a new group\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new medical group of providers.\n"
+        },
+        {
+          "info": {
+            "name": "Get an existing group\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/groups/:groupId",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the group to get the data for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data for a specific group.\n"
+        },
+        {
+          "info": {
+            "name": "Patch an existing group\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/groups/:groupId",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Allows you to change a group's name or other data properties.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an existing group\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/groups/:groupId",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This will delete the group and all its associations with providers.\n"
+        },
+        {
+          "info": {
+            "name": "List enrollments for the group\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/groups/:groupId/enrollments",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the group to get enrollments for."
+              },
+              {
+                "name": "payerPlanId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified payer plan."
+              },
+              {
+                "name": "networkStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified network status."
+              },
+              {
+                "name": "enrollmentStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified enrollment status."
+              },
+              {
+                "name": "specialistType",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on enrollments with the specified specialist type."
+              },
+              {
+                "name": "submissionDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "effectiveDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              },
+              {
+                "name": "rosterType",
+                "value": "",
+                "type": "query",
+                "description": "If set, csv report of specified type will be generated."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of enrollments for the specified group or generated csv roster if `rosterType` parameter specified.\n"
+        },
+        {
+          "info": {
+            "name": "List providers for the group\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/groups/:groupId/providers",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the group to get providers for."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified status."
+              },
+              {
+                "name": "providerName",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "credentialingStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified credentialing status."
+              },
+              {
+                "name": "providerTypeId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "npi",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified npi number."
+              },
+              {
+                "name": "deactivated",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "nextCredentialingDateOnOrAfter",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "nextCredentialingDateOnOrBefore",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              },
+              {
+                "name": "rosterType",
+                "value": "",
+                "type": "query",
+                "description": "If set, csv report of specified type will be generated."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of providers for the specified group or generated csv roster if `rosterType` parameter specified.\n"
+        },
+        {
+          "info": {
+            "name": "Patch providers-group relations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/groups/:groupId/providers",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the group."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Patch associations between group and providers.\n"
+        },
+        {
+          "info": {
+            "name": "Patch payer plans-group relations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/groups/:groupId/payer-plans",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the group."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Patch associations between group and payer plans.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

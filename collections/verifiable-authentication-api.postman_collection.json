@@ -1,0 +1,2199 @@
+{
+  "item": [
+    {
+      "id": "1fb4858a-893f-45c3-bc5a-6db70fb4f3cc",
+      "name": "Authentication",
+      "description": {
+        "content": "These endpoint allow you to create and manage access tokens to be used in API calls. Unlike most other endpoints, when creating an access token, these do not require an access token to be used. Instead you authenticate via another secure mechanism and in exchange you retrieve an access token.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e95b738c-907d-4880-a369-ea2571bc54de",
+          "name": "Password Authentication\n",
+          "request": {
+            "name": "Password Authentication\n",
+            "description": {
+              "content": "Endpoint for authentication using an email and password for a user already registered at Verifiable. In return you will receive an access token that can be used in the following API calls.\n\n**Note:** The account may require a password change for successful authentication. If password change is required and `newPassword` is not set the server returns `409 Conflict`.\nIf `newPassword` is set but the current `password` is not correct the server returns `403 Forbidden`.\n\n**Note:** If `newPassword` is set it *must* be different than the current password. If the password is the same the server returns `400 Bad Request`.\n\n**Note:** When `newPassword` is set and the request returns `200 Ok`, all the active access tokens will be invalidated.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "token",
+                "password"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\",\n  \"newPassword\": \"<string>\",\n  \"timeToLive\": \"<timespan>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c98faf18-2738-43ba-80ce-92d6639b9179",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john.doe@mail.com\",\n  \"password\": \"secret\",\n  \"newPassword\": \"even-more-secret\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tokenId\": \"0847312d-19fe-49d2-9e21-5825735b511a\",\n  \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ece721a-c6e5-4780-b666-418d7a6fecd9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john.doe@mail.com\",\n  \"password\": \"secret\",\n  \"newPassword\": \"even-more-secret\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9b05251a-1a5e-47a7-b8ce-8949e88b4c7c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john.doe@mail.com\",\n  \"password\": \"secret\",\n  \"newPassword\": \"even-more-secret\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3eea0bf8-4fbf-4269-9ea4-ccad1f658f02",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john.doe@mail.com\",\n  \"password\": \"secret\",\n  \"newPassword\": \"even-more-secret\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bb230dd3-9f76-48f1-a27a-ff8dae9a81bc",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john.doe@mail.com\",\n  \"password\": \"secret\",\n  \"newPassword\": \"even-more-secret\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c431252f-986c-4ca5-abc9-9022bde63324",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john.doe@mail.com\",\n  \"password\": \"secret\",\n  \"newPassword\": \"even-more-secret\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c5220f82-8659-4308-bdec-42f2a80ceae7",
+          "name": "Resets a password\n",
+          "request": {
+            "name": "Resets a password\n",
+            "description": {
+              "content": "Endpoint for changing a password using a token.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "password",
+                "reset"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newPassword\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3c8d7df7-6627-40cf-a02a-cc744a26c7de",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "reset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"newPassword\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9504fd58-4c0b-4ad4-baf7-c8a276344447",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "reset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"newPassword\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "74e3bd48-583e-4153-8cfa-e700321d51ae",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "reset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"newPassword\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3003ff9b-3c50-4bf0-9813-63149f215c0d",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "reset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"newPassword\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "881657c0-412c-4656-b3af-4292493d3e38",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "reset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"newPassword\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ee5b1474-6fd6-4630-b25d-db6d28890cc4",
+          "name": "Requests a password reset\n",
+          "request": {
+            "name": "Requests a password reset\n",
+            "description": {
+              "content": "Endpoint for requesting a password reset.\n\nIf the e-mail sent in the body of this request has an account associated with it, a message with a link for changing the password will be sent to it.  \n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "password",
+                "requestreset"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"<email>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ccaac8d1-5892-4d09-b386-db29e0a19ef3",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "requestreset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "17e7ef2b-c1a1-4056-af4d-7c725ff98b0d",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "requestreset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "656df356-4b41-4a3c-94cf-8ac3f512931c",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "requestreset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "af634ebf-34c3-4521-b55f-ef286cf87b4c",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "password",
+                    "requestreset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6636a37f-ed6c-4327-a7df-526038b503d3",
+          "name": "Google Authentication\n",
+          "request": {
+            "name": "Google Authentication\n",
+            "description": {
+              "content": "It is possible to use Google Sign-In for authentication with the Verifiable API. In order to do so we follow the [Google Sign-In for server-side apps](https://developers.google.com/identity/sign-in/web/server-side-flow) flow. In order to use this flow you must use the `client ID` from Verifiable when signing in to Google and send the authorization code as payload to this endpoint. In return you will receive an access token that can be used in the following API calls. The email address of the user must already be registered at Verifiable.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "token",
+                "google"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"<string>\",\n  \"timeToLive\": \"<timespan>\",\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2d26d9a7-0a2b-4464-9e5c-c256e7a7fcd0",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "google"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"4/yU4cQZT...4z7U4UmAI\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tokenId\": \"0847312d-19fe-49d2-9e21-5825735b511a\",\n  \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01ea839d-2d33-4d7f-8dd2-883d6c365099",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "google"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"4/yU4cQZT...4z7U4UmAI\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9d20e5ea-4d6b-42ab-b8e7-138ec487c152",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "google"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"4/yU4cQZT...4z7U4UmAI\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7230eab0-c6d7-451b-af62-e0cb795b04ad",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "google"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"4/yU4cQZT...4z7U4UmAI\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c3c9827b-5666-4503-8663-20d3ce5b9dbf",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "google"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"4/yU4cQZT...4z7U4UmAI\",\n  \"timeToLive\": \"00:30:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6dc783ac-9a14-4e31-8e2e-73b6f0d232d8",
+          "name": "List active access tokens\n",
+          "request": {
+            "name": "List active access tokens\n",
+            "description": {
+              "content": "Returns all access tokens for the current user that are neither expired, nor invalidated.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sortedBy",
+                  "value": "<string>",
+                  "description": "The property by which the returned data will be sorted."
+                },
+                {
+                  "disabled": false,
+                  "key": "Keys",
+                  "value": "<string>",
+                  "description": "If set, the properties and directions the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "Values",
+                  "value": "<string>",
+                  "description": "If set, the properties and directions the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset for the page to start."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "<integer>",
+                  "description": "The number of items to include in a single page."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "<string>",
+                  "description": "The direction the returned data will be sorted by."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ffb19413-6941-4706-8eab-b1c2fb7c8c21",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"previousCursor\": \"string\",\n  \"nextCursor\": \"string\",\n  \"nextOffset\": 0,\n  \"pageSize\": 0,\n  \"count\": 0,\n  \"totalCount\": 0,\n  \"items\": [\n    {\n      \"lastUserAgent\": \"string\",\n      \"lastIpAddress\": \"string\",\n      \"lastUsed\": \"2019-08-24T14:15:22.0000000Z\",\n      \"isCurrent\": true,\n      \"expiresAt\": \"2019-08-24T14:15:22.0000000Z\"\n    }\n  ],\n  \"sortedBy\": \"Id\",\n  \"sortDirection\": \"Asc\",\n  \"sort\": {\n    \"Id\": \"Asc\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9071e1af-e07f-4bec-92d2-6950777a4fd7",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8746a6ab-2d6d-4b93-b280-72598451a07f",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "705b6b69-ba37-4241-94b9-f078a19cf256",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "008a647f-19e8-43c0-8e28-86e78c69a9b1",
+          "name": "Invalidate an access token\n",
+          "request": {
+            "name": "Invalidate an access token\n",
+            "description": {
+              "content": "Invalidates an access token so that it can no longer be used.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "token",
+                ":tokenId",
+                "invalidate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "tokenId",
+                  "description": "(Required) The unique identifier of the access token to be invalidated."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "556bd982-005d-436f-9585-0a55d7b64939",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    ":tokenId",
+                    "invalidate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "tokenId",
+                      "description": "(Required) The unique identifier of the access token to be invalidated."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0cff7652-d73e-4e4b-b68c-3f9c1af980a9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    ":tokenId",
+                    "invalidate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "tokenId",
+                      "description": "(Required) The unique identifier of the access token to be invalidated."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "59fc26a8-c8c8-4568-a7d7-fa49120f3ea6",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    ":tokenId",
+                    "invalidate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "tokenId",
+                      "description": "(Required) The unique identifier of the access token to be invalidated."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "27d67373-065a-49ce-9492-102b2143eaf2",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    ":tokenId",
+                    "invalidate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "tokenId",
+                      "description": "(Required) The unique identifier of the access token to be invalidated."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6274560b-8058-4db6-bcb0-5cefffdb3bd2",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    ":tokenId",
+                    "invalidate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "tokenId",
+                      "description": "(Required) The unique identifier of the access token to be invalidated."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5238fe74-8c40-44c5-b33f-b14ae37b3ab9",
+          "name": "Invalidate multiple access tokens\n",
+          "request": {
+            "name": "Invalidate multiple access tokens\n",
+            "description": {
+              "content": "Invalidates multiple access tokens that belongs to the user making the request so they can no longer be used.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "token",
+                "invalidate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"invalidateCurrent\": \"<boolean>\",\n  \"tokenIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "caaea11b-9ee4-4414-9354-b5a5efded34b",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "invalidate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"invalidateCurrent\": \"<boolean>\",\n  \"tokenIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0e18b628-1088-4b85-b889-ada77979d22a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "invalidate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"invalidateCurrent\": \"<boolean>\",\n  \"tokenIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f569787f-936b-44a0-af3a-7f439be45119",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token",
+                    "invalidate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"invalidateCurrent\": \"<boolean>\",\n  \"tokenIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8da48af0-d1ba-4188-a10c-abb33eab0802",
+          "name": "OAuth Authentication\n",
+          "request": {
+            "name": "OAuth Authentication\n",
+            "description": {
+              "content": "**🔒 Premium Feature**\n\nThe OAuth 2.0 (machine-to-machine) and SSO authentication flows are premium features that must be enabled by the Verifiable team.\n- **Availability:** These features are available as add-ons to select Verifiable plans.\n- **Provisioning:** These features require organizational-level provisioning through a one-time configuration by the Verifiable team. To ensure maximum security, endpoints are not enabled by default.\n- **Next Steps:** To enable these authentication methods for your organization, please contact your Customer Success Manager or [reach out to our Support Team](mailto:support@verifiable.com).\n\n<br/>\nIt is possible to use the OAuth Client Credentials flow to authenticate with the Verifiable API. In order to use this flow, you must use the `client ID` and a `client secret` from Verifiable. You must send the client credentials along with the grant type `client_credentials` in a URL-encoded format.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "oauth",
+                "token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "client_secret",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "grant_type",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "655dd444-d9a6-4a95-a0e3-7064a09852e6",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "client_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "client_secret",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grant_type",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"access_token\": \"string\",\n  \"token_type\": \"string\",\n  \"expires_in\": 1374\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c377743-1f55-4600-9b6a-20582a0be55c",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "client_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "client_secret",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grant_type",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0fc98f83-ee66-4acc-831c-e77aa45abb97",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "client_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "client_secret",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grant_type",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "635df0eb-342c-4f86-a245-8a48a0ea67de",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "client_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "client_secret",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grant_type",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b1d08aa4-6a3f-43f2-b91f-892ae864e3af",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "client_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "client_secret",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grant_type",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://discovery.verifiable.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "347527b3-2038-4c6e-97fa-7b046eff397f",
+    "name": "Verifiable API Documentation Alerts Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n",
+      "type": "text/plain"
+    }
+  }
+}

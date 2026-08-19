@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Reports API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List sanctions and exclusions reports for the organization.\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/organization/reports/sanctionsandexclusions",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all the sanctions and exclusions reports that have been created so far. The reports are sorted in descending order from latest created to oldest.\n"
+        },
+        {
+          "info": {
+            "name": "List enrollments reports for the organization.\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/organization/reports/enrollments",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all the enrollment reports that have been created so far. The reports are sorted in descending order from latest created to oldest.\n"
+        },
+        {
+          "info": {
+            "name": "List expirable credentials reports for the organization.\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/organization/reports/expirable-credentials",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all the expirable credentials reports that have been created so far. The reports are sorted in descending order from latest created to oldest.\n"
+        },
+        {
+          "info": {
+            "name": "List roster reports for the organization.\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/organization/reports/roster",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all the roster reports that have been created so far. The reports are sorted in descending order from latest created to oldest.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,2189 @@
+{
+  "item": [
+    {
+      "id": "5cc456c0-9df2-44d5-ace8-5c2396c79e12",
+      "name": "Notes",
+      "description": {
+        "content": "These endpoints allow you to create and manage provider notes.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "30a54ae2-a6fa-487f-88ea-3dd09945a015",
+          "name": "Create a new provider note\n",
+          "request": {
+            "name": "Create a new provider note\n",
+            "description": {
+              "content": "Creates a note associated with the specified provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "notes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) Identifier of the provider to create a note for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6873c804-0ae3-4450-9c17-8dcf5c6af199",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to create a note for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"providerId\": \"ea3eda3b-ee80-00d6-3d29-5f558d77d7be\",\n  \"timestamp\": \"1979-09-27T15:59:53.259Z\",\n  \"note\": \"string\",\n  \"id\": \"72d725c7-d4f2-3215-6fde-0d1603dcf3ae\",\n  \"alert\": {\n    \"type\": \"LicenseExpiresSoon\",\n    \"providerId\": \"92435783-a4e8-244e-8075-669168333f44\",\n    \"provider\": {\n      \"credentialingStatus\": \"string\",\n      \"firstName\": \"string\",\n      \"lastName\": \"string\",\n      \"id\": \"e87d873f-6708-47e6-0609-a132aa217199\",\n      \"dateOfBirth\": \"1956-11-17T14:06:27.936Z\",\n      \"ssn\": \"string\",\n      \"credentialedDate\": \"1965-08-14T14:06:11.518Z\",\n      \"nextCredentialingDate\": \"2018-11-25\",\n      \"npi\": 4970,\n      \"deactivated\": true,\n      \"deactivatedAt\": \"1999-01-08T07:53:42.447Z\",\n      \"aliases\": [\n        {\n          \"firstName\": \"string\",\n          \"lastName\": \"string\",\n          \"id\": \"c89ea1fa-5293-ea65-ec9d-72a0ce7e53dd\"\n        },\n        {\n          \"firstName\": \"string\",\n          \"lastName\": \"string\",\n          \"id\": \"51a67930-b287-d54f-b89c-80df34cc7129\"\n        }\n      ],\n      \"primaryPracticeState\": \"NH\",\n      \"additionalPracticeStates\": [\n        \"AZ\",\n        \"RI\"\n      ],\n      \"gender\": \"Other\",\n      \"ethnicity\": [\n        \"BlackOrAfricanAmerican\",\n        \"BlackOrAfricanAmerican\"\n      ],\n      \"addresses\": [\n        {\n          \"addressLine1\": \"string\",\n          \"city\": \"string\",\n          \"state\": \"OR\",\n          \"zipCode\": \"string\",\n          \"addressLine2\": \"string\",\n          \"type\": \"Work\",\n          \"id\": \"7120f901-114c-2bea-d408-ad1068932724\"\n        },\n        {\n          \"addressLine1\": \"string\",\n          \"city\": \"string\",\n          \"state\": \"MD\",\n          \"zipCode\": \"string\",\n          \"addressLine2\": \"string\",\n          \"type\": \"Unspecified\",\n          \"id\": \"3772587e-19ed-2a6e-ec39-d7aac110a509\"\n        }\n      ],\n      \"emails\": [\n        {\n          \"email\": \"string\",\n          \"type\": \"Work\",\n          \"id\": \"7df5fee0-e1b0-848d-0008-ae6cbd45a962\"\n        },\n        {\n          \"email\": \"string\",\n          \"type\": \"Work\",\n          \"id\": \"088576d7-ffa2-2457-8ccb-4834addb76bf\"\n        }\n      ],\n      \"phone\": \"string\",\n      \"languages\": [\n        \"string\",\n        \"string\"\n      ],\n      \"recredentialedDates\": [\n        \"1971-11-06T16:57:50.687Z\",\n        \"1981-02-01T10:00:50.606Z\"\n      ],\n      \"providerType\": {\n        \"id\": \"443ff372-f493-6840-8fee-21cdc5e902f9\",\n        \"name\": \"string\"\n      },\n      \"nuccGroup\": {\n        \"name\": \"Allopathic & Osteopathic Physicians\"\n      },\n      \"segment\": {\n        \"name\": \"acme-corp\"\n      },\n      \"createdAt\": \"1966-04-01T19:06:59.695Z\"\n    },\n    \"entityType\": \"Note\",\n    \"entityId\": \"2c2dd1a9-611b-7317-595a-960614993976\",\n    \"data\": {\n      \"messageTemplate\": \"string\",\n      \"messageParams\": {\n        \"key_0\": \"string\"\n      },\n      \"data\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      }\n    },\n    \"timestamp\": \"1954-11-29T12:27:43.906Z\",\n    \"dismissalTimestamp\": \"1962-10-14T21:21:03.986Z\",\n    \"dismissalNote\": \"string\",\n    \"id\": \"c282adef-332f-ec74-a075-fd63e113ddd1\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab02daaa-d76a-476f-a4cd-334ecaadf879",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to create a note for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ff90d540-add9-459b-9b9f-027d72126b45",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to create a note for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2de7cf03-e6db-4fc9-8a8d-6768e96c5687",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to create a note for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6562a515-f359-4d2d-959e-c5c307374500",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to create a note for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e03646bf-7879-4041-8fc6-34fbc9708f61",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to create a note for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e244f0be-c0cb-4259-b828-9519783cdb35",
+          "name": "List provider notes\n",
+          "request": {
+            "name": "List provider notes\n",
+            "description": {
+              "content": "Returns all notes associated with the specified provider. This also returns any dismissal related to alerts on this provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "notes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) Identifier of the provider to get all notes for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d724090b-52dd-4bda-b95a-a1df20839602",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to get all notes for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"providerId\": \"c37bfa35-e459-fdb9-80e5-3ab7976f2148\",\n    \"timestamp\": \"1963-03-16T00:47:09.771Z\",\n    \"note\": \"string\",\n    \"id\": \"97e3ed80-77cd-f8f2-6bc2-55bd6bfb2237\",\n    \"alert\": {\n      \"type\": \"LicenseChanged\",\n      \"providerId\": \"aa37c6a6-f45b-6354-51d8-f2ced72d2eee\",\n      \"provider\": {\n        \"credentialingStatus\": \"string\",\n        \"firstName\": \"stri\",\n        \"lastName\": \"stri\",\n        \"id\": \"f28f6330-d552-a92f-a1a8-b990579e2ca8\",\n        \"dateOfBirth\": \"1955-09-09T13:17:28.073Z\",\n        \"ssn\": \"string\",\n        \"credentialedDate\": \"2016-08-26T16:58:50.656Z\",\n        \"nextCredentialingDate\": \"2015-08-06\",\n        \"npi\": 8024,\n        \"deactivated\": false,\n        \"deactivatedAt\": \"1957-08-14T05:21:37.255Z\",\n        \"aliases\": [\n          {\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"primaryPracticeState\": \"GA\",\n        \"additionalPracticeStates\": [\n          \"IL\",\n          \"SD\"\n        ],\n        \"gender\": \"Female\",\n        \"ethnicity\": [\n          \"White\",\n          \"White\"\n        ],\n        \"addresses\": [\n          {\n            \"addressLine1\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"state\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"zipCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"addressLine2\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"addressLine1\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"state\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"zipCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"addressLine2\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"emails\": [\n          {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"phone\": \"string\",\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"recredentialedDates\": [\n          \"1981-03-09T03:45:29.462Z\",\n          \"1972-10-15T16:31:23.343Z\"\n        ],\n        \"providerType\": {\n          \"id\": \"f06d7ff5-01c6-93a8-c87d-9d7d5a58aa60\",\n          \"name\": \"string\"\n        },\n        \"nuccGroup\": {\n          \"name\": \"Allopathic & Osteopathic Physicians\"\n        },\n        \"segment\": {\n          \"name\": \"acme-corp\"\n        },\n        \"createdAt\": \"1974-04-01T18:26:18.221Z\"\n      },\n      \"entityType\": \"BoardCertificationVerification\",\n      \"entityId\": \"92a6cab4-a857-d5ef-6727-c528afbbc748\",\n      \"data\": {\n        \"messageTemplate\": \"string\",\n        \"messageParams\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\",\n          \"key_3\": \"string\"\n        },\n        \"data\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        }\n      },\n      \"timestamp\": \"1953-07-17T00:02:35.302Z\",\n      \"dismissalTimestamp\": \"1995-09-10T00:40:40.266Z\",\n      \"dismissalNote\": \"string\",\n      \"id\": \"e864c418-4569-9a67-3446-cf591b134ac8\"\n    }\n  },\n  {\n    \"providerId\": \"25fce131-a684-b1f5-ea3c-efc641a5ccc5\",\n    \"timestamp\": \"2004-05-24T18:46:30.672Z\",\n    \"note\": \"string\",\n    \"id\": \"de789537-dd34-1fd5-b8d1-a59afc1aabd2\",\n    \"alert\": {\n      \"type\": \"LicenseExpired\",\n      \"providerId\": \"4f881755-acba-99c0-989f-635c98fc4180\",\n      \"provider\": {\n        \"credentialingStatus\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"id\": \"7d240d59-51b1-5b79-687f-f1f2ffb57f4d\",\n        \"dateOfBirth\": \"1984-05-09T05:18:04.803Z\",\n        \"ssn\": \"string\",\n        \"credentialedDate\": \"1976-07-10T03:17:03.365Z\",\n        \"nextCredentialingDate\": \"1985-07-03\",\n        \"npi\": 9986,\n        \"deactivated\": true,\n        \"deactivatedAt\": \"2009-01-10T08:51:43.862Z\",\n        \"aliases\": [\n          {\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"primaryPracticeState\": \"AS\",\n        \"additionalPracticeStates\": [\n          \"LA\",\n          \"VA\"\n        ],\n        \"gender\": \"Unknown\",\n        \"ethnicity\": [\n          \"AmericanIndianOrAlaskaNative\",\n          \"AmericanIndianOrAlaskaNative\"\n        ],\n        \"addresses\": [\n          {\n            \"addressLine1\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"state\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"zipCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"addressLine2\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"addressLine1\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"city\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"state\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"zipCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"addressLine2\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"emails\": [\n          {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"phone\": \"string\",\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"recredentialedDates\": [\n          \"1975-01-21T18:53:03.791Z\",\n          \"2020-12-02T06:41:47.629Z\"\n        ],\n        \"providerType\": {\n          \"id\": \"3ed7ea6d-ec2c-c22d-6f33-83d2c1a673f8\",\n          \"name\": \"string\"\n        },\n        \"nuccGroup\": {\n          \"name\": \"Allopathic & Osteopathic Physicians\"\n        },\n        \"segment\": {\n          \"name\": \"acme-corp\"\n        },\n        \"createdAt\": \"1958-07-13T08:27:50.677Z\"\n      },\n      \"entityType\": \"Alert\",\n      \"entityId\": \"1e6b4f8b-a0ba-cb26-197c-9bc38042f223\",\n      \"data\": {\n        \"messageTemplate\": \"string\",\n        \"messageParams\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"data\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"timestamp\": \"1999-03-13T04:35:31.600Z\",\n      \"dismissalTimestamp\": \"1968-09-01T15:33:09.283Z\",\n      \"dismissalNote\": \"string\",\n      \"id\": \"193c0ec7-b205-cd94-4f1b-4ea59e571d02\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3d45b811-f68f-4cce-9e28-d7f97d6eb88f",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to get all notes for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0c51fc84-999a-46c9-b9e9-f35d0026ae63",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to get all notes for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8cc99e8a-0059-4931-9199-5b7b43e677ce",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to get all notes for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "239b69a1-cca3-4f28-8d95-0af9aaed0ec4",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to get all notes for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "68ccbd56-c5ac-462b-9c3f-4dd420f51da2",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider to get all notes for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "22593075-cbd2-47e9-b433-7a30833f3510",
+          "name": "Get an existing provider note\n",
+          "request": {
+            "name": "Get an existing provider note\n",
+            "description": {
+              "content": "Gets an existing note associated with the specified provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "notes",
+                ":noteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) Identifier of the provider associated with the note."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "noteId",
+                  "description": "(Required) Identifier of the note."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "892c876a-a2e6-45a1-a6c2-5fe6c5471bdd",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"providerId\": \"1e5d1307-8bbf-9924-99f7-56bea8f578f7\",\n  \"timestamp\": \"1966-08-16T03:23:43.134Z\",\n  \"note\": \"string\",\n  \"id\": \"970ad757-993e-091c-177f-647857ff0c25\",\n  \"alert\": {\n    \"type\": \"LicenseExpiresSoon\",\n    \"providerId\": \"93eb8765-02d6-4478-8dd8-1965f797bba9\",\n    \"provider\": {\n      \"credentialingStatus\": \"string\",\n      \"firstName\": \"string\",\n      \"lastName\": \"string\",\n      \"id\": \"967bc9d3-3ce0-5195-c499-409625b9b4ec\",\n      \"dateOfBirth\": \"1968-07-21T18:42:42.126Z\",\n      \"ssn\": \"string\",\n      \"credentialedDate\": \"1977-03-04T09:45:57.759Z\",\n      \"nextCredentialingDate\": \"1958-07-29\",\n      \"npi\": 7823,\n      \"deactivated\": true,\n      \"deactivatedAt\": \"2019-03-21T16:30:58.541Z\",\n      \"aliases\": [\n        {\n          \"firstName\": \"string\",\n          \"lastName\": \"string\",\n          \"id\": \"79215454-246f-078e-ad31-4cdd13347396\"\n        },\n        {\n          \"firstName\": \"string\",\n          \"lastName\": \"string\",\n          \"id\": \"ead1192f-9814-897a-e3cc-7b2b04e38639\"\n        }\n      ],\n      \"primaryPracticeState\": \"IA\",\n      \"additionalPracticeStates\": [\n        \"AK\",\n        \"ND\"\n      ],\n      \"gender\": \"Male\",\n      \"ethnicity\": [\n        \"NativeHawaiianOrOtherPacificIslander\",\n        \"BlackOrAfricanAmerican\"\n      ],\n      \"addresses\": [\n        {\n          \"addressLine1\": \"string\",\n          \"city\": \"string\",\n          \"state\": \"WI\",\n          \"zipCode\": \"string\",\n          \"addressLine2\": \"string\",\n          \"type\": \"Unspecified\",\n          \"id\": \"28d77478-62ff-8e54-108b-4c7d93d96494\"\n        },\n        {\n          \"addressLine1\": \"string\",\n          \"city\": \"string\",\n          \"state\": \"KY\",\n          \"zipCode\": \"string\",\n          \"addressLine2\": \"string\",\n          \"type\": \"Home\",\n          \"id\": \"4fc7bb6a-e075-0fca-b05e-9a9902f9d67d\"\n        }\n      ],\n      \"emails\": [\n        {\n          \"email\": \"string\",\n          \"type\": \"Unspecified\",\n          \"id\": \"ee5d6891-f8a6-f5db-86ca-9b792355d6c6\"\n        },\n        {\n          \"email\": \"string\",\n          \"type\": \"Unspecified\",\n          \"id\": \"4f54d005-a092-f3d3-bb33-6d3f1aa1b6fb\"\n        }\n      ],\n      \"phone\": \"string\",\n      \"languages\": [\n        \"string\",\n        \"string\"\n      ],\n      \"recredentialedDates\": [\n        \"2012-04-16T07:32:10.139Z\",\n        \"1988-12-11T08:33:44.712Z\"\n      ],\n      \"providerType\": {\n        \"id\": \"81a2747b-f9b8-751c-c74b-2b62d0cc65a0\",\n        \"name\": \"string\"\n      },\n      \"nuccGroup\": {\n        \"name\": \"Allopathic & Osteopathic Physicians\"\n      },\n      \"segment\": {\n        \"name\": \"acme-corp\"\n      },\n      \"createdAt\": \"2023-04-26T19:26:52.815Z\"\n    },\n    \"entityType\": \"NpdbVerificationRequest\",\n    \"entityId\": \"3b425360-236c-7e4d-0fbf-629347866380\",\n    \"data\": {\n      \"messageTemplate\": \"string\",\n      \"messageParams\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"data\": {\n        \"key_0\": \"string\"\n      }\n    },\n    \"timestamp\": \"1957-07-09T19:36:50.350Z\",\n    \"dismissalTimestamp\": \"1949-04-17T03:20:39.796Z\",\n    \"dismissalNote\": \"string\",\n    \"id\": \"f1109eac-479a-0e6a-b257-524b58f0b207\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "09c91386-c52c-4ed8-911a-3b97f9349515",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ca4f0a70-d97b-40f0-8294-c454f81b0e74",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "58525cf1-6504-437d-9089-4ee7c1c3b6d3",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "57669d9a-4e1a-4231-a03c-c6920ea312a0",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bccdc184-5c72-46af-ad21-c7d5676c9de4",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e638865d-2677-474a-9263-4d6e219ef718",
+          "name": "Change an existing provider note\n",
+          "request": {
+            "name": "Change an existing provider note\n",
+            "description": {
+              "content": "Change an existing note associated with the specified provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "notes",
+                ":noteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) Identifier of the provider associated with the note to change."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "noteId",
+                  "description": "(Required) Identifier of the note to be changed."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ccef57c7-f966-4b7f-874e-4ebe130cb793",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to change."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be changed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"providerId\": \"1e5d1307-8bbf-9924-99f7-56bea8f578f7\",\n  \"timestamp\": \"1966-08-16T03:23:43.134Z\",\n  \"note\": \"string\",\n  \"id\": \"970ad757-993e-091c-177f-647857ff0c25\",\n  \"alert\": {\n    \"type\": \"LicenseExpiresSoon\",\n    \"providerId\": \"93eb8765-02d6-4478-8dd8-1965f797bba9\",\n    \"provider\": {\n      \"credentialingStatus\": \"string\",\n      \"firstName\": \"string\",\n      \"lastName\": \"string\",\n      \"id\": \"967bc9d3-3ce0-5195-c499-409625b9b4ec\",\n      \"dateOfBirth\": \"1968-07-21T18:42:42.126Z\",\n      \"ssn\": \"string\",\n      \"credentialedDate\": \"1977-03-04T09:45:57.759Z\",\n      \"nextCredentialingDate\": \"1958-07-29\",\n      \"npi\": 7823,\n      \"deactivated\": true,\n      \"deactivatedAt\": \"2019-03-21T16:30:58.541Z\",\n      \"aliases\": [\n        {\n          \"firstName\": \"string\",\n          \"lastName\": \"string\",\n          \"id\": \"79215454-246f-078e-ad31-4cdd13347396\"\n        },\n        {\n          \"firstName\": \"string\",\n          \"lastName\": \"string\",\n          \"id\": \"ead1192f-9814-897a-e3cc-7b2b04e38639\"\n        }\n      ],\n      \"primaryPracticeState\": \"IA\",\n      \"additionalPracticeStates\": [\n        \"AK\",\n        \"ND\"\n      ],\n      \"gender\": \"Male\",\n      \"ethnicity\": [\n        \"NativeHawaiianOrOtherPacificIslander\",\n        \"BlackOrAfricanAmerican\"\n      ],\n      \"addresses\": [\n        {\n          \"addressLine1\": \"string\",\n          \"city\": \"string\",\n          \"state\": \"WI\",\n          \"zipCode\": \"string\",\n          \"addressLine2\": \"string\",\n          \"type\": \"Unspecified\",\n          \"id\": \"28d77478-62ff-8e54-108b-4c7d93d96494\"\n        },\n        {\n          \"addressLine1\": \"string\",\n          \"city\": \"string\",\n          \"state\": \"KY\",\n          \"zipCode\": \"string\",\n          \"addressLine2\": \"string\",\n          \"type\": \"Home\",\n          \"id\": \"4fc7bb6a-e075-0fca-b05e-9a9902f9d67d\"\n        }\n      ],\n      \"emails\": [\n        {\n          \"email\": \"string\",\n          \"type\": \"Unspecified\",\n          \"id\": \"ee5d6891-f8a6-f5db-86ca-9b792355d6c6\"\n        },\n        {\n          \"email\": \"string\",\n          \"type\": \"Unspecified\",\n          \"id\": \"4f54d005-a092-f3d3-bb33-6d3f1aa1b6fb\"\n        }\n      ],\n      \"phone\": \"string\",\n      \"languages\": [\n        \"string\",\n        \"string\"\n      ],\n      \"recredentialedDates\": [\n        \"2012-04-16T07:32:10.139Z\",\n        \"1988-12-11T08:33:44.712Z\"\n      ],\n      \"providerType\": {\n        \"id\": \"81a2747b-f9b8-751c-c74b-2b62d0cc65a0\",\n        \"name\": \"string\"\n      },\n      \"nuccGroup\": {\n        \"name\": \"Allopathic & Osteopathic Physicians\"\n      },\n      \"segment\": {\n        \"name\": \"acme-corp\"\n      },\n      \"createdAt\": \"2023-04-26T19:26:52.815Z\"\n    },\n    \"entityType\": \"NpdbVerificationRequest\",\n    \"entityId\": \"3b425360-236c-7e4d-0fbf-629347866380\",\n    \"data\": {\n      \"messageTemplate\": \"string\",\n      \"messageParams\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"data\": {\n        \"key_0\": \"string\"\n      }\n    },\n    \"timestamp\": \"1957-07-09T19:36:50.350Z\",\n    \"dismissalTimestamp\": \"1949-04-17T03:20:39.796Z\",\n    \"dismissalNote\": \"string\",\n    \"id\": \"f1109eac-479a-0e6a-b257-524b58f0b207\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9277def-2e4b-4a23-a815-92cc8211c9b3",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to change."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be changed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "32ff9023-0a9b-41e0-80bc-4390c08080d5",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to change."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be changed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "80aab030-6515-43fe-a0a4-ab49d13b0dc3",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to change."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be changed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0f0cd0e2-abea-41c9-b555-60c40a8a12ae",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to change."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be changed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3d00ad03-89d8-4a26-baaa-00d75915f8a4",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to change."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be changed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a9b02dd6-50e1-4629-8f4b-ce454e252bb2",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to change."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be changed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "288061f6-2701-49b7-bcea-eb2430e2a7d7",
+          "name": "Delete an existing provider note\n",
+          "request": {
+            "name": "Delete an existing provider note\n",
+            "description": {
+              "content": "Deletes an existing note associated with the specified provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "providers",
+                ":providerId",
+                "notes",
+                ":noteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "providerId",
+                  "description": "(Required) Identifier of the provider associated with the note to delete."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "noteId",
+                  "description": "(Required) Identifier of the note to be deleted."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "99cbf1d1-1f34-4e78-b400-cb69018efffb",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to delete."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4a2a7bb2-dd26-470b-9a8b-df6fc217e294",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to delete."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "96064bdb-a8b8-45af-81f3-8bad78072fac",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to delete."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ab7f73cf-b1ca-4f96-aaa9-c5a8871b3b58",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to delete."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7c38785a-7193-482e-8ed5-edfc1e28ff64",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to delete."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6b6f043e-4a63-4578-9428-250bbce664a3",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to delete."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9ed46ad2-0c71-4b2a-854a-6cab538729da",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "providers",
+                    ":providerId",
+                    "notes",
+                    ":noteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "providerId",
+                      "description": "(Required) Identifier of the provider associated with the note to delete."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "noteId",
+                      "description": "(Required) Identifier of the note to be deleted."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://discovery.verifiable.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d43ac96f-2325-49ad-9dc6-b53b884aeee4",
+    "name": "Verifiable API Documentation Alerts Notes API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n",
+      "type": "text/plain"
+    }
+  }
+}

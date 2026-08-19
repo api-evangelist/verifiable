@@ -1,0 +1,978 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts FacilitiesInfo API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "FacilitiesInfo",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get info for the existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility to get the data for."
+              },
+              {
+                "name": "facilityInfoTypes",
+                "value": "",
+                "type": "query",
+                "description": "If not specified, will return all data for the facility. Info types can be combined, ex.: `facilityInfoTypes=npi&facilityInfoTypes=dea`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the info for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's NPIs\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/npis",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all NPIs associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Create a NPI for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/npis",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a NPI for the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Get NPI for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/npis/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the NPI for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing facility's NPI\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/npis/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing NPI associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing NPI for a facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/npis/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing NPI associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's DEAs\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/deas",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all DEAs associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Create a DEA for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/deas",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a DEA for the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Get DEA for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/deas/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the DEA for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing facility's DEA\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/deas/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing DEA associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing DEA for a facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/deas/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing DEA associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's Liability Insurances\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/liabilityInsurances",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all Liability Insurances associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Create a Liability Insurance for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/liabilityInsurances",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a Liability Insurance for the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Get Liability Insurance for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/liabilityInsurances/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the Liability Insurance for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing facility's Liability Insurance\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/liabilityInsurances/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing Liability Insurance associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing Liability Insurance for a facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/liabilityInsurances/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing Liability Insurance associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's Licenses\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/licenses",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all Licenses associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Create a License for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/licenses",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a License for the specified facility."
+        },
+        {
+          "info": {
+            "name": "Get License for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/licenses/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the License for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing facility's License\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/licenses/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing License associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing License for a facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/licenses/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing License associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's Accreditations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/accreditations",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all Accreditations associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Create an Accreditation for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/accreditations",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add an Accreditation for the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Get Accreditation for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/accreditations/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the Accreditation for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing facility's Accreditation\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/accreditations/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing Accreditation associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing Accreditation for a facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/accreditations/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing Accreditation associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's CMS Certifications\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/cmsCertifications",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all CMS Certifications associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Create a CMS Certification for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/cmsCertifications",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a CMS Certification for the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Get CMS Certification for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/cmsCertifications/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the CMS Certification for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing facility's CMS Certification\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/cmsCertifications/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing CMS Certification associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing CMS Certification for a facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/cmsCertifications/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing CMS Certification associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's Medicare Enrollments\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/medicare-enrollments",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all Medicare Enrollments associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Create a Medicare Enrollment for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/medicare-enrollments",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a Medicare Enrollment for the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Get Medicare Enrollment for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/medicare-enrollments/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the Medicare Enrollment Info for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing facility's Medicare Enrollment\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/medicare-enrollments/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing Medicare Enrollment associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a Medicare Enrollment from an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/info/medicare-enrollments/:id",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a Medicare Enrollment from the specified facility.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

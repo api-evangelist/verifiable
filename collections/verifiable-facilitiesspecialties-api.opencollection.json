@@ -1,0 +1,258 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts FacilitiesSpecialties API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "FacilitiesSpecialties",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List facility's Specialties\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/specialties",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility to get the Specialties for."
+              },
+              {
+                "name": "taxonomyId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all Specialties associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Create a Specialty for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/specialties",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility to create the Specialty for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a Specialty for the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "Get Specialty for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/specialties/:facilitySpecialtyId",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility to get the Specialty for."
+              },
+              {
+                "name": "facilitySpecialtyId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the Specialty."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the Specialty for a specific facility.\n"
+        },
+        {
+          "info": {
+            "name": "Update a Specialty for an existing facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/specialties/:facilitySpecialtyId",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility to update the Specialty for."
+              },
+              {
+                "name": "facilitySpecialtyId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the Specialty to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates the Specialty for a specific facility. Only the fields provided in the request body will be updated.\n"
+        },
+        {
+          "info": {
+            "name": "Delete existing Specialty for a facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/specialties/:facilitySpecialtyId",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility to remove the Specialty from."
+              },
+              {
+                "name": "facilitySpecialtyId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the Specialty to remove."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing Specialty associated with the specified facility.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's specialty information by type\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/specialties/:facilitySpecialtyId/info/:facilityInfoType",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility to get the information for."
+              },
+              {
+                "name": "facilitySpecialtyId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility specialty to get the information for."
+              },
+              {
+                "name": "facilityInfoType",
+                "value": "",
+                "type": "path",
+                "description": "Type of facility information."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all Infos associated with the specified facility specialty filtered by type.\n"
+        },
+        {
+          "info": {
+            "name": "List facility's specialty information\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/facilities/:facilityId/specialties/:facilitySpecialtyId/info",
+            "params": [
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility to get the information for."
+              },
+              {
+                "name": "facilitySpecialtyId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the facility specialty to get the information for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all Infos associated with the specified facility specialty.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

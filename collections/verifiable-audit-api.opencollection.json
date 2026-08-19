@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Audit API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audit",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List event log entries\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/log/events",
+            "params": [
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events with the specified type. More than 1 type can be specified."
+              },
+              {
+                "name": "includeFailedRequests",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, also includes failed request events (these are filtered out by default). Note that not all failed requests can be captured or assigned to your organization, depending on the nature of the failure."
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events related to the specified identifier. For example, to filter on events for a given provider, set this parameter to the identifier of that provider. More than 1 entity identifier can be specified."
+              },
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events related to the specified category. More than 1 category can be specified."
+              },
+              {
+                "name": "subcategory",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events related to the specified subcategory. The subcategories differ per `category`. More than 1 subcategory can be specified."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events from before this date."
+              },
+              {
+                "name": "beforeInclusive",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, will include events created exactly at `before` date and time too."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events from after this date."
+              },
+              {
+                "name": "afterInclusive",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, will include events created exactly at `after` date and time too."
+              },
+              {
+                "name": "correlationId",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events related to the specified correlation identifier."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of event log entries. Events can occur either system or user initiated. In case an event is user initiated the event context contains information on the user that triggered it and the associated HTTP request is captured.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

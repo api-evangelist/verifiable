@@ -1,0 +1,740 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Datasets API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List dataset scans\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/scans",
+            "params": [
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans with the specified dataset types."
+              },
+              {
+                "name": "parameterSetId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans with the specified parameter set."
+              },
+              {
+                "name": "referenceId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans with the specified provider info reference id."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans with the specified statuses."
+              },
+              {
+                "name": "includeOldScans",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will contain all dataset scans, otherwise, only the most recent scans will be included."
+              },
+              {
+                "name": "hasMonitor",
+                "value": "",
+                "type": "query",
+                "description": "If set, when `true`, the results will only contain scans currently associated with a monitor, or when `false`, the results will only contain scans not currently associated with a monitor."
+              },
+              {
+                "name": "trigger",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans with the specified trigger."
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Indicates whether to retrieve dataset scans for practitioners or facilities. Defaults to `Practitioners`."
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the specified entity identifier (`providerId` or `facilityId`)."
+              },
+              {
+                "name": "entityName",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the specified entity name (provider name/alias or facility name)."
+              },
+              {
+                "name": "entityNpi",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the specified entity NPI number."
+              },
+              {
+                "name": "entityDeactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the specified entity deactivated status."
+              },
+              {
+                "name": "credentialingStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans for providers in the specified credentialing status."
+              },
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans for this provider."
+              },
+              {
+                "name": "providerName",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans for providers with the specified name or alias name."
+              },
+              {
+                "name": "providerNpi",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans for providers with the specified npi number."
+              },
+              {
+                "name": "providerDeactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans for providers in the specified deactivated status."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of dataset scans.\n"
+        },
+        {
+          "info": {
+            "name": "Start a dataset scan\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/datasets/scans",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Starts a new dataset scan.\n\nWill return a failed scan if required parameters are missing.\n"
+        },
+        {
+          "info": {
+            "name": "Get dataset scan\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/scans/:scanId",
+            "params": [
+              {
+                "name": "scanId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the scan to get results for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the status and results for a previously started dataset scan.\n"
+        },
+        {
+          "info": {
+            "name": "List dataset matches\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/matches",
+            "params": [
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain matches for the specified dataset types. As opposed to `type` you can filter on more than 1 different dataset type this way."
+              },
+              {
+                "name": "userActionNeeded",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "referenceId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeOldMatches",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will contain all dataset matches, otherwise, only matches from the most recent completed scans will be included."
+              },
+              {
+                "name": "userActionResolution",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "matchRelevance",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Indicates whether to retrieve dataset matches for practitioners or facilities. Defaults to `Practitioners`."
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the specified entity identifier (`providerId` or `facilityId`)."
+              },
+              {
+                "name": "entityName",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the specified entity name (provider name/alias or facility name)."
+              },
+              {
+                "name": "entityNpi",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the specified entity NPI number."
+              },
+              {
+                "name": "entityDeactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the specified entity deactivated status."
+              },
+              {
+                "name": "credentialingStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans for providers in the specified credentialing status."
+              },
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain matches for this provider."
+              },
+              {
+                "name": "providerName",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "providerNpi",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "providerDeactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only contain scans for providers in the specified deactivated status."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of dataset matches. By default, only matches that have not been rejected are returned. By default, only the most recent matches are returned.\n"
+        },
+        {
+          "info": {
+            "name": "Get dataset metadata\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/:datasetType",
+            "params": [
+              {
+                "name": "datasetType",
+                "value": "",
+                "type": "path",
+                "description": "The specific dataset type to get the metadata for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns metadata for a specific dataset. The metadata includes the date it was last updated in our system in addition to the JSON schema used for the records.\n"
+        },
+        {
+          "info": {
+            "name": "List datasets metadata\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets",
+            "params": [
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "If set, the result will contain items with matching associated tags. Currently supported tags are: \"Sanctions and Exclusions\", \"Board Certifications\", \"NPI\", \"Id Check\", \"NPDB\""
+              },
+              {
+                "name": "entityTypes",
+                "value": "",
+                "type": "query",
+                "description": "If set, the result will contain items that support the specified healthcare entity types."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns metadata for all available datasets. The metadata includes the date it was last updated in our system in addition to the JSON schema used for the records.\n"
+        },
+        {
+          "info": {
+            "name": "Get dataset scan parameters for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/:datasetType/parameters/providers/:providerId",
+            "params": [
+              {
+                "name": "datasetType",
+                "value": "",
+                "type": "path",
+                "description": "The specific dataset type to get the scan parameters for."
+              },
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the provider for which the parameters should be returned."
+              },
+              {
+                "name": "parameterSetId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only return the parameters based on the specified parameter set else the parameters will be returned based on preferred dataset parameter."
+              },
+              {
+                "name": "referenceId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only use the associated provider info to derive the parameters."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the list of dataset scan parameters that will be used during a dataset scan.\n"
+        },
+        {
+          "info": {
+            "name": "Get dataset scan parameters for a facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/:datasetType/parameters/facilities/:facilityId",
+            "params": [
+              {
+                "name": "datasetType",
+                "value": "",
+                "type": "path",
+                "description": "The specific dataset type to get the scan parameters for."
+              },
+              {
+                "name": "facilityId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the facility for which the parameters should be returned."
+              },
+              {
+                "name": "parameterSetId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only return the parameters based on the specified parameter set else the parameters will be returned based on preferred dataset parameter."
+              },
+              {
+                "name": "referenceId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only use the associated facility info to derive the parameters."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the list of dataset scan parameters that will be used during a dataset scan.\n"
+        },
+        {
+          "info": {
+            "name": "Upload a dataset file\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/datasets/:datasetType/uploads",
+            "params": [
+              {
+                "name": "datasetType",
+                "value": "",
+                "type": "path",
+                "description": "The dataset type of the file to upload. Only `CmsPreclusion` is supported for now."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "datasetFile",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Uploads a dataset file. Only CSV files are supported.\n"
+        },
+        {
+          "info": {
+            "name": "Get dataset matches aggregations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/matches/aggregations",
+            "params": [
+              {
+                "name": "providerDeactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified deactivated status."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns aggregated counts for dataset matches that require `user action` and for dataset matches that have been `accepted`.\n"
+        },
+        {
+          "info": {
+            "name": "(Deprecated) Get dataset scan parameters for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/:datasetType/parameters/:providerId",
+            "params": [
+              {
+                "name": "datasetType",
+                "value": "",
+                "type": "path",
+                "description": "The specific dataset type to get the scan parameters for."
+              },
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the provider for which the parameters should be returned."
+              },
+              {
+                "name": "parameterSetId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only return the parameters based on the specified parameter set else the parameters will be returned based on preferred dataset parameter."
+              },
+              {
+                "name": "referenceId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the results will only use the associated provider info to derive the parameters."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the list of dataset scan parameters that will be used during a dataset scan.\n"
+        },
+        {
+          "info": {
+            "name": "List schools\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/datasets/nsc/schoolCodes",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on schools with the specified name."
+              },
+              {
+                "name": "code",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on schools with the specified code."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of schools that are supported by NSC.\n\nThe codes originating from [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/participating-schools)\n"
+        },
+        {
+          "info": {
+            "name": "Patch an existing dataset match\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/datasets/matches/:matchId",
+            "params": [
+              {
+                "name": "matchId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the dataset match to patch."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Allows you to reject, accept or restore a previous rejected dataset match. Only a match from the most recent scan can be patched.\n"
+        },
+        {
+          "info": {
+            "name": "Refresh dataset scan\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/datasets/scans/:scanId/refresh",
+            "params": [
+              {
+                "name": "scanId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the scan to trigger refresh for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Triggers a refresh for an existing running continuous dataset scan. Currently only NPDB dataset supports it. For NPDB it will trigger Status request to fetch the latest available response from the site.  \n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

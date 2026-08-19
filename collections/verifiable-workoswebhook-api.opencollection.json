@@ -1,0 +1,34 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts WorkOsWebhook API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "WorkOsWebhook",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "WorkOsWebhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/auth/workos/webhook",
+            "headers": [
+              {
+                "name": "WorkOS-Signature",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

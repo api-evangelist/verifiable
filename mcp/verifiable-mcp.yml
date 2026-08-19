@@ -7,18 +7,14 @@ server:
   kind: documentation
   transport: http
   url: https://docs.discovery.verifiable.com/mcp
-  notes: >-
-    The Verifiable API documentation site advertises an official hosted MCP
-    server ("Install MCP server on Cursor" / "Install MCP server on VS Code")
-    that exposes the API documentation to MCP-capable clients. It is a docs
-    assistant, not an execution surface over the API operations themselves.
+  notes: The Verifiable API documentation site advertises an official hosted MCP server ("Install MCP
+    server on Cursor" / "Install MCP server on VS Code") that exposes the API documentation to MCP-capable
+    clients. It is a docs assistant, not an execution surface over the API operations themselves.
 candidate_api_tools:
   status: candidate
   source: openapi/verifiable-openapi-original.json
-  notes: >-
-    Verifiable does not publish an operational MCP server that wraps the API's
-    253 operations. The following are candidate tools derived from marquee
-    OpenAPI operations, for a future generated server.
+  notes: Verifiable does not publish an operational MCP server that wraps the API's 253 operations. The
+    following are candidate tools derived from marquee OpenAPI operations, for a future generated server.
   tools:
   - name: create_provider
     description: Create a new healthcare provider record
@@ -50,3 +46,8 @@ candidate_api_tools:
   - name: create_webhook
     description: Register a webhook for event delivery
     source_operation: openapi/verifiable-openapi-original.json#CreateWebhook
+deployment:
+  mode: remote
+  verified: searched
+  checked: '2026-08-12'
+  source: catalog MCP census

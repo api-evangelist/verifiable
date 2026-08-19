@@ -1,0 +1,220 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Webhooks API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all webhooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/webhooks",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all webhooks created on this organization."
+        },
+        {
+          "info": {
+            "name": "Create a new webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/webhooks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new webhook that will be called when the specified event is triggered."
+        },
+        {
+          "info": {
+            "name": "Get details from a webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/webhooks/:webhookId",
+            "params": [
+              {
+                "name": "webhookId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of a previously created webhook."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get details from a previously created webhook."
+        },
+        {
+          "info": {
+            "name": "Update a webhook\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/webhooks/:webhookId",
+            "params": [
+              {
+                "name": "webhookId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of a previously created webhook."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a previously created webhook.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a webhook\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/webhooks/:webhookId",
+            "params": [
+              {
+                "name": "webhookId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of a previously created webhook to be deleted."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a previously created webhook.\n"
+        },
+        {
+          "info": {
+            "name": "List all webhooks logs\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/webhookslog",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered with the specified webhook type."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered with the specified webhook log status."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              },
+              {
+                "name": "traceId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered with the specified webhook log trace id."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered with timestamp value less the provided value."
+              },
+              {
+                "name": "beforeInclusive",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, will include events created exactly at `before` date and time too."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered with timestamp value more the provided value."
+              },
+              {
+                "name": "afterInclusive",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, will include events created exactly at `after` date and time too."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all webhooks logs on this organization.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

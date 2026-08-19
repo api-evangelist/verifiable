@@ -1,0 +1,159 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Notes API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Notes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List provider notes\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/notes",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider to get all notes for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all notes associated with the specified provider. This also returns any dismissal related to alerts on this provider.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new provider note\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/notes",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider to create a note for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a note associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get an existing provider note\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/notes/:noteId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider associated with the note."
+              },
+              {
+                "name": "noteId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the note."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Gets an existing note associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Change an existing provider note\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/notes/:noteId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider associated with the note to change."
+              },
+              {
+                "name": "noteId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the note to be changed."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change an existing note associated with the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an existing provider note\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/notes/:noteId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider associated with the note to delete."
+              },
+              {
+                "name": "noteId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the note to be deleted."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing note associated with the specified provider.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,492 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Providers API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Providers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List providers\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified status."
+              },
+              {
+                "name": "providerName",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified name or alias name."
+              },
+              {
+                "name": "credentialingStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified credentialing status."
+              },
+              {
+                "name": "providerTypeId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified provider type."
+              },
+              {
+                "name": "npi",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified npi number."
+              },
+              {
+                "name": "deactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified deactivated status."
+              },
+              {
+                "name": "nextCredentialingDateOnOrAfter",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified next credentialing date that is equal to or greater than the date specified."
+              },
+              {
+                "name": "nextCredentialingDateOnOrBefore",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified next credentialing date that is equal to or less than the date specified."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of providers.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new provider that can be used to store information about this provider. Once a provider is created you can attach records, notes, documents and create other associations with this provider such as adding them to a Group or Payer."
+        },
+        {
+          "info": {
+            "name": "Get an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider to get the data for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data for a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Patch an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider to patch."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Allows you to change a provider's name or other data properties.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider to get the data for."
+              },
+              {
+                "name": "cancelNpdbContinuousQuery",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This will delete the provider and all associated data such as attached licenses, NPI records, DEA registration etc.\n"
+        },
+        {
+          "info": {
+            "name": "Get provider aggregations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/aggregations",
+            "params": [
+              {
+                "name": "providerDeactivated",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified deactivated status."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns aggregated counts for providers with different statuses.\n"
+        },
+        {
+          "info": {
+            "name": "List provider types\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providertypes",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all provider types that are currently supported.\n"
+        },
+        {
+          "info": {
+            "name": "Generate report for an existing provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/report",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the provider to generate report."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generates report for the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "List providers due for recredentialing\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/recredentialing/due",
+            "params": [
+              {
+                "name": "includeUnassigned",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "providerName",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified name or alias name."
+              },
+              {
+                "name": "providerNpi",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified npi number."
+              },
+              {
+                "name": "credentialingRequestOwnerId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified credentialing request owner IDs."
+              },
+              {
+                "name": "credentialingRequestEventStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified credentialing request event statuses."
+              },
+              {
+                "name": "nextCredentialingDateOnOrAfter",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified next credentialing date that is equal to or greater than the date specified."
+              },
+              {
+                "name": "nextCredentialingDateOnOrBefore",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified next credentialing date that is equal to or less than the date specified."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of providers due for recredentialing.\n"
+        },
+        {
+          "info": {
+            "name": "Get provider sanctions and exclusions monitoring categories aggregations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/monitoring/sanctions-and-exclusions/aggregations",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns aggregated counts for providers monitoring categories for sanctions and exclusions.\n"
+        },
+        {
+          "info": {
+            "name": "List provider monitoring summary for sanctions and exclusions\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/monitoring/sanctions-and-exclusions",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified name/alias."
+              },
+              {
+                "name": "npi",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified NPI number."
+              },
+              {
+                "name": "credentialingStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified credentialing status."
+              },
+              {
+                "name": "monitoringCategory",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified monitoring category."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction in which the returned data will be sorted."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of provider monitoring summaries for sanctions and exclusions.\n"
+        },
+        {
+          "info": {
+            "name": "Initiate an NPDB enrollment transfer for a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/npdb/transfer-enrollment",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Initiates the transfer of an existing an NPDB enrollment to the specified provider. Once a transfer has been initiated, review the dataset scan results to monitor the transfer operation.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

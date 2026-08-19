@@ -1,0 +1,607 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Licenses API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Licenses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List provider licenses\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/provider-licenses",
+            "params": [
+              {
+                "name": "providerName",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified (first or last) name."
+              },
+              {
+                "name": "providerCredentialingStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified credentialing status."
+              },
+              {
+                "name": "licenseState",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on licenses with the specified license state."
+              },
+              {
+                "name": "licenseType",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on licenses with the specified license type."
+              },
+              {
+                "name": "licenseStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on licenses with the specified license status."
+              },
+              {
+                "name": "licenseVerificationStatus",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on licenses with the verification status."
+              },
+              {
+                "name": "licenseApprovedStatus",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "export",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "providerDeactivated",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a page of provider licenses.\n"
+        },
+        {
+          "info": {
+            "name": "Trigger a new license verification\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses/:licenseId/verify",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the license."
+              },
+              {
+                "name": "licenseId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license to be verified again."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "By executing this endpoint a new license verification is scheduled and executed for the specified license.\n"
+        },
+        {
+          "info": {
+            "name": "Trigger license verifications\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses/verify",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the license."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "By executing this endpoint a license verifications is scheduled and executed for specified licenses for the provider.\n"
+        },
+        {
+          "info": {
+            "name": "Get a specific license from a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses/:licenseId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the license."
+              },
+              {
+                "name": "licenseId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license that you want to get the data for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data and latest verification for a specific license attached to a specific provider.\n"
+        },
+        {
+          "info": {
+            "name": "Detach a license from a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses/:licenseId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider to detach the license from."
+              },
+              {
+                "name": "licenseId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license that you want to detach."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This will delete the license and associated verification records for the specified provider. This will also delete any related data such as screenshots, attachments, export reports, alerts etc.\n"
+        },
+        {
+          "info": {
+            "name": "Get a specific license verification\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses/:licenseId/verifications/:verificationId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the license."
+              },
+              {
+                "name": "licenseId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license that was previously verified."
+              },
+              {
+                "name": "verificationId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license verification that you want to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the data for a specific previously executed license verification. This endpoint can be used to retrieve historical results on older license verifications.\n"
+        },
+        {
+          "info": {
+            "name": "Resolve problems with a license verification\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses/:licenseId/verifications/:verificationId",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the license."
+              },
+              {
+                "name": "licenseId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license that has a verification problem."
+              },
+              {
+                "name": "verificationId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license verification that needs to be patched."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "After a license verification is executed we sometimes are uncertain about the results we get from the source. For example when the source returns more than 1 match or the name of the license does not match the name that was used for the provider. In such cases we mark the license `status` as `NeedsReview`. It is expected that this status is resolved by the end user. The resolution can be patched by using this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Diff two license verifications\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses/:licenseId/verifications/:verificationId/diff",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the license."
+              },
+              {
+                "name": "licenseId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license that was previously verified."
+              },
+              {
+                "name": "verificationId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license verification that you want to diff with the previous one."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the diff according to [jsondiffpatch format](https://github.com/benjamine/jsondiffpatch) between the specified verification and the previous successful verification.\n"
+        },
+        {
+          "info": {
+            "name": "List all verifications for a license\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses/:licenseId/verifications",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider that holds the license."
+              },
+              {
+                "name": "licenseId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the license to get the verifications from."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "It is possible to perform more than one verification for any given license. In order to go back in history you can use this endpoint to get a list of all verifications for the specified license.\n"
+        },
+        {
+          "info": {
+            "name": "List license types\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/licensetypes",
+            "params": [
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on the state specified by this parameter"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all license types that are currently supported and used for license verifications.\n"
+        },
+        {
+          "info": {
+            "name": "List license source status\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/licensetypes/status",
+            "params": [
+              {
+                "name": "licenseTypeId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the License type id. Please refer to [LicenseTypes](/references/api/licenses/listsimplifiedlicensetypes) for more information on the License type id."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered by the state specified in this parameter."
+              },
+              {
+                "name": "licenseTypeSearchQuery",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sourceIssue",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the license source status information for one or more license types.\n"
+        },
+        {
+          "info": {
+            "name": "List all licenses from a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider to list all licenses for."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all licenses previously attached to the specified provider.\n"
+        },
+        {
+          "info": {
+            "name": "Attach a license to a provider\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/providers/:providerId/licenses",
+            "params": [
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the provider to attach the license to."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "To perform a license verification you must first attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can reverify the same license without reattaching it. A provider can have more than one license attached.\n"
+        },
+        {
+          "info": {
+            "name": "Get provider licenses aggregations\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/provider-licenses/aggregations",
+            "params": [
+              {
+                "name": "providerDeactivated",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns aggregated counts for provider licenses with different statuses.\n"
+        },
+        {
+          "info": {
+            "name": "Patch an existing license\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/licenses/:licenseId",
+            "params": [
+              {
+                "name": "licenseId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the license to patch."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Allows you to change a license's restriction or approved status.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

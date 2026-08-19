@@ -1,0 +1,2539 @@
+{
+  "item": [
+    {
+      "id": "a47b64b2-b320-44da-87ae-992ab90c3338",
+      "name": "Monitoring",
+      "description": {
+        "content": "Endpoints to allow you to enable/disable monitoring or update monitoring settings for monitorable data.\n\n## License Expiration Monitoring\nLicense Expiration Monitoring is a process that automatically performs verifications of licenses as they approach their expiration date. This process operates independently of a license's configured monitoring interval (e.g., Monthly, Yearly). Its purpose is to ensure timely updates and proactive management of expiring licenses.\n\n### License Expiration Monitoring for Free Sources\nFor licenses verified via free sources (those without pass-through fees), the Verifiable Platform follows a more frequent and proactive monitoring to ensure timely updates. This increased frequency applies regardless of the license's general monitoring interval. Verifications are performed at the following intervals, relative to the license expiration date:\n- Before license expiration: 90, 60, 28, 14, 7, 3, and 0 days\n- After license expiration: 3 days\n\nThis means the Verifiable Platform will check the license 90 days before it expires, then 60 days before, and so on, until the day of expiration (0 days). A final check is performed 3 days after the expiration date.\n\n### License Expiration Monitoring for Paid Sources\nFor licenses verified via paid sources (those with pass-through fees), the Verifiable Platform follows a more streamlined monitoring for efficient management to minimize costs incurred to users.\n- After license expiration: 1 day\n\nAs with free verification sources, these licenses will also continue to be monitored at their scheduled cadence regardless of this expiration check.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3c2f4465-2b42-4b40-b2ef-f00515f333ab",
+          "name": "Initiate monitoring for a provider or facility\n",
+          "request": {
+            "name": "Initiate monitoring for a provider or facility\n",
+            "description": {
+              "content": "Initiate monitoring for a dataset or license for a provider or facility. Please note that not all dataset types support monitoring. Please refer to [dataset endpoint](/references/api/datasets/getdataset) to get the capabilities of a dataset. \n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "monitors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"providerId\": \"<uuid>\",\n  \"facilityId\": \"<uuid>\",\n  \"datasetType\": \"<string>\",\n  \"licenseId\": \"<uuid>\",\n  \"monitoringInterval\": \"<string>\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a9de7db1-b982-4d13-9d8c-1344a8eb1cee",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"providerId\": \"<uuid>\",\n  \"facilityId\": \"<uuid>\",\n  \"datasetType\": \"<string>\",\n  \"licenseId\": \"<uuid>\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"License\",\n  \"id\": \"4aa598d7-af94-d022-d925-a20a8bc5621c\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"1997-10-18T04:54:32.190Z\",\n  \"lastMonitoringDate\": \"1987-03-01T15:50:16.737Z\",\n  \"providerId\": \"c3d1f313-abd0-ccea-f6cc-18f39d00bbc3\",\n  \"facilityId\": \"40b59414-ecd8-cb54-4747-ebf0c11863ba\",\n  \"datasetType\": \"AmericanBoardofInternalMedicine\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"lastVerification\": {\n    \"type\": \"Npi\",\n    \"id\": \"45102541-d0db-a725-0ea6-c4885adc34e6\",\n    \"started\": \"2012-10-10T06:41:25.716Z\",\n    \"completed\": \"1968-05-28T22:30:10.653Z\",\n    \"status\": \"Active\",\n    \"providerId\": \"c2dea50f-13ad-ccfb-fd3c-33520a6e16f7\",\n    \"facilityId\": \"f3ed9353-d328-bf9a-8a54-ab11caace4e8\",\n    \"provider\": {},\n    \"trigger\": \"Monitor\",\n    \"options\": {\n      \"parameterSetId\": \"<uuid>\",\n      \"referenceId\": \"<uuid>\"\n    },\n    \"failureReason\": {\n      \"messageTemplate\": \"string\",\n      \"messageParams\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      }\n    },\n    \"statusDescription\": \"\",\n    \"parameters\": [\n      {\n        \"type\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationNumber\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationProgram\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"type\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationNumber\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationProgram\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"matches\": [\n      {\n        \"id\": \"814d8e42-06f6-fe1d-ff3a-94c90250b695\",\n        \"datasetTimestamp\": \"1996-10-11T05:33:32.637Z\",\n        \"recordTimestamp\": \"1975-07-04T07:23:19.326Z\",\n        \"data\": {\n          \"positiveParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"negativeParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"record\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"scanId\": \"b20fc442-b41e-1b41-268c-15b5b49873c9\",\n        \"scan\": {\n          \"value\": \"<Circular reference to #/components/schemas/DatasetScanModel detected>\"\n        },\n        \"userActionNeeded\": true,\n        \"isIgnored\": false,\n        \"userActionResolution\": \"Accept\",\n        \"userActionResolutionNote\": \"string\",\n        \"matchRelevance\": \"High\",\n        \"matchScore\": {},\n        \"createdTimestamp\": \"1951-01-14T02:41:27.615Z\",\n        \"obsoleteTimestamp\": \"1967-08-15T21:39:20.376Z\"\n      },\n      {\n        \"id\": \"452243e6-36ef-4be8-8bc8-ec9b205c175e\",\n        \"datasetTimestamp\": \"2014-04-02T07:10:47.599Z\",\n        \"recordTimestamp\": \"2008-03-14T17:45:48.459Z\",\n        \"data\": {\n          \"positiveParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"negativeParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"record\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"scanId\": \"d1cac6cc-9462-a2b2-70a3-e529ab192527\",\n        \"scan\": {\n          \"value\": \"<Circular reference to #/components/schemas/DatasetScanModel detected>\"\n        },\n        \"userActionNeeded\": false,\n        \"isIgnored\": true,\n        \"userActionResolution\": \"Reject\",\n        \"userActionResolutionNote\": \"string\",\n        \"matchRelevance\": \"High\",\n        \"matchScore\": {},\n        \"createdTimestamp\": \"2012-09-16T21:49:22.520Z\",\n        \"obsoleteTimestamp\": \"1982-10-08T12:52:07.103Z\"\n      }\n    ],\n    \"monitoringMetadata\": {\n      \"monitoringInterval\": \"Monthly\",\n      \"lastMonitoringDate\": \"2005-04-02T12:03:56.720Z\",\n      \"nextMonitoringDate\": \"1998-06-01T19:17:52.089Z\",\n      \"monitorId\": \"83bef1e2-cefc-1bfd-bc5a-363eff08980d\"\n    },\n    \"verifiedAt\": \"1978-02-28T15:33:19.586Z\",\n    \"datasetMetadata\": {\n      \"importDate\": \"1949-08-12\",\n      \"importFileName\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acd7e001-a44c-4bc2-b5dc-3622dc55c10b",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"providerId\": \"<uuid>\",\n  \"facilityId\": \"<uuid>\",\n  \"datasetType\": \"<string>\",\n  \"licenseId\": \"<uuid>\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4a50a095-abc7-451c-bb80-1112852cb93e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"providerId\": \"<uuid>\",\n  \"facilityId\": \"<uuid>\",\n  \"datasetType\": \"<string>\",\n  \"licenseId\": \"<uuid>\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9aa71d96-81f3-4579-ad33-51914ecc1e12",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"providerId\": \"<uuid>\",\n  \"facilityId\": \"<uuid>\",\n  \"datasetType\": \"<string>\",\n  \"licenseId\": \"<uuid>\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3f68ef62-b3d4-4f62-a71e-88f4e5a47729",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"providerId\": \"<uuid>\",\n  \"facilityId\": \"<uuid>\",\n  \"datasetType\": \"<string>\",\n  \"licenseId\": \"<uuid>\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "102c91d4-ed76-454e-87ba-deed5f03294b",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"<string>\",\n  \"providerId\": \"<uuid>\",\n  \"facilityId\": \"<uuid>\",\n  \"datasetType\": \"<string>\",\n  \"licenseId\": \"<uuid>\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6024c039-77e0-46dd-8958-ce7171f41de5",
+          "name": "Lists all the monitored items\n",
+          "request": {
+            "name": "Lists all the monitored items\n",
+            "description": {
+              "content": "Lists all the monitors and monitoring settings for monitors that are enabled.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "monitors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "If set, the items will be filtered on monitor type."
+                },
+                {
+                  "disabled": false,
+                  "key": "datasetTypes",
+                  "value": "<string>",
+                  "description": "If set, the items will be filtered on datasets with the specified types."
+                },
+                {
+                  "disabled": false,
+                  "key": "datasetTypes",
+                  "value": "<string>",
+                  "description": "If set, the items will be filtered on datasets with the specified types."
+                },
+                {
+                  "disabled": false,
+                  "key": "licenseIds",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on licenses with the specified ids."
+                },
+                {
+                  "disabled": false,
+                  "key": "licenseIds",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on licenses with the specified ids."
+                },
+                {
+                  "disabled": false,
+                  "key": "entityType",
+                  "value": "<string>",
+                  "description": "Indicates whether to retrieve monitors for practitioners or facilities. Defaults to `Practitioners`."
+                },
+                {
+                  "disabled": false,
+                  "key": "entityIds",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on entities with the specified ids and type specified in 'entityType'.<br/>If 'entityType' is 'Practitioner', the ids here should be ids of providers.<br/>If 'entityType' is 'Facility', the ids here should be ids of facilities."
+                },
+                {
+                  "disabled": false,
+                  "key": "entityIds",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on entities with the specified ids and type specified in 'entityType'.<br/>If 'entityType' is 'Practitioner', the ids here should be ids of providers.<br/>If 'entityType' is 'Facility', the ids here should be ids of facilities."
+                },
+                {
+                  "disabled": false,
+                  "key": "providerIds",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on providers with the specified ids."
+                },
+                {
+                  "disabled": false,
+                  "key": "providerIds",
+                  "value": "<uuid>",
+                  "description": "If set, the items will be filtered on providers with the specified ids."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortedBy",
+                  "value": "<string>",
+                  "description": "The property by which the returned data will be sorted."
+                },
+                {
+                  "disabled": false,
+                  "key": "Keys",
+                  "value": "<string>",
+                  "description": "If set, the properties and directions the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "Values",
+                  "value": "<string>",
+                  "description": "If set, the properties and directions the returned data will be sorted by."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset for the page to start."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "<integer>",
+                  "description": "The number of items to include in a single page."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "<string>",
+                  "description": "The direction the returned data will be sorted by."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7fdfa369-9a45-45e3-ad90-e2c0845c9d11",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"sort\": {\n    \"Keys\": \"NextMonitoringDate\",\n    \"Values\": \"Asc\"\n  },\n  \"previousCursor\": \"string\",\n  \"nextCursor\": \"string\",\n  \"nextOffset\": 2579,\n  \"pageSize\": 7951,\n  \"count\": 7272,\n  \"totalCount\": 2845,\n  \"items\": [\n    {\n      \"type\": \"License\",\n      \"id\": \"25af6019-1b12-f3d1-3580-2b4c98c30921\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"1984-08-25T20:26:17.253Z\",\n      \"lastMonitoringDate\": \"2012-08-21T05:54:28.987Z\",\n      \"providerId\": \"053f9fe1-cfdb-b1e1-16fd-98a9543b6a15\",\n      \"facilityId\": \"866d0d0c-5c95-22db-99ab-37ca61a23c38\",\n      \"datasetType\": \"AmericanBoardofPainMedicine\",\n      \"options\": {\n        \"parameterSetId\": \"<uuid>\",\n        \"referenceId\": \"<uuid>\"\n      },\n      \"lastVerification\": {\n        \"type\": \"AmericanRegistryOfRadiologyTechnologists\",\n        \"id\": \"bdf77cc4-3996-dde1-d354-f797537acb47\",\n        \"started\": \"1996-10-23T21:34:44.609Z\",\n        \"completed\": \"2006-07-12T06:19:01.475Z\",\n        \"status\": \"Active\",\n        \"providerId\": \"2b145a4e-f0a1-4f6d-191d-4dd62b7456e3\",\n        \"facilityId\": \"f6aaf7d2-796d-00e8-716f-fd92fa42bf6d\",\n        \"provider\": {},\n        \"trigger\": \"Manual\",\n        \"options\": {\n          \"parameterSetId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"referenceId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"failureReason\": {\n          \"messageTemplate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"messageParams\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"statusDescription\": \"\",\n        \"parameters\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"matches\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"monitoringMetadata\": {\n          \"monitoringInterval\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"lastMonitoringDate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"nextMonitoringDate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"monitorId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"verifiedAt\": \"1953-02-27T21:20:15.993Z\",\n        \"datasetMetadata\": {\n          \"importDate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"importFileName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"License\",\n      \"id\": \"3245122e-416f-7c34-2215-4c1064b904bc\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"1994-06-12T06:35:32.912Z\",\n      \"lastMonitoringDate\": \"1998-12-21T07:32:03.927Z\",\n      \"providerId\": \"b3b3f16f-4820-2df6-6435-54d43c5fe387\",\n      \"facilityId\": \"7554cf7e-e1bd-de5c-5633-4cbe28f8b5dd\",\n      \"datasetType\": \"NationalRegistryOfAlliedHealthProfessionals\",\n      \"options\": {\n        \"parameterSetId\": \"<uuid>\",\n        \"referenceId\": \"<uuid>\"\n      },\n      \"lastVerification\": {\n        \"type\": \"AmericanBoardofSurgery\",\n        \"id\": \"98cae387-cafe-a2c2-de7b-63808efb221b\",\n        \"started\": \"2018-11-29T19:31:52.522Z\",\n        \"completed\": \"1951-05-03T15:04:28.208Z\",\n        \"status\": \"Completed\",\n        \"providerId\": \"4b1663d4-b8e6-891e-4f49-2151f57d84fe\",\n        \"facilityId\": \"44cc927c-6426-f9c0-7a25-659769d81f69\",\n        \"provider\": {},\n        \"trigger\": \"Monitor\",\n        \"options\": {\n          \"parameterSetId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"referenceId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"failureReason\": {\n          \"messageTemplate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"messageParams\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"statusDescription\": \"\",\n        \"parameters\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"matches\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"monitoringMetadata\": {\n          \"monitoringInterval\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"lastMonitoringDate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"nextMonitoringDate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"monitorId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"verifiedAt\": \"2025-07-13T09:01:31.407Z\",\n        \"datasetMetadata\": {\n          \"importDate\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"importFileName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    }\n  ],\n  \"sortedBy\": \"NextMonitoringDate\",\n  \"sortDirection\": \"Desc\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "82a6f9bc-7072-4cf4-8a11-cb81ed846b3c",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a63afd17-93e0-4e01-99ed-bb8f93653f53",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1a405a9b-e62f-4033-9f8b-92f9a195b216",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6b1be772-3356-48a1-9e7a-a6a1b85672da",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "datasetTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "licenseIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "entityIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "providerIds",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "sortedBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Values",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "31063f96-6935-4088-94f9-5d67c9614d23",
+          "name": "Initiates monitoring for the specified Sanctions and Exclusions datasets for the specified providers\n",
+          "request": {
+            "name": "Initiates monitoring for the specified Sanctions and Exclusions datasets for the specified providers\n",
+            "description": {
+              "content": "Initiate monitoring for the specified Sanctions and Exclusions datasets, for the specified list of providers. Immediate verification is not supported with this endpoint. If a next monitoring date is omitted or specified with a past date or within the closest 10 minutes, the monitor will execute within the next hour. Only Sanctions and Exclusions datasets are supported by this endpoint. Up to 100 provider IDs may be specified in one bulk.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "monitors",
+                "bulk",
+                "sanctions-and-exclusions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"datasetInfos\": [\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"<string>\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    },\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"<string>\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    }\n  ],\n  \"providerIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4eeb3c22-fa29-4415-b899-764014accba4",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    "bulk",
+                    "sanctions-and-exclusions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"datasetInfos\": [\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    },\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    }\n  ],\n  \"providerIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdMonitors\": [\n    {\n      \"monitorId\": \"5e2f72c8-7de9-b18d-484e-a19524a6341b\",\n      \"datasetType\": \"AmericanBoardofInternalMedicine\"\n    },\n    {\n      \"monitorId\": \"e7f517de-a210-3266-2ddf-3def09d86b42\",\n      \"datasetType\": \"NationalCommissionForCertificationOfAnesthesiologistAssistants\"\n    }\n  ],\n  \"providerIds\": [\n    \"30f1da6b-ff50-aafd-8f0d-7fd167846290\",\n    \"d269ee5c-596b-a7f6-df5e-5f482851b427\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf727bcf-24e4-4cd6-a8b3-b667bce62522",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    "bulk",
+                    "sanctions-and-exclusions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"datasetInfos\": [\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    },\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    }\n  ],\n  \"providerIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e0c33c9b-7762-4e5e-8a61-96d1b8c7e6cd",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    "bulk",
+                    "sanctions-and-exclusions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"datasetInfos\": [\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    },\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    }\n  ],\n  \"providerIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2365c41b-04fa-4724-8f90-4659b83f2d5a",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    "bulk",
+                    "sanctions-and-exclusions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"datasetInfos\": [\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    },\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    }\n  ],\n  \"providerIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e212c9c6-7324-4d78-8179-57896908c3c1",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    "bulk",
+                    "sanctions-and-exclusions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"datasetInfos\": [\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    },\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    }\n  ],\n  \"providerIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8d029f57-e70c-496d-9d9e-fa92615a63e3",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    "bulk",
+                    "sanctions-and-exclusions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"datasetInfos\": [\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    },\n    {\n      \"datasetType\": \"<string>\",\n      \"parameterSetId\": \"<uuid>\",\n      \"monitoringInterval\": \"Monthly\",\n      \"nextMonitoringDate\": \"<dateTime>\"\n    }\n  ],\n  \"providerIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6412e431-a578-4a23-ab8b-160ce2ab188e",
+          "name": "Returns a specified monitored item\n",
+          "request": {
+            "name": "Returns a specified monitored item\n",
+            "description": {
+              "content": "Returns all the info for a specified monitored item.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "monitors",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) The identifier describing the monitored item."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "eeecda27-5706-4512-846d-ee68f3c528e9",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"License\",\n  \"id\": \"482d983b-589f-d167-5a14-98d7a828d9f2\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"1949-02-12T01:46:37.148Z\",\n  \"lastMonitoringDate\": \"1977-04-27T04:24:29.302Z\",\n  \"providerId\": \"7ec7587c-7770-1af6-11f6-012a92d1d2c1\",\n  \"facilityId\": \"2e65d39e-7f0a-7a6d-54ff-f2baf3d5bc99\",\n  \"datasetType\": \"MedicaidEnrollmentCalifornia\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"lastVerification\": {\n    \"type\": \"InternationalBoardofLactationConsultantExaminers\",\n    \"id\": \"2d5813c6-8d10-4b01-3817-f35d10a8a994\",\n    \"started\": \"1957-11-19T08:44:25.804Z\",\n    \"completed\": \"1979-09-17T08:21:55.356Z\",\n    \"status\": \"Failed\",\n    \"providerId\": \"e5637a21-177b-d0bb-0eec-e616899f98a3\",\n    \"facilityId\": \"25a3c480-8c36-449b-6f8b-fe6d4e31405f\",\n    \"provider\": {},\n    \"trigger\": \"Manual\",\n    \"options\": {\n      \"parameterSetId\": \"<uuid>\",\n      \"referenceId\": \"<uuid>\"\n    },\n    \"failureReason\": {\n      \"messageTemplate\": \"string\",\n      \"messageParams\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      }\n    },\n    \"statusDescription\": \"\",\n    \"parameters\": [\n      {\n        \"type\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationNumber\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationProgram\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"type\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationNumber\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationProgram\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"matches\": [\n      {\n        \"id\": \"510be8cc-1163-4e40-3cd5-dbce0ea03490\",\n        \"datasetTimestamp\": \"1952-07-08T02:02:54.031Z\",\n        \"recordTimestamp\": \"1973-11-04T22:47:15.818Z\",\n        \"data\": {\n          \"positiveParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"negativeParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"record\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"scanId\": \"ab97cbda-48cb-ad6d-34d5-147acb72c7fe\",\n        \"scan\": {\n          \"value\": \"<Circular reference to #/components/schemas/DatasetScanModel detected>\"\n        },\n        \"userActionNeeded\": true,\n        \"isIgnored\": true,\n        \"userActionResolution\": \"Accept\",\n        \"userActionResolutionNote\": \"string\",\n        \"matchRelevance\": \"High\",\n        \"matchScore\": {},\n        \"createdTimestamp\": \"1946-09-29T01:56:05.215Z\",\n        \"obsoleteTimestamp\": \"1953-11-16T09:28:45.651Z\"\n      },\n      {\n        \"id\": \"0d463660-a76b-dbab-2095-dbfc4390a8e9\",\n        \"datasetTimestamp\": \"1999-01-24T03:34:35.804Z\",\n        \"recordTimestamp\": \"1951-07-06T16:49:10.870Z\",\n        \"data\": {\n          \"positiveParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"negativeParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"record\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"scanId\": \"60fed217-26b7-1c7f-2b8e-205bf139c4d0\",\n        \"scan\": {\n          \"value\": \"<Circular reference to #/components/schemas/DatasetScanModel detected>\"\n        },\n        \"userActionNeeded\": false,\n        \"isIgnored\": false,\n        \"userActionResolution\": \"Reject\",\n        \"userActionResolutionNote\": \"string\",\n        \"matchRelevance\": \"Medium\",\n        \"matchScore\": {},\n        \"createdTimestamp\": \"1994-01-19T13:36:41.141Z\",\n        \"obsoleteTimestamp\": \"1975-08-09T01:01:27.183Z\"\n      }\n    ],\n    \"monitoringMetadata\": {\n      \"monitoringInterval\": \"Monthly\",\n      \"lastMonitoringDate\": \"1948-12-22T02:35:38.465Z\",\n      \"nextMonitoringDate\": \"1954-08-11T12:40:07.098Z\",\n      \"monitorId\": \"f7a6f462-065f-f055-9477-b4a333c84d3e\"\n    },\n    \"verifiedAt\": \"2001-08-15T19:37:42.071Z\",\n    \"datasetMetadata\": {\n      \"importDate\": \"1961-02-25\",\n      \"importFileName\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "521e1d7f-8c6b-4dcb-9bac-b3b857a84678",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "42e8d31f-78a6-454e-a6da-5ceae2110759",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ede12cf2-cb2d-46fc-9b1c-45c276337967",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a86f54b7-4c4e-41d1-981b-59a50b68866c",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "688ffb0d-1568-4b95-9319-f8889fce5802",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "897ed486-b04e-4f09-a164-19746e595fe6",
+          "name": "Patch an existing monitored item\n",
+          "request": {
+            "name": "Patch an existing monitored item\n",
+            "description": {
+              "content": "Change existing monitoring for a specified item. Use this endpoint to update the monitoring frequency and next monitoring date.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "monitors",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) The identifier describing the monitored item."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monitoringInterval\": \"<string>\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6130832a-406c-43fe-a2cd-f4b6163530ca",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"License\",\n  \"id\": \"482d983b-589f-d167-5a14-98d7a828d9f2\",\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"1949-02-12T01:46:37.148Z\",\n  \"lastMonitoringDate\": \"1977-04-27T04:24:29.302Z\",\n  \"providerId\": \"7ec7587c-7770-1af6-11f6-012a92d1d2c1\",\n  \"facilityId\": \"2e65d39e-7f0a-7a6d-54ff-f2baf3d5bc99\",\n  \"datasetType\": \"MedicaidEnrollmentCalifornia\",\n  \"options\": {\n    \"parameterSetId\": \"<uuid>\",\n    \"referenceId\": \"<uuid>\"\n  },\n  \"lastVerification\": {\n    \"type\": \"InternationalBoardofLactationConsultantExaminers\",\n    \"id\": \"2d5813c6-8d10-4b01-3817-f35d10a8a994\",\n    \"started\": \"1957-11-19T08:44:25.804Z\",\n    \"completed\": \"1979-09-17T08:21:55.356Z\",\n    \"status\": \"Failed\",\n    \"providerId\": \"e5637a21-177b-d0bb-0eec-e616899f98a3\",\n    \"facilityId\": \"25a3c480-8c36-449b-6f8b-fe6d4e31405f\",\n    \"provider\": {},\n    \"trigger\": \"Manual\",\n    \"options\": {\n      \"parameterSetId\": \"<uuid>\",\n      \"referenceId\": \"<uuid>\"\n    },\n    \"failureReason\": {\n      \"messageTemplate\": \"string\",\n      \"messageParams\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      }\n    },\n    \"statusDescription\": \"\",\n    \"parameters\": [\n      {\n        \"type\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationNumber\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationProgram\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"type\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationNumber\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"accreditationProgram\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"matches\": [\n      {\n        \"id\": \"510be8cc-1163-4e40-3cd5-dbce0ea03490\",\n        \"datasetTimestamp\": \"1952-07-08T02:02:54.031Z\",\n        \"recordTimestamp\": \"1973-11-04T22:47:15.818Z\",\n        \"data\": {\n          \"positiveParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"negativeParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"record\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"scanId\": \"ab97cbda-48cb-ad6d-34d5-147acb72c7fe\",\n        \"scan\": {\n          \"value\": \"<Circular reference to #/components/schemas/DatasetScanModel detected>\"\n        },\n        \"userActionNeeded\": true,\n        \"isIgnored\": true,\n        \"userActionResolution\": \"Accept\",\n        \"userActionResolutionNote\": \"string\",\n        \"matchRelevance\": \"High\",\n        \"matchScore\": {},\n        \"createdTimestamp\": \"1946-09-29T01:56:05.215Z\",\n        \"obsoleteTimestamp\": \"1953-11-16T09:28:45.651Z\"\n      },\n      {\n        \"id\": \"0d463660-a76b-dbab-2095-dbfc4390a8e9\",\n        \"datasetTimestamp\": \"1999-01-24T03:34:35.804Z\",\n        \"recordTimestamp\": \"1951-07-06T16:49:10.870Z\",\n        \"data\": {\n          \"positiveParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"negativeParameters\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"record\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"scanId\": \"60fed217-26b7-1c7f-2b8e-205bf139c4d0\",\n        \"scan\": {\n          \"value\": \"<Circular reference to #/components/schemas/DatasetScanModel detected>\"\n        },\n        \"userActionNeeded\": false,\n        \"isIgnored\": false,\n        \"userActionResolution\": \"Reject\",\n        \"userActionResolutionNote\": \"string\",\n        \"matchRelevance\": \"Medium\",\n        \"matchScore\": {},\n        \"createdTimestamp\": \"1994-01-19T13:36:41.141Z\",\n        \"obsoleteTimestamp\": \"1975-08-09T01:01:27.183Z\"\n      }\n    ],\n    \"monitoringMetadata\": {\n      \"monitoringInterval\": \"Monthly\",\n      \"lastMonitoringDate\": \"1948-12-22T02:35:38.465Z\",\n      \"nextMonitoringDate\": \"1954-08-11T12:40:07.098Z\",\n      \"monitorId\": \"f7a6f462-065f-f055-9477-b4a333c84d3e\"\n    },\n    \"verifiedAt\": \"2001-08-15T19:37:42.071Z\",\n    \"datasetMetadata\": {\n      \"importDate\": \"1961-02-25\",\n      \"importFileName\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "490800fb-9484-499b-a3fc-7b1f2bc5182a",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c4d05ad4-6647-4a9a-9561-cb50f5cf2647",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e9efe1ca-711a-4a4b-888f-c1a0562d0eb5",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5e95071d-c4e5-455d-867e-16f15e377813",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9a7ca37a-c1be-4564-af59-1dc31c75b41e",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"monitoringInterval\": \"Monthly\",\n  \"nextMonitoringDate\": \"<dateTime>\",\n  \"triggerImmediateVerification\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e7c03a16-a118-4337-a7d4-2e2eaa253f25",
+          "name": "Stop monitoring an item\n",
+          "request": {
+            "name": "Stop monitoring an item\n",
+            "description": {
+              "content": "Stops existing monitoring for a specified dataset or license for a provider.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "monitors",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "propagateToPrimarySource",
+                  "value": "<boolean>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) The identifier describing the monitored item."
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2da82c20-7993-4321-8d0f-5613fccea017",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "propagateToPrimarySource",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "737f296d-e1ac-47ca-9a51-fe0ae3579947",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "propagateToPrimarySource",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "756a9f5b-a812-4fa3-bd96-3ccf7560d8f9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "propagateToPrimarySource",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fa6d310b-44a7-49a0-a524-e10b5aa57d2f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "propagateToPrimarySource",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "de4fce60-be86-4a59-a87f-be6d41f37e4e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "propagateToPrimarySource",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a691cfbd-4946-433a-be7f-400a3e47e842",
+              "name": "Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitors",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "propagateToPrimarySource",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The identifier describing the monitored item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://discovery.verifiable.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6b599317-1fd8-4f2c-8a19-6e88031b861f",
+    "name": "Verifiable API Documentation Alerts Monitoring API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThis document contains the official documentation for the latest version of the Verifiable API. Our solution has been built API-first. That means we first design our API's and build our own user interfaces on top of these API's afterwards. This results in a reusable API that can be used by 3rd parties to offer the exact same functionality as we can provide ourselves. Both the product and API are still subject to significant and potentially breaking changes, so please refer back to this documentation frequently. Any breaking change will be communicated ahead of time to our partners integrating with our API's.\n\n# Release Notes\n\nVerifiable customers can find [release notes](https://help.verifiable.com/hc/en-us/sections/49501536514067-Verifiable-APIs) in the Verifiable Help Center. To access the notes for the first time, go to the [Help Center](https://help.verifiable.com/hc/en-us) and click Sign up next to New to Verifiable.\n\n# Getting Started\n\nThis is a RESTful API that can be accessed using convential HTTP methods. It doesn't matter what programming language you use, there is already tooling available that can jumpstart you to access our API's. This documentation is based on OpenAPI 3.0 specifications and as such it is possible to dynamically generate a client in a language of your choice by simply loading our [specification document](https://api.discovery.verifiable.com/.well-known/openapi/vCurrent.json) in a tool such as [Swagger Codegen](https://swagger.io/tools/swagger-codegen/). It is not necessary to generate such a client and it is also possible to simply use any HTTP client to access our API. You can refer to the reference below to find the correct HTTP method, endpoint and model to use.\n\n### Environments\n\nWhen developing an integration with our API we typicially request you to use our `staging` environment for development and only start using `production` when your integration is stable and tested thoroughly. Please contact [Verifiable support](https://verifiable.com/contact) to be granted access to our environments.\n\n**Staging Base URL**\n```\nhttps://discovery-staging.verifiable.com/api\n```\n\n**Production Base URL**\n```\nhttps://discovery.verifiable.com/api\n```\n\n## Authentication\n\nMost endpoints require authentication to be used. You can authenticate to the API by passing an access token in the `Authentication` header using the `Bearer` scheme. An access token can be requested by authenticating against one of the [Authentication endpoints](/references/api/authentication).\n\n### Example using password authentication endpoint\n\n**Request:**\n\n```http\nPOST /auth/token/password HTTP/1.1\nContent-Type: application/json\nHost: https://<SERVER>\n{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"secret\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 12:59:56 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"tokenId\": \"2e5db76c-4c48-4cce-b11f-23a57ac5824c\",\n    \"token\": \"MtetyFcIW...xgXXX-Z4yy\"\n}\n```\n\n### Example using access token\n\n**Request**\n\n```http\nGET /log/events HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nAn access token is bound to a single user in an organization. The access token should remain secret and be treated as if it were a password. We recommend you to create access tokens with a short time to live and frequently rotate them. Note that time to live requested might be lowered to a shorter duration based on your organization settings. These can be configured to enforce a suitable maximum time to live for your use-cases that facilitate users and service integrations.\n\n## Create a new provider\n\nA provider must be created and associated with license numbers, NPI numbers or other identifiers that can be used to perform lookups to fetch associated data for this provider.\n\n### Example creating a new provider\n\nTo create a new provider that can be used for license lookups:\n\n**Request:**\n\n```http\nPOST /providers HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:25:12 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenses\": []\n}\n```\n\n**Note:**\nThe `id` in the response is the `Provider id`. It can be used as a `Path Parameter` to attach licenses to this provider, using [Attach License](/references/api/licenses/attachlicense) API.\nYou will need to pass in a `licenseTypeId`, which can be obtained from the [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) API. For more details on providers see [Provider endpoints](/references/api/providers)\n\n## Get license types\n\nThe list of license types which are supported for license verification.\n\n### Example get license types\n\nReturns a list of all license types that are currently supported and used for license verifications.\n\n**Request**\n\n```http\nGET /licensetypes HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:32:47 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"nextOffset\": \"100\",\n    \"nextCursor\": \"100\",\n    \"pageSize\": 100,\n    \"items\": [\n        {\n            \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n            \"name\": \"Medical Physician & Surgeon\",\n            \"source\": {\n                \"id\": \"72dcec62-a0d3-4af8-955d-07ecac8f1e4d\",\n                \"name\": \"Missouri Division of ProfessionalRegistration\",\n                \"state\": \"MO\",\n                \"availability\": \"Available\",\n                \"isDegraded\": false,\n                \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n            }\n        },\n    ],\n    \"sortedBy\": \"Id\",\n    \"sortDirection\": \"Asc\"\n}\n```\n\n**Note:**\n`id` in response refers to `licenseTypeId`. It will be unique for each license type. Please see [List Simplified License Types](/references/api/licenses/listsimplifiedlicensetypes) for more details.\n\n## Attach a license to a provider\n\nTo perform a license verification you must attach a license to a provider. The first time you do this will automatically trigger a license verification on that provider. Once attached you can re-verify the same license without reattaching it. A provider can have more than one license attached.\n\n### Example attach license to a provider\n\n**Request:**\n\n```http\nPOST /providers/{providerId}/licenses HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n{\n    \"licenseNumber\": \"123456\",\n    \"licenseTypeId\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\"\n}\n```\n\n**Response:**\n\n```http\nHTTP/1.1 201 Created\nDate: Fri, 25 Sep 2020 15:35:00 GMT\nContent-Type: application/json; charset=utf-8\nLocation: https://<SERVER>/providers/9706f2ea-9c1d-49f3-9a57-871159878c9c?licenseId=bfb028f0-52ca-47f4-8181-6b4c8262d29c\n{\n    \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"licenseNumber\": \"123456\",\n    \"licenseType\": {\n        \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n        \"name\": \"Registered Nurse - RN\",\n        \"source\": {\n            \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n            \"name\": \"Missouri Division of ProfessionalRegistration\",\n            \"state\": \"MO\",\n            \"availability\": \"Available\",\n            \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n        }\n    }\n    \"jobStatus\": \"Pending\",\n    \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n}\n```\n\n**Note:**\nRegister a Webhook to get notified on HTTP endpoint, this prevents the need to poll the API for completion checks. For more details on Webhooks please see [Webhooks endpoint](/references/api/webhooks) and for details on attaching a license see [Attach License endpoint](/references/api/licenses/attachlicense).\n\n## Fetch created provider\n\nReturns the data for a specific provider.\n\n### Example to fetch created provider\n\n**Request**\n\n```http\nGET /providers/{providerId} HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\n**Response:**\n\n```http\nHTTP/1.1 200 OK\nDate: Fri, 25 Sep 2020 15:36:30 GMT\nContent-Type: application/json; charset=utf-8\n{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"id\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n    \"npis\": [],\n    \"licenses\": [\n        {\n            \"providerId\": \"9706f2ea-9c1d-49f3-9a57-871159878c9c\",\n            \"licenseNumber\": \"123456\",\n            \"licenseType\": {\n                \"id\": \"0059f76a-280a-377a-73e2-ddfe86f4113c\",\n                \"name\": \"Registered Nurse - RN\",\n                \"source\": {\n                    \"id\": \"679b4f9a-cc3c-49e8-b560-0d0a9af47fd3”,\n                    \"name\": \"Missouri Division of ProfessionalRegistration\",\n                    \"state\": \"MO\",\n                    \"availability\": \"Available\",\n                    \"url\": \"https://pr.mo.gov/licensee-search.asp\"\n                }\n            }\n            \"jobStatus\": \"Idle\",\n            \"currentVerificationStatus\": \"NeedsReview\",\n            \"id\": \"b45cbeb0-873e-495b-8182-1b9a8b6d379d\"\n        }\n    ]\n}\n```\n\n**Note:**\nResponse contains attached licenses, NPI details for the given provider. To get details of these individual items (a particular License or an NPI), use unique identifiers in each of these categories. For more details check [Get specific license endpoint](/references/api/licenses/getlicense). Further details on providers are at [Providers endpoint](/references/api/providers).\n\n# Common Concepts\n\n## Pagination, filtering and sorting\n\nSome endpoints can return a large list of data. To allow you to efficiently iterate through this data these endpoints offer pagination, sorting and filtering. The concept will be similar for each endpoint that supports it:\n\n* Pagination, filtering and sorting parameters are provided through the query string.\n* Pagination, filtering and sorting is only supported for endpoints that return lists of data.\n* Filters is only supported for certain endpoints. You can refer to the documentation of the endpoint to find out if filtering is supported.\n* The `sortedBy` and `sortDirection` parameters can be used to specify the sorting method.\n* The `count` parameter can be used to specify the page size. Please note that the maximum and default page size can differ per endpoint.\n* (Deprecated) The `offset` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextOffset` parameter as returned by the server.\n* The `cursor` parameter influences the start of the page. For the first page you can always omit this parameter. For any subsequent page you can supply the value from the `nextCursor` or `previousCursor` parameter as returned by the server.\n\nExample on how to make a paginated request:\n\n```http\nGET /log/events?sortDirection=Asc&sortedBy=Timestamp&count=10 HTTP/1.1\nAuthorization: Bearer <ACCESS_TOKEN>\nHost: https://<SERVER>\n```\n\nIn addition to returning a list of `items`, a paginated response will also return `nextCursor` and/or `previousCursor`. The value of this property can be used to fetch the next or previous page by passing it in the `cursor` parameter.\n\n## Error handling\n\nAll responses that do not indicate a success status code will return an error using the error model as specified by [RFC 7807](https://tools.ietf.org/html/rfc7807). The amount of details exposed by the error model varies and depends on the nature of the error. We attempt to include as much information as is necessary to be able to self-diagnose the problem that led to the error. Should this information not be enough, then we also supply a `correlationId` in the response. We kindly request you to make note of this value when contacting Verifiable support as this will help us to quickly locate more information on this error.\n\nExample error result on a malformed request:\n```json\n{\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\",\n    \"title\": \"One or more validation errors occurred.\",\n    \"status\": 400,\n    \"correlationId\": \"5e94110e-45a8-404c-831d-77eaeaa73ad6\",\n    \"errors\": {\n        \"$.firstName\": [\n            \"The JSON value could not be converted to System.String. Path: $.firstName | LineNumber: 1 | BytePositionInLine: 18.\"\n        ]\n    }\n}\n```\n\n## Nullable properties\n\nIf an input parameter is required it is marked as such. If an input parameter is not marked as required and you do not wish or need to use it, you should omit the parameter completely in the request.\n\nFor response parameters you should always code defensively and assume that a parameter might be missing from the response. This could happen in case the parameter is not applicable (yet) or simply because the data is missing. By coding defensively and assuming that a parameter might be missing you also future proof your solution for potential future (otherwise) breaking changes.\n\n## Flexible data model\n\nIn some cases we collect data from external sources that are hard to fit in a single predefined schema. For these cases we have come up with a flexible data model that allows us to store structured data in 3 different ways:\n - Form \n - Table \n - Section\n \n### Table\n\nData that can be represented in a table structure. The keys of every element/object in the data array is expected to be the same.\n\n```json\n{\n   \"type\": \"Table\",\n   \"data\": [\n      {\n         \"Status Code\": \"CB\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"CANCELLED BY BOARD\"\n      },\n      {\n         \"Status Code\": \"NA\",\n         \"Effective Date\": \"06/10/2016\",\n         \"Description\": \"NOT ACTIVE\"\n      }\n   ]\n}\n```\n\n### Section\nSections are used to represent multiple different data representations. For example, additional properties can \nhave three sections with section one being a Form, while the other two could be a table. \nAlso note there could be sections with and without heading.\n\n#### With section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": {\n      \"Discipline\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      \"NPDB code\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      \"Actions\": {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   }\n}\n```\n\n#### Without section heading\n```json\n{\n   \"type\": \"Section\",\n   \"data\": [\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Discipline/Final Orders state\": \"ILLINOIS\",\n            \"Date action was taken\": \"02/03/2020\",\n            \"Against privilege to practice (PTP)\": \"N/A\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"NPDB code\": \"39 - LICENSE REVOCATION, SUSPENSION OR OTHER DISCIPLINARY ACTION TAKEN BY A FEDERAL, STATE OR LOCAL LICENSING AUTHORITY\"\n         }\n      },\n      {\n         \"type\": \"Form\",\n         \"data\": {\n            \"Initial action date\": \"02/03/2020\",\n            \"Effective date(s)\": \"02/03/2020 - INDEFINITE/UNSPECIFIED\",\n            \"Is license automatically reinstated after the effective date(s)\": \"NOT SUPPLIED\",\n            \"NPDB code\": \"1148 - DENIAL OF LICENSE RENEWAL\"\n         }\n      }\n   ]\n}\n```\n\n### Form\n\nA form is essentially a simple key/value collection, but it can also have nested flexible data.\n\n#### Simple form\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\"\n   }\n}\n```\n\n#### Nested form\n\n```json\n{\n   \"type\": \"Form\",\n   \"data\": {\n      \"Date of Birth\": \"1958\",\n      \"Registration Date\": \"06/13/2016\",\n      \"Disciplinary Status\": \"CANCELLED BY BOARD\",\n      \"Status Change\": {\n         \"type\": \"Table\",\n         \"data\": [\n            {\n               \"Status Code\": \"CB\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"CANCELLED BY BOARD\"\n            },\n            {\n               \"Status Code\": \"NA\",\n               \"Effective Date\": \"06/10/2016\",\n               \"Description\": \"NOT ACTIVE\"\n            }\n         ]\n      }\n   }\n}\n```\n\n## API Rate Limiting\n\n### Overview\n\nTo ensure the stability and performance of the Verifiable Platform API for all users, we enforce rate limits on API requests. \nThese limits help maintain fair access and high availability across all clients.\n\n### Rate Limits\n\nAPI requests are rate limited to **10,000 requests per 5 minutes.** \nIf a client exceeds this limit, the API will return an HTTP **429 Too Many Requests** response.\n\nVerifiable may adjust rate limits in the future based on factors such as endpoint-specific traffic patterns or system load. \nChanges may include increasing or decreasing limits or introducing secondary rate limits for specific use cases. \nAny changes will be reflected in this documentation.\n\nExample response:\n\n```http\nHTTP/1.1 429 Too Many Requests\n{\n    \"title\": \"You have exceeded the allowed rate limit of 10,000 per 5 mins. Try again later.\",\n    \"status\": 429\n}\n```\n\n",
+      "type": "text/plain"
+    }
+  }
+}

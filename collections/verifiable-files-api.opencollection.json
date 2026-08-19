@@ -1,0 +1,296 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Files API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload a file\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/files/uploads/:path",
+            "params": [
+              {
+                "name": "path",
+                "value": "",
+                "type": "path",
+                "description": "The complete path to the file including -but not necessarily requiring- folder separators."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Uploads, copies or moves a file. If the file already exists the server returns `409 Conflict`.\n\nIf `x-source-path` is set then the file is copied from an existing file and stored at `path`.\nIf `x-source-delete` is set to `1`, `true` or `yes` then the file is moved instead of copied.\nIf `x-source-path` is not set then the content of the file must be uploaded by using form data (Content-Type = `multipart/form-data`). The new file is stored at `path`.\n\nNote that there is special handling for files "
+        },
+        {
+          "info": {
+            "name": "Upload and overwrite a file\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://discovery.verifiable.com/api/files/uploads/:path",
+            "params": [
+              {
+                "name": "path",
+                "value": "",
+                "type": "path",
+                "description": "The complete path to the file including -but not necessarily requiring- folder separators."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Uploads, copies or moves a file. If the file already exists then it is overwritten.\n\nIf `x-source-path` is set then the file is copied from an existing file and stored at `path`.\nIf `x-source-delete` is set to `1`, `true` or `yes` then the file is moved instead of copied.\nIf `x-source-path` is not set then the content of the file must be uploaded by using form data (Content-Type = `multipart/form-data`). The new file is stored at `path`.\n\nNote that there is special handling for files uploaded to"
+        },
+        {
+          "info": {
+            "name": "Delete a file\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/files/uploads/:pathOrId",
+            "params": [
+              {
+                "name": "pathOrId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a previously uploaded file.\n"
+        },
+        {
+          "info": {
+            "name": "Download a file\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/files/:pathOrId",
+            "params": [
+              {
+                "name": "pathOrId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Download the file contents for the file at the specified location.\n"
+        },
+        {
+          "info": {
+            "name": "Get file metadata\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "HEAD",
+            "url": "https://discovery.verifiable.com/api/files/:pathOrId",
+            "params": [
+              {
+                "name": "pathOrId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the metadata of a file at the specified location.\n"
+        },
+        {
+          "info": {
+            "name": "List uploaded files\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/files/uploads",
+            "params": [
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "If set the result is filtered to return only files whose path begin with the specified prefix."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events from before this date."
+              },
+              {
+                "name": "beforeInclusive",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, will include events created exactly at `before` date and time too."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events from after this date."
+              },
+              {
+                "name": "afterInclusive",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, will include events created exactly at `after` date and time too."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns metadata for previously uploaded files.\n"
+        },
+        {
+          "info": {
+            "name": "List event log exports\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/files/exports",
+            "params": [
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "If set the result is filtered to return only files whose path begin with the specified prefix."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events from before this date."
+              },
+              {
+                "name": "beforeInclusive",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, will include events created exactly at `before` date and time too."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "If set, only returns events from after this date."
+              },
+              {
+                "name": "afterInclusive",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, will include events created exactly at `after` date and time too."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns metadata for exported event logs.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

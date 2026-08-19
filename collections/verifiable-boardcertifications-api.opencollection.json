@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts BoardCertifications API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "BoardCertifications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List board certification sources (Deprecated)\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/sources/board-certifications",
+            "params": [
+              {
+                "name": "availability",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on the availability specified by this parameter"
+              },
+              {
+                "name": "isDegraded",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on the degraded status specified by this parameter"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of all board certification source that are currently supported and used for verifications.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

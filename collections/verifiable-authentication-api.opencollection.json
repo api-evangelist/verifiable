@@ -1,0 +1,201 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Authentication API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Password Authentication\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/auth/token/password",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint for authentication using an email and password for a user already registered at Verifiable. In return you will receive an access token that can be used in the following API calls.\n\n**Note:** The account may require a password change for successful authentication. If password change is required and `newPassword` is not set the server returns `409 Conflict`.\nIf `newPassword` is set but the current `password` is not correct the server returns `403 Forbidden`.\n\n**Note:** If `newPassword` is"
+        },
+        {
+          "info": {
+            "name": "Resets a password\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/auth/password/reset",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint for changing a password using a token.\n"
+        },
+        {
+          "info": {
+            "name": "Requests a password reset\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/auth/password/requestreset",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Endpoint for requesting a password reset.\n\nIf the e-mail sent in the body of this request has an account associated with it, a message with a link for changing the password will be sent to it.  \n"
+        },
+        {
+          "info": {
+            "name": "Google Authentication\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/auth/token/google",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "It is possible to use Google Sign-In for authentication with the Verifiable API. In order to do so we follow the [Google Sign-In for server-side apps](https://developers.google.com/identity/sign-in/web/server-side-flow) flow. In order to use this flow you must use the `client ID` from Verifiable when signing in to Google and send the authorization code as payload to this endpoint. In return you will receive an access token that can be used in the following API calls. The email address of the use"
+        },
+        {
+          "info": {
+            "name": "List active access tokens\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/auth/token",
+            "params": [
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all access tokens for the current user that are neither expired, nor invalidated.\n"
+        },
+        {
+          "info": {
+            "name": "Invalidate an access token\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/auth/token/:tokenId/invalidate",
+            "params": [
+              {
+                "name": "tokenId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the access token to be invalidated."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Invalidates an access token so that it can no longer be used.\n"
+        },
+        {
+          "info": {
+            "name": "Invalidate multiple access tokens\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/auth/token/invalidate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Invalidates multiple access tokens that belongs to the user making the request so they can no longer be used.\n"
+        },
+        {
+          "info": {
+            "name": "OAuth Authentication\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/auth/oauth/token",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "client_id",
+                  "value": ""
+                },
+                {
+                  "name": "client_secret",
+                  "value": ""
+                },
+                {
+                  "name": "grant_type",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "**🔒 Premium Feature**\n\nThe OAuth 2.0 (machine-to-machine) and SSO authentication flows are premium features that must be enabled by the Verifiable team.\n- **Availability:** These features are available as add-ons to select Verifiable plans.\n- **Provisioning:** These features require organizational-level provisioning through a one-time configuration by the Verifiable team. To ensure maximum security, endpoints are not enabled by default.\n- **Next Steps:** To enable these authentication methods f"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

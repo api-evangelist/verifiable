@@ -1,0 +1,223 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Verifiable API Documentation Alerts Monitoring API",
+    "version": "26.12.1.962"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Monitoring",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all the monitored items\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/monitors",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on monitor type."
+              },
+              {
+                "name": "datasetTypes",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on datasets with the specified types."
+              },
+              {
+                "name": "licenseIds",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on licenses with the specified ids."
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Indicates whether to retrieve monitors for practitioners or facilities. Defaults to `Practitioners`."
+              },
+              {
+                "name": "entityIds",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on entities with the specified ids and type specified in 'entityType'.<br/>If 'entityType' is 'Practitioner', the ids here should be ids of providers.<br/>If 'entityType' is 'Facility', the ids here should be ids of facilities."
+              },
+              {
+                "name": "providerIds",
+                "value": "",
+                "type": "query",
+                "description": "If set, the items will be filtered on providers with the specified ids."
+              },
+              {
+                "name": "sortedBy",
+                "value": "",
+                "type": "query",
+                "description": "The property by which the returned data will be sorted."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "If set, the properties and directions the returned data will be sorted by."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset for the page to start."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to render the page requested. To load the first page send an empty cursor, then the system will generate the cursors to go to the next and/or previous pages automatically."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of items to include in a single page."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction the returned data will be sorted by."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists all the monitors and monitoring settings for monitors that are enabled.\n"
+        },
+        {
+          "info": {
+            "name": "Initiate monitoring for a provider or facility\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/monitors",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Initiate monitoring for a dataset or license for a provider or facility. Please note that not all dataset types support monitoring. Please refer to [dataset endpoint](/references/api/datasets/getdataset) to get the capabilities of a dataset. \n"
+        },
+        {
+          "info": {
+            "name": "Initiates monitoring for the specified Sanctions and Exclusions datasets for the specified providers\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://discovery.verifiable.com/api/monitors/bulk/sanctions-and-exclusions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Initiate monitoring for the specified Sanctions and Exclusions datasets, for the specified list of providers. Immediate verification is not supported with this endpoint. If a next monitoring date is omitted or specified with a past date or within the closest 10 minutes, the monitor will execute within the next hour. Only Sanctions and Exclusions datasets are supported by this endpoint. Up to 100 provider IDs may be specified in one bulk.\n"
+        },
+        {
+          "info": {
+            "name": "Returns a specified monitored item\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://discovery.verifiable.com/api/monitors/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the monitored item."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all the info for a specified monitored item.\n"
+        },
+        {
+          "info": {
+            "name": "Patch an existing monitored item\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://discovery.verifiable.com/api/monitors/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the monitored item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Change existing monitoring for a specified item. Use this endpoint to update the monitoring frequency and next monitoring date.\n"
+        },
+        {
+          "info": {
+            "name": "Stop monitoring an item\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://discovery.verifiable.com/api/monitors/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier describing the monitored item."
+              },
+              {
+                "name": "propagateToPrimarySource",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Stops existing monitoring for a specified dataset or license for a provider.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
