@@ -41,6 +41,15 @@ tags:
 - Primary Source Verification
 - Compliance
 - Monitoring
+tags_raw:
+- Company
+- Health
+- Healthcare
+- Credentialing
+- Provider Data
+- Primary Source Verification
+- Compliance
+- Monitoring
 - API
 maintainers:
 - FN: Kin Lane
@@ -360,6 +369,8 @@ apis:
   humanURL: https://docs.discovery.verifiable.com/references/api
   baseURL: https://discovery.verifiable.com/api
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -377,6 +388,8 @@ apis:
   humanURL: https://docs.discovery.verifiable.com/references/api
   baseURL: https://discovery.verifiable.com/api
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -395,6 +408,8 @@ apis:
   humanURL: https://docs.discovery.verifiable.com/references/api
   baseURL: https://discovery.verifiable.com/api
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
@@ -696,6 +711,8 @@ apis:
   humanURL: https://docs.discovery.verifiable.com/references/api
   baseURL: https://discovery.verifiable.com/api
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
@@ -734,6 +751,8 @@ apis:
   humanURL: https://docs.discovery.verifiable.com/references/api
   baseURL: https://discovery.verifiable.com/api
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
