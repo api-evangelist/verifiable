@@ -16,6 +16,18 @@ x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - craft-ventures
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
@@ -780,6 +792,9 @@ apis:
   - type: GettingStarted
     url: https://docs.discovery.verifiable.com/references/api/section/getting-started
 common:
+- type: CapabilityMap
+  url: capabilities/verifiable-capability-edges.yml
+  name: Verifiable Business Capability Map
 - type: Website
   url: https://verifiable.com
 - type: DeveloperPortal
