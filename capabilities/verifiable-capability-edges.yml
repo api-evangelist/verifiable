@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 10
+edge_count: 18
 edges:
 - tag: CredentialingRequests
   spec_file: verifiable-credentialingrequests-api-openapi.yml
@@ -96,6 +96,17 @@ edges:
     CaqhProfile.Malpractice, CaqhProfile.TrainingInfo, CaqhProfile.CriminalHistory
   reason: Imports practitioner credentialing profile data (CAQH licensure, malpractice, training, disclosures)
     used to build the credentialing file — practitioner credentialing rather than generic data import.
+- tag: Webhooks
+  spec_file: verifiable-webhooks-api-openapi.yml
+  capability_id: BC-4270.80
+  capability_id_l1: BC-4270
+  capability_name: Webhook & Event Subscription Management
+  confidence: 0.8
+  evidence: POST /webhooks CreateWebhook 'Create a new webhook'; GET /webhookslog 'List all webhooks logs'
+    (WebhookLogModel)
+  reason: The tag manages the lifecycle of outbound webhook subscriptions and exposes delivery logs, which
+    is precisely Webhook & Event Subscription Management within the vendor's developer/API platform surface.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Alerts
   spec_file: verifiable-alerts-api-openapi.yml
   capability_id: BC-2890.10
@@ -118,3 +129,84 @@ edges:
   reason: Enumerates board-certification primary sources used to verify practitioner credentials, which
     is the primary-source-verification element of practitioner credentialing. Only one deprecated read
     endpoint, so confidence is tempered.
+- tag: Datasets
+  spec_file: verifiable-datasets-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.7
+  evidence: POST /datasets/scans 'Start a dataset scan'; schemas OfacAlternateIdentityRecord, DmfDatasetRecord,
+    MedicareOptOutDatasetRecord, NpdbReportInformation
+  reason: Dataset scans/matches against OFAC, death master file, NPDB and Medicare opt-out registries
+    implement sanction/exclusion screening as part of ongoing practitioner credentialing; some ambiguity
+    as it is a generic scan surface.
+  recovered_from: healthcare-vertical-edges.json
+- tag: DeleteOAuthCredentialsClientSecret
+  spec_file: verifiable-deleteoauthcredentialsclientsecret-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.7
+  evidence: DELETE /organization/settings/oauth-credentials/{clientId}/client-secret/{clientSecretId}
+    DeleteOAuthCredentialsClientSecret
+  reason: Single operation revoking an OAuth client secret used to access the vendor's public API — lifecycle
+    of API client credentials, i.e. Developer Identity & Credential Management. Could alternatively be
+    read as generic IAM, hence moderate confidence.
+  recovered_from: sweep-20260829T005356Z-edges.json
+- tag: Facilities
+  spec_file: verifiable-facilities-api-openapi.yml
+  capability_id: BC-2890
+  capability_id_l1: BC-2890
+  capability_name: Medical Staff & Credentialing Management
+  confidence: 0.7
+  evidence: POST /facilities CreateFacility; 'List facility license types', 'List facility accreditations',
+    'List facility medicare enrollment types'
+  reason: Facility record management with license types, accreditation agencies and Medicare enrolment
+    types supports credentialing of organisational providers; L1 credentialing is defensible but no L2
+    fits facility (non-practitioner) records cleanly.
+  recovered_from: healthcare-vertical-edges.json
+- tag: FacilitiesInfo
+  spec_file: verifiable-facilitiesinfo-api-openapi.yml
+  capability_id: BC-2890
+  capability_id_l1: BC-2890
+  capability_name: Medical Staff & Credentialing Management
+  confidence: 0.7
+  evidence: '''Create a NPI for an existing facility'', ''Create a DEA for an existing facility'', ''Create
+    a Liability Insurance for an existing facility''; FacilityCmsCertificationModel, FacilityAccreditationModel'
+  reason: Maintains and verifies facility credential elements (NPI, DEA, licences, liability insurance,
+    CMS certification, accreditation) — credentialing of facilities; L2 sub-capabilities are practitioner-specific
+    so left unmapped.
+  recovered_from: healthcare-vertical-edges.json
+- tag: ListOAuthCredentials
+  spec_file: verifiable-listoauthcredentials-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.7
+  evidence: GET /organization/settings/oauth-credentials ListOAuthCredentials; schemas ClientSecretModel,
+    OAuthCredentialsModel
+  reason: Lists the OAuth client credentials issued for programmatic access to the vendor's API — stewardship
+    of API client credentials. Moderate confidence as it could also be classed as general identity and
+    access management.
+  recovered_from: sweep-20260829T005356Z-edges.json
+- tag: PayerPlans
+  spec_file: verifiable-payerplans-api-openapi.yml
+  capability_id: BC-2890.50
+  capability_id_l1: BC-2890
+  capability_name: Provider Enrolment Management
+  confidence: 0.7
+  evidence: POST /payer-plans CreatePayerPlan 'Create a new payer plan'; schemas PayerPlanModel
+  reason: Payer plan records in this platform are the reference data for provider enrolment with payers
+    (PayerPlanModel also appears in ProviderEnrollment schemas), supporting provider enrolment management.
+  recovered_from: healthcare-vertical-edges.json
+- tag: Reports
+  spec_file: verifiable-reports-api-openapi.yml
+  capability_id: BC-2890
+  capability_id_l1: BC-2890
+  capability_name: Medical Staff & Credentialing Management
+  confidence: 0.7
+  evidence: GET /organization/reports/expirable-credentials 'List expirable credentials reports'; GET
+    /organization/reports/sanctionsandexclusions; GET /organization/reports/roster
+  reason: Reporting outputs specific to credentialing domain (expirable credentials, sanctions/exclusions,
+    enrolments, roster); reporting surface so L1 only.
+  recovered_from: healthcare-vertical-edges.json
