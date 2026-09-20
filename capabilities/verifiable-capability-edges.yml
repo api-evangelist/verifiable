@@ -1,0 +1,120 @@
+slug: verifiable
+provider: Verifiable
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Healthcare Providers
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 10
+edges:
+- tag: CredentialingRequests
+  spec_file: verifiable-credentialingrequests-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.9
+  evidence: POST /credentialing-requests CreateCredentialingRequest 'Create a new credentialing request';
+    GET /providers/{providerId}/credentialing-data 'Get the credentialing data for a provider'
+  reason: Operations create, track and checklist credentialing requests for providers/facilities, with
+    schemas for NPDB reports, CAQH profile, ABMS board records — the practitioner credentialing workflow
+    including primary-source data.
+- tag: Licenses
+  spec_file: verifiable-licenses-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.9
+  evidence: POST /providers/{providerId}/licenses/{licenseId}/verify 'Trigger a new license verification';
+    GET /providers/{providerId}/licenses/{licenseId}/verifications 'List all verifications for a license'
+  reason: Attaching provider licences and triggering/resolving licence verifications against verification
+    sources is primary-source verification in practitioner credentialing.
+- tag: ProviderEnrollments
+  spec_file: verifiable-providerenrollments-api-openapi.yml
+  capability_id: BC-2890.50
+  capability_id_l1: BC-2890
+  capability_name: Provider Enrolment Management
+  confidence: 0.9
+  evidence: POST /providers/enrollments CreateProviderEnrollment 'Create a new provider enrollment'; schemas
+    ProviderEnrollmentModel, PayerPlanModel
+  reason: Directly manages enrolment of providers with payers/plans, which is Provider Enrolment Management
+    within medical staff and credentialing.
+- tag: Providers
+  spec_file: verifiable-providers-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.85
+  evidence: GET /providers/recredentialing/due 'List providers due for recredentialing'; 'List provider
+    monitoring summary for sanctions and exclusions'; 'Initiate an NPDB enrollment transfer for a provider'
+  reason: Practitioner record stewardship plus recredentialing due lists, sanctions/exclusions summaries
+    and NPDB enrolment — core initial and ongoing practitioner credentialing.
+- tag: ProvidersInfo
+  spec_file: verifiable-providersinfo-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.85
+  evidence: CreateBoardCertificationInfo 'Create board certification info for the existing provider';
+    schemas DeaRegistrationInfoRequestModel, LiabilityInsuranceModel, HospitalAffiliationModel, WorkHistoryPatchModel
+  reason: Maintains the practitioner credentialing dossier — board certifications, DEA registrations,
+    liability insurance, hospital affiliations, work history — i.e. practitioner credentialing data management.
+- tag: DEA
+  spec_file: verifiable-dea-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.8
+  evidence: POST /providers/{providerId}/dea/{registrationNumber} 'Attach a DEA registration number to
+    a provider'; 'Get a specific DEA registration verification'
+  reason: Attaching and verifying a practitioner's DEA registration is credential verification of a practitioner,
+    not controlled-substance dispensing operations; DeaVerificationModel/DeaVerificationResult confirm
+    a verification surface.
+- tag: Monitoring
+  spec_file: verifiable-monitoring-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.8
+  evidence: POST /monitors 'Initiate monitoring for a provider or facility'; 'Initiates monitoring for
+    the specified Sanctions and Exclusions datasets for the specified providers'
+  reason: Operations create and manage continuous monitoring of practitioners against sanctions/exclusions
+    reference datasets (OFAC, DMF, Medicare opt-out, NPDB) — this is ongoing practitioner credentialing/screening,
+    not IT observability despite the tag word 'Monitoring'.
+- tag: ProviderProfiles
+  spec_file: verifiable-providerprofiles-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.8
+  evidence: POST /providers/profiles/import 'Create a new provider profile import'; schemas CaqhProfile.Licensure,
+    CaqhProfile.Malpractice, CaqhProfile.TrainingInfo, CaqhProfile.CriminalHistory
+  reason: Imports practitioner credentialing profile data (CAQH licensure, malpractice, training, disclosures)
+    used to build the credentialing file — practitioner credentialing rather than generic data import.
+- tag: Alerts
+  spec_file: verifiable-alerts-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.72
+  evidence: GET /alerts  ListAlerts; schemas ProviderModel, ProviderAliasModel, TaxonomyGroupModel; vendor
+    "continuously monitor providers for sanctions and exclusions"
+  reason: Alerts here attach to provider records on a credentialing platform and are dismissed/aggregated
+    as part of continuous monitoring of licenses, sanctions and exclusions — ongoing practitioner credentialing,
+    not observability alerting. Some ambiguity because alert semantics are not spelled out in the operations
+    themselves.
+- tag: BoardCertifications
+  spec_file: verifiable-boardcertifications-api-openapi.yml
+  capability_id: BC-2890.10
+  capability_id_l1: BC-2890
+  capability_name: Practitioner Credentialing
+  confidence: 0.7
+  evidence: GET /sources/board-certifications  "List board certification sources (Deprecated)"
+  reason: Enumerates board-certification primary sources used to verify practitioner credentials, which
+    is the primary-source-verification element of practitioner credentialing. Only one deprecated read
+    endpoint, so confidence is tempered.
