@@ -1,0 +1,30 @@
+# Front Door AI Index — verifiable — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: verifiable
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: verifiable.com
+  final_host: verifiable.com
+  ownership: own
+  owner: verifiable
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 12
+  host_score: 12
+  density: 12.59
+  words: 953
+  tiers:
+    agentic: 4
+    core: 8
+    model: 0
+  ambiguous: 4
+  top_terms:
+    AI: 7
+    agentic: 3
+    agent: 2
+    automation: 2
+    autonomous agent: 1
+    generative ai: 1
