@@ -386,103 +386,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    FileModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for this file.
-          format: uuid
-        providerId:
-          type: string
-          description: If set, the provider to which this file is associated.
-          format: uuid
-        facilityId:
-          type: string
-          description: If set, the facility to which this file is associated.
-          format: uuid
-        createdAt:
-          type: string
-          description: The time when the file was created.
-          format: date-time
-        createdByUserId:
-          type: string
-          description: The identifier of the user who created the file.
-          format: uuid
-        createdByUserEmail:
-          type: string
-          description: The e-mail of the user who created the file.
-        path:
-          type: string
-          description: Path to the file.
-        size:
-          type: integer
-          description: The size of the file.
-          format: int32
-      additionalProperties: false
-    FilePageModel:
-      type: object
-      properties:
-        sort:
-          type:
-          - object
-          - 'null'
-          properties:
-            Keys:
-              enum:
-              - Path
-              - CreatedAt
-              type: string
-            Values:
-              enum:
-              - Asc
-              - Desc
-              type: string
-        previousCursor:
-          type:
-          - string
-          - 'null'
-        nextCursor:
-          type:
-          - string
-          - 'null'
-        nextOffset:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        count:
-          type: integer
-          format: int32
-        totalCount:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FileModel'
-        sortedBy:
-          enum:
-          - Path
-          - CreatedAt
-          type:
-          - string
-          - 'null'
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     EventLogExportPageModel:
       type: object
       properties:
@@ -557,6 +460,40 @@ components:
           status: Completed
         sort:
           Date: Desc
+    FileModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this file.
+          format: uuid
+        providerId:
+          type: string
+          description: If set, the provider to which this file is associated.
+          format: uuid
+        facilityId:
+          type: string
+          description: If set, the facility to which this file is associated.
+          format: uuid
+        createdAt:
+          type: string
+          description: The time when the file was created.
+          format: date-time
+        createdByUserId:
+          type: string
+          description: The identifier of the user who created the file.
+          format: uuid
+        createdByUserEmail:
+          type: string
+          description: The e-mail of the user who created the file.
+        path:
+          type: string
+          description: Path to the file.
+        size:
+          type: integer
+          description: The size of the file.
+          format: int32
+      additionalProperties: false
     EventLogExportModel:
       type: object
       properties:
@@ -593,6 +530,69 @@ components:
           type: string
           description: Unique identifier for the export.
           format: uuid
+      additionalProperties: false
+    FilePageModel:
+      type: object
+      properties:
+        sort:
+          type:
+          - object
+          - 'null'
+          properties:
+            Keys:
+              enum:
+              - Path
+              - CreatedAt
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+        previousCursor:
+          type:
+          - string
+          - 'null'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+        nextOffset:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        totalCount:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FileModel'
+        sortedBy:
+          enum:
+          - Path
+          - CreatedAt
+          type:
+          - string
+          - 'null'
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type:
+          - string
+          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

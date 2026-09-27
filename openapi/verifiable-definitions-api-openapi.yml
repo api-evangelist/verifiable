@@ -188,98 +188,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    CountryModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this country.
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          description: The name of the country.
-          readOnly: true
-        isoCode:
-          type: string
-          description: The 3-letter ISO code of the country.
-          readOnly: true
-        createdAt:
-          type: string
-          description: The timestamp of the addition of this country to Verifiable's data.
-          format: date-time
-          readOnly: true
-      additionalProperties: false
-    TaxonomyGroupPageModel:
-      type: object
-      properties:
-        previousCursor:
-          type: string
-          description: Cursor for previous page or null if first page.
-        nextCursor:
-          type: string
-          description: Cursor for next page or null if last page.
-        nextOffset:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          description: Maximum items per page.
-          format: int32
-        count:
-          type: integer
-          description: Number of items in current page.
-          format: int32
-        totalCount:
-          type: integer
-          description: Total items across all pages.
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxonomyGroupModel'
-          description: Taxonomy groups in current page.
-        sortedBy:
-          enum:
-          - Id
-          - Name
-          type: string
-          description: Property by which data is sorted.
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type: string
-          description: Sort direction (Asc/Desc).
-        sort:
-          type: object
-          additionalProperties:
-            enum:
-            - Asc
-            - Desc
-            type: string
-      additionalProperties: false
-      example:
-        items:
-        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-          name: Allopathic & Osteopathic Physicians
-        count: 100
-        totalCount: 150
-        pageSize: 100
-    TaxonomyGroupModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the taxonomy group.
-          format: uuid
-        name:
-          type: string
-          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
-      additionalProperties: false
-      example:
-        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-        name: Allopathic & Osteopathic Physicians
     TaxonomyPageModel:
       type: object
       properties:
@@ -350,6 +258,28 @@ components:
         sortDirection: Asc
         sort:
           Code: Asc
+    CountryModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this country.
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: The name of the country.
+          readOnly: true
+        isoCode:
+          type: string
+          description: The 3-letter ISO code of the country.
+          readOnly: true
+        createdAt:
+          type: string
+          description: The timestamp of the addition of this country to Verifiable's data.
+          format: date-time
+          readOnly: true
+      additionalProperties: false
     TaxonomyModel:
       type: object
       properties:
@@ -384,6 +314,76 @@ components:
         specialization: Cardiovascular Disease
         section: Section 1
         displayName: Internal Medicine - Cardiovascular Disease
+    TaxonomyGroupModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the taxonomy group.
+          format: uuid
+        name:
+          type: string
+          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
+      additionalProperties: false
+      example:
+        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        name: Allopathic & Osteopathic Physicians
+    TaxonomyGroupPageModel:
+      type: object
+      properties:
+        previousCursor:
+          type: string
+          description: Cursor for previous page or null if first page.
+        nextCursor:
+          type: string
+          description: Cursor for next page or null if last page.
+        nextOffset:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          description: Maximum items per page.
+          format: int32
+        count:
+          type: integer
+          description: Number of items in current page.
+          format: int32
+        totalCount:
+          type: integer
+          description: Total items across all pages.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxonomyGroupModel'
+          description: Taxonomy groups in current page.
+        sortedBy:
+          enum:
+          - Id
+          - Name
+          type: string
+          description: Property by which data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: Sort direction (Asc/Desc).
+        sort:
+          type: object
+          additionalProperties:
+            enum:
+            - Asc
+            - Desc
+            type: string
+      additionalProperties: false
+      example:
+        items:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          name: Allopathic & Osteopathic Physicians
+        count: 100
+        totalCount: 150
+        pageSize: 100
   securitySchemes:
     Bearer:
       type: http

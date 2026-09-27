@@ -546,6 +546,28 @@ paths:
       - Bearer: []
 components:
   schemas:
+    GroupProviderRelationPatchModel:
+      type: object
+      properties:
+        add:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Collection of unique provider identifiers. If set, new relations between the group and specified provider in this collection will be created.
+        remove:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Collection of unique provider identifiers. If set, the existing relations between the group and specified provider in this collection will be removed.
+      additionalProperties: false
+      example:
+        add:
+        - 5d03a731-b9b5-45b9-b67e-06bb44369102
+        - ea82c3cc-9206-4d22-a501-5dd6624457d3
+        remove:
+        - 2b159576-92f6-453e-aaf6-822402536e02
     ProviderModel:
       required:
       - credentialingStatus
@@ -780,93 +802,6 @@ components:
           description: Timestamp when this provider was created.
           format: date-time
       additionalProperties: false
-    ProviderAliasModel:
-      type: object
-      properties:
-        firstName:
-          type: string
-          description: The first (given) name of this alias.
-        lastName:
-          type: string
-          description: The last (family) name of this alias.
-        id:
-          type: string
-          description: Unique identifier for this alias.
-          format: uuid
-      additionalProperties: false
-    ProviderEnrollmentPageModel:
-      type: object
-      properties:
-        sort:
-          type:
-          - object
-          - 'null'
-          properties:
-            Keys:
-              enum:
-              - Id
-              - NetworkStatus
-              - EnrollmentStatus
-              - SpecialistType
-              - SubmissionDate
-              - EffectiveDate
-              - PayerPlanName
-              type: string
-            Values:
-              enum:
-              - Asc
-              - Desc
-              type: string
-        previousCursor:
-          type:
-          - string
-          - 'null'
-        nextCursor:
-          type:
-          - string
-          - 'null'
-        nextOffset:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        count:
-          type: integer
-          format: int32
-        totalCount:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProviderEnrollmentModel'
-        sortedBy:
-          enum:
-          - Id
-          - NetworkStatus
-          - EnrollmentStatus
-          - SpecialistType
-          - SubmissionDate
-          - EffectiveDate
-          - PayerPlanName
-          type:
-          - string
-          - 'null'
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     TaxonomyGroupModel:
       type: object
       properties:
@@ -881,11 +816,232 @@ components:
       example:
         id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
         name: Allopathic & Osteopathic Physicians
-    GroupRequestModel:
+    AddressModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+        zipCode:
+          minLength: 1
+          type: string
+        city:
+          minLength: 1
+          type: string
+        addressLine1:
+          minLength: 1
+          type: string
+        addressLine2:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProviderTypeModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider type.
+          format: uuid
+        name:
+          type: string
+          description: Associated provider type name.
+      additionalProperties: false
+    SegmentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the segment.
+          format: uuid
+        name:
+          type: string
+          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
+      additionalProperties: false
+      example:
+        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
+        name: acme-corp
+    ProviderPageModel:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Id
+              - LastName
+              - FirstName
+              - CredentialingStatus
+              - CredentialedDate
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderModel'
+          description: The providers in the current page.
+        sortedBy:
+          enum:
+          - Id
+          - LastName
+          - FirstName
+          - CredentialingStatus
+          - CredentialedDate
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          firstName: string
+          lastName: string
+          dateOfBirth: '2019-08-24T14:15:22.0000000Z'
+          ssn: '***'
+          credentialingStatus: string
+          credentialedDate: '2019-08-24T14:15:22.0000000Z'
+          npi: 0
+          aliases:
+          - id: 9b4c12e8-02c5-4107-a524-c02416d43079
+            firstName: string
+            lastName: string
+          addresses:
+          - id: e57c9ee4-807d-456a-bf32-623280064ca5
+            state: AL
+            zipCode: string
+            city: string
+            addressLine1: string
+            addressLine2: string
+            type: Unspecified
+          emails:
+          - id: 1d46ecfe-5ce4-4b9c-aaba-3543e15d36d1
+            email: string
+            type: Unspecified
+          phone: string
+          languages:
+          - string
+          recredentialedDates:
+          - '2019-08-24T14:15:22.0000000Z'
+          providerType:
+            id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+            name: string
+        sortedBy: Id
+        sortDirection: Asc
+        sort:
+          Id: Asc
+          FirstName: Asc
+          LastName: Asc
+          CredentialingStatus: Desc
+    GroupModel:
       required:
       - name
       type: object
       properties:
+        id:
+          type: string
+          description: Unique identifier associated with this group.
+          format: uuid
         name:
           minLength: 1
           type: string
@@ -899,6 +1055,99 @@ components:
           description: Tax ID number associated with this group.
         remitAddress:
           $ref: '#/components/schemas/AddressModel'
+      additionalProperties: false
+    ProviderAliasModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          type: string
+          description: The last (family) name of this alias.
+        id:
+          type: string
+          description: Unique identifier for this alias.
+          format: uuid
+      additionalProperties: false
+    PayerPlanModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this payer plan.
+          format: uuid
+        name:
+          type: string
+          description: The name associated with this payer plan.
+        payerId:
+          type: string
+          description: Id of the payer assosiated with this plan
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: US state 2-letter code associated with this payer plan.
+        displayName:
+          type: string
+          description: Name displayed in lists in the format of {Payer name} - {Payer plan name}
+          readOnly: true
       additionalProperties: false
     GroupPayerRelationPatchModel:
       type: object
@@ -1017,157 +1266,6 @@ components:
           description: Unique identifier for this address.
           format: uuid
       additionalProperties: false
-    ProviderTypeModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this provider type.
-          format: uuid
-        name:
-          type: string
-          description: Associated provider type name.
-      additionalProperties: false
-    GroupModel:
-      required:
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this group.
-          format: uuid
-        name:
-          minLength: 1
-          type: string
-          description: The name associated with this group.
-        npi:
-          type: integer
-          description: NPI number associated with this group.
-          format: int64
-        taxId:
-          type: string
-          description: Tax ID number associated with this group.
-        remitAddress:
-          $ref: '#/components/schemas/AddressModel'
-      additionalProperties: false
-    SegmentModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the segment.
-          format: uuid
-        name:
-          type: string
-          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
-      additionalProperties: false
-      example:
-        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
-        name: acme-corp
-    GroupProviderRelationPatchModel:
-      type: object
-      properties:
-        add:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: Collection of unique provider identifiers. If set, new relations between the group and specified provider in this collection will be created.
-        remove:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: Collection of unique provider identifiers. If set, the existing relations between the group and specified provider in this collection will be removed.
-      additionalProperties: false
-      example:
-        add:
-        - 5d03a731-b9b5-45b9-b67e-06bb44369102
-        - ea82c3cc-9206-4d22-a501-5dd6624457d3
-        remove:
-        - 2b159576-92f6-453e-aaf6-822402536e02
-    AddressModel:
-      required:
-      - addressLine1
-      - city
-      - state
-      - zipCode
-      type: object
-      properties:
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-        zipCode:
-          minLength: 1
-          type: string
-        city:
-          minLength: 1
-          type: string
-        addressLine1:
-          minLength: 1
-          type: string
-        addressLine2:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     ProviderEnrollmentModel:
       type: object
       properties:
@@ -1231,196 +1329,6 @@ components:
         groupModel:
           $ref: '#/components/schemas/GroupModel'
       additionalProperties: false
-    ProviderPageModel:
-      type: object
-      properties:
-        sort:
-          type: object
-          properties:
-            Keys:
-              enum:
-              - Id
-              - LastName
-              - FirstName
-              - CredentialingStatus
-              - CredentialedDate
-              type: string
-            Values:
-              enum:
-              - Asc
-              - Desc
-              type: string
-          description: The properties and directions the data is sorted by.
-        previousCursor:
-          type: string
-          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
-        nextCursor:
-          type: string
-          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
-        nextOffset:
-          type: integer
-          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
-          format: int32
-          deprecated: true
-        pageSize:
-          type: integer
-          description: The maximum number of items included in this page.
-          format: int32
-        count:
-          type: integer
-          description: The number of items in this page.
-          format: int32
-        totalCount:
-          type: integer
-          description: The total number of items in all pages combined.
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProviderModel'
-          description: The providers in the current page.
-        sortedBy:
-          enum:
-          - Id
-          - LastName
-          - FirstName
-          - CredentialingStatus
-          - CredentialedDate
-          type: string
-          description: The property by which the data is sorted.
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type: string
-          description: The direction in which the data is sorted.
-      additionalProperties: false
-      example:
-        previousCursor: string
-        nextCursor: string
-        nextOffset: 0
-        pageSize: 0
-        count: 0
-        totalCount: 0
-        items:
-        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-          firstName: string
-          lastName: string
-          dateOfBirth: '2019-08-24T14:15:22.0000000Z'
-          ssn: '***'
-          credentialingStatus: string
-          credentialedDate: '2019-08-24T14:15:22.0000000Z'
-          npi: 0
-          aliases:
-          - id: 9b4c12e8-02c5-4107-a524-c02416d43079
-            firstName: string
-            lastName: string
-          addresses:
-          - id: e57c9ee4-807d-456a-bf32-623280064ca5
-            state: AL
-            zipCode: string
-            city: string
-            addressLine1: string
-            addressLine2: string
-            type: Unspecified
-          emails:
-          - id: 1d46ecfe-5ce4-4b9c-aaba-3543e15d36d1
-            email: string
-            type: Unspecified
-          phone: string
-          languages:
-          - string
-          recredentialedDates:
-          - '2019-08-24T14:15:22.0000000Z'
-          providerType:
-            id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-            name: string
-        sortedBy: Id
-        sortDirection: Asc
-        sort:
-          Id: Asc
-          FirstName: Asc
-          LastName: Asc
-          CredentialingStatus: Desc
-    PayerPlanModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this payer plan.
-          format: uuid
-        name:
-          type: string
-          description: The name associated with this payer plan.
-        payerId:
-          type: string
-          description: Id of the payer assosiated with this plan
-          format: uuid
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: US state 2-letter code associated with this payer plan.
-        displayName:
-          type: string
-          description: Name displayed in lists in the format of {Payer name} - {Payer plan name}
-          readOnly: true
-      additionalProperties: false
     ProviderEmailModel:
       type: object
       properties:
@@ -1458,6 +1366,98 @@ components:
       example:
         name: string
         npi: 1234567890
+    ProviderEnrollmentPageModel:
+      type: object
+      properties:
+        sort:
+          type:
+          - object
+          - 'null'
+          properties:
+            Keys:
+              enum:
+              - Id
+              - NetworkStatus
+              - EnrollmentStatus
+              - SpecialistType
+              - SubmissionDate
+              - EffectiveDate
+              - PayerPlanName
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+        previousCursor:
+          type:
+          - string
+          - 'null'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+        nextOffset:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        totalCount:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProviderEnrollmentModel'
+        sortedBy:
+          enum:
+          - Id
+          - NetworkStatus
+          - EnrollmentStatus
+          - SpecialistType
+          - SubmissionDate
+          - EffectiveDate
+          - PayerPlanName
+          type:
+          - string
+          - 'null'
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    GroupRequestModel:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+          description: The name associated with this group.
+        npi:
+          type: integer
+          description: NPI number associated with this group.
+          format: int64
+        taxId:
+          type: string
+          description: Tax ID number associated with this group.
+        remitAddress:
+          $ref: '#/components/schemas/AddressModel'
+      additionalProperties: false
   securitySchemes:
     Bearer:
       type: http

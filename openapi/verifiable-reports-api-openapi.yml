@@ -112,17 +112,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    RosterReportInfoModel:
-      type: object
-      properties:
-        date:
-          type: string
-          description: The time when the report was created.
-          format: date-time
-        path:
-          type: string
-          description: Path to the report.
-      additionalProperties: false
     ExpirableCredentialsReportInfoModel:
       type: object
       properties:
@@ -134,7 +123,7 @@ components:
           type: string
           description: Path to the report.
       additionalProperties: false
-    EnrollmentsReportInfoModel:
+    RosterReportInfoModel:
       type: object
       properties:
         date:
@@ -146,6 +135,17 @@ components:
           description: Path to the report.
       additionalProperties: false
     SanctionsAndExclusionsReportInfoModel:
+      type: object
+      properties:
+        date:
+          type: string
+          description: The time when the report was created.
+          format: date-time
+        path:
+          type: string
+          description: Path to the report.
+      additionalProperties: false
+    EnrollmentsReportInfoModel:
       type: object
       properties:
         date:

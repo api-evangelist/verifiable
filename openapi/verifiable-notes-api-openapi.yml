@@ -451,40 +451,6 @@ components:
           description: Timestamp when this provider was created.
           format: date-time
       additionalProperties: false
-    AlertData:
-      type: object
-      properties:
-        messageTemplate:
-          type: string
-          description: An informative human readable message describing the action in the audit log entry.
-        messageParams:
-          type: object
-          additionalProperties:
-            type:
-            - string
-            - 'null'
-          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
-        data:
-          type: object
-          additionalProperties:
-            type:
-            - string
-            - 'null'
-      additionalProperties: false
-    ProviderAliasModel:
-      type: object
-      properties:
-        firstName:
-          type: string
-          description: The first (given) name of this alias.
-        lastName:
-          type: string
-          description: The last (family) name of this alias.
-        id:
-          type: string
-          description: Unique identifier for this alias.
-          format: uuid
-      additionalProperties: false
     TaxonomyGroupModel:
       type: object
       properties:
@@ -499,62 +465,31 @@ components:
       example:
         id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
         name: Allopathic & Osteopathic Physicians
-    AlertModel:
+    ProviderTypeModel:
       type: object
       properties:
-        type:
-          enum:
-          - LicenseChanged
-          - LicenseExpiresSoon
-          - LicenseExpired
-          - ProfileImportCompleted
-          type: string
-          description: The type of event that led to this alert.
-        providerId:
-          type: string
-          description: Identifier of the provider related to this alert.
-          format: uuid
-        provider:
-          $ref: '#/components/schemas/ProviderModel'
-        entityType:
-          enum:
-          - License
-          - Verification
-          - Alert
-          - NpiRecord
-          - Note
-          - BoardCertification
-          - BoardCertificationVerification
-          - DeaVerification
-          - DatasetScan
-          - DatasetRecord
-          - File
-          - ProfileImport
-          - NpdbVerificationRequest
-          type: string
-          description: If set, the type of the entity that `EntityId` refers to.
-        entityId:
-          type: string
-          description: Identifier of the related entity that's relevant to this alert type.
-          format: uuid
-        data:
-          $ref: '#/components/schemas/AlertData'
-        timestamp:
-          type: string
-          description: The date and time when this alert was triggered.
-          format: date-time
-        dismissalTimestamp:
-          type: string
-          description: The date and time when this alert was dismissed, if at all.
-          format: date-time
-        dismissalNote:
-          type: string
-          description: The note supplied as reason for dismissal, if and when this alert was dismissed.
         id:
           type: string
-          description: Unique identifier for this alert.
+          description: Unique identifier associated with this provider type.
           format: uuid
+        name:
+          type: string
+          description: Associated provider type name.
       additionalProperties: false
+    SegmentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the segment.
+          format: uuid
+        name:
+          type: string
+          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
+      additionalProperties: false
+      example:
+        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
+        name: acme-corp
     ProviderAddressModel:
       required:
       - addressLine1
@@ -650,31 +585,24 @@ components:
           description: Unique identifier for this address.
           format: uuid
       additionalProperties: false
-    ProviderTypeModel:
+    ProviderEmailModel:
       type: object
       properties:
+        email:
+          type: string
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
+          type: string
+          description: The type of the email.
         id:
           type: string
-          description: Unique identifier associated with this provider type.
+          description: Unique identifier for this specific email.
           format: uuid
-        name:
-          type: string
-          description: Associated provider type name.
       additionalProperties: false
-    SegmentModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the segment.
-          format: uuid
-        name:
-          type: string
-          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
-      additionalProperties: false
-      example:
-        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
-        name: acme-corp
     ProviderNotesRequestModel:
       required:
       - note
@@ -684,6 +612,82 @@ components:
           minLength: 1
           type: string
           description: The contents of the note.
+      additionalProperties: false
+    AlertModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - LicenseChanged
+          - LicenseExpiresSoon
+          - LicenseExpired
+          - ProfileImportCompleted
+          type: string
+          description: The type of event that led to this alert.
+        providerId:
+          type: string
+          description: Identifier of the provider related to this alert.
+          format: uuid
+        provider:
+          $ref: '#/components/schemas/ProviderModel'
+        entityType:
+          enum:
+          - License
+          - Verification
+          - Alert
+          - NpiRecord
+          - Note
+          - BoardCertification
+          - BoardCertificationVerification
+          - DeaVerification
+          - DatasetScan
+          - DatasetRecord
+          - File
+          - ProfileImport
+          - NpdbVerificationRequest
+          type: string
+          description: If set, the type of the entity that `EntityId` refers to.
+        entityId:
+          type: string
+          description: Identifier of the related entity that's relevant to this alert type.
+          format: uuid
+        data:
+          $ref: '#/components/schemas/AlertData'
+        timestamp:
+          type: string
+          description: The date and time when this alert was triggered.
+          format: date-time
+        dismissalTimestamp:
+          type: string
+          description: The date and time when this alert was dismissed, if at all.
+          format: date-time
+        dismissalNote:
+          type: string
+          description: The note supplied as reason for dismissal, if and when this alert was dismissed.
+        id:
+          type: string
+          description: Unique identifier for this alert.
+          format: uuid
+      additionalProperties: false
+    AlertData:
+      type: object
+      properties:
+        messageTemplate:
+          type: string
+          description: An informative human readable message describing the action in the audit log entry.
+        messageParams:
+          type: object
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
+        data:
+          type: object
+          additionalProperties:
+            type:
+            - string
+            - 'null'
       additionalProperties: false
     ProviderNotesModel:
       type: object
@@ -706,22 +710,18 @@ components:
         alert:
           $ref: '#/components/schemas/AlertModel'
       additionalProperties: false
-    ProviderEmailModel:
+    ProviderAliasModel:
       type: object
       properties:
-        email:
+        firstName:
           type: string
-          description: The email associated with the provider.
-        type:
-          enum:
-          - Unspecified
-          - Personal
-          - Work
+          description: The first (given) name of this alias.
+        lastName:
           type: string
-          description: The type of the email.
+          description: The last (family) name of this alias.
         id:
           type: string
-          description: Unique identifier for this specific email.
+          description: Unique identifier for this alias.
           format: uuid
       additionalProperties: false
   securitySchemes:

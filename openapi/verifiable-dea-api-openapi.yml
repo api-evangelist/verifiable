@@ -383,6 +383,46 @@ components:
           description: Certified Patient Limit.
           format: int32
       additionalProperties: false
+    DeaVerificationResolutionModel:
+      type: object
+      properties:
+        status:
+          enum:
+          - Found
+          - Failed
+          - NeedsReview
+          - NotFound
+          - Pending
+          - Working
+          type: string
+          description: The correct status for this verification.
+      additionalProperties: false
+    DeaVerificationDiffModel:
+      type: object
+      properties:
+        old:
+          $ref: '#/components/schemas/DeaVerificationModel'
+        new:
+          $ref: '#/components/schemas/DeaVerificationModel'
+        diff:
+          description: Diff in [jsondiffpatch](https://github.com/benjamine/jsondiffpatch) format.
+      additionalProperties: false
+    DeaRegistrationModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        providerId:
+          type: string
+          description: Identifier of the provider associated with this DEA registration.
+          format: uuid
+        registrationNumber:
+          type: string
+          description: The DEA registration number.
+        currentVerification:
+          $ref: '#/components/schemas/DeaVerificationModel'
+      additionalProperties: false
     DeaVerificationResult:
       type: object
       properties:
@@ -486,46 +526,6 @@ components:
           $ref: '#/components/schemas/DeaVerificationResult'
         deaxResults:
           $ref: '#/components/schemas/DeaxVerificationResult'
-      additionalProperties: false
-    DeaVerificationResolutionModel:
-      type: object
-      properties:
-        status:
-          enum:
-          - Found
-          - Failed
-          - NeedsReview
-          - NotFound
-          - Pending
-          - Working
-          type: string
-          description: The correct status for this verification.
-      additionalProperties: false
-    DeaVerificationDiffModel:
-      type: object
-      properties:
-        old:
-          $ref: '#/components/schemas/DeaVerificationModel'
-        new:
-          $ref: '#/components/schemas/DeaVerificationModel'
-        diff:
-          description: Diff in [jsondiffpatch](https://github.com/benjamine/jsondiffpatch) format.
-      additionalProperties: false
-    DeaRegistrationModel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        providerId:
-          type: string
-          description: Identifier of the provider associated with this DEA registration.
-          format: uuid
-        registrationNumber:
-          type: string
-          description: The DEA registration number.
-        currentVerification:
-          $ref: '#/components/schemas/DeaVerificationModel'
       additionalProperties: false
   securitySchemes:
     Bearer:

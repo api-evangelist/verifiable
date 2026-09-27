@@ -174,15 +174,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    PayerPatchModel:
-      type: object
-      properties:
-        name:
-          type: string
-          description: If set, the payer's `name` will be updated with this value.
-      additionalProperties: false
-      example:
-        name: string
     PayerRequestModel:
       required:
       - name
@@ -193,6 +184,15 @@ components:
           type: string
           description: The name associated with this payer.
       additionalProperties: false
+    PayerPatchModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: If set, the payer's `name` will be updated with this value.
+      additionalProperties: false
+      example:
+        name: string
     PayerModel:
       required:
       - name

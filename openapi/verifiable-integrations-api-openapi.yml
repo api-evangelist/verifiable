@@ -82,6 +82,35 @@ paths:
       - Bearer: []
 components:
   schemas:
+    FountainStage:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        id:
+          type: string
+          format: uuid
+      additionalProperties: false
+    SalesforceDocumentRequestRequestModel:
+      required:
+      - document
+      - relatedIds
+      type: object
+      properties:
+        document:
+          minLength: 1
+          type: string
+          description: Path to the document (stored in this organization) to be uploaded to Salesforce.
+        pathOnClient:
+          type: string
+        relatedIds:
+          type: array
+          items:
+            type: string
+          description: Array of Salesforce identifiers to which the uploaded content document will be linked.
+      additionalProperties: false
     FountainApplicantModel:
       type: object
       properties:
@@ -120,41 +149,6 @@ components:
           - 'null'
           additionalProperties: {}
       additionalProperties: false
-    SalesforceDocumentRequestRequestModel:
-      required:
-      - document
-      - relatedIds
-      type: object
-      properties:
-        document:
-          minLength: 1
-          type: string
-          description: Path to the document (stored in this organization) to be uploaded to Salesforce.
-        pathOnClient:
-          type: string
-        relatedIds:
-          type: array
-          items:
-            type: string
-          description: Array of Salesforce identifiers to which the uploaded content document will be linked.
-      additionalProperties: false
-    FountainStage:
-      type: object
-      properties:
-        title:
-          type:
-          - string
-          - 'null'
-        id:
-          type: string
-          format: uuid
-      additionalProperties: false
-    FountainWebhookRequestModel:
-      type: object
-      properties:
-        applicant:
-          $ref: '#/components/schemas/FountainApplicantModel'
-      additionalProperties: false
     FountainFunnel:
       type: object
       properties:
@@ -165,6 +159,12 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    FountainWebhookRequestModel:
+      type: object
+      properties:
+        applicant:
+          $ref: '#/components/schemas/FountainApplicantModel'
       additionalProperties: false
     FountainWebhookResponseModel:
       type: object

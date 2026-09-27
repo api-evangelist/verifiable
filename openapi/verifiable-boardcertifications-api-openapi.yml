@@ -102,31 +102,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    BoardCertificationSourceModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this board certification source.
-          format: uuid
-        name:
-          type: string
-          description: Board certification source name.
-        availability:
-          enum:
-          - Available
-          - Disabled
-          - ComingSoon
-          type: string
-          description: Availability indicator of the source. Only sources that are `Available` should be used for board certification verifications.
-        isDegraded:
-          type: boolean
-          description: The sources we use for verifications are not hosted by Verifiable. In some cases we detect the source to be unavailable. In that case `isDegraded` will be set to `true`.
-        url:
-          type: string
-          description: The URL used to fetch the certification data for this source.
-          format: uri
-      additionalProperties: false
     BoardCertificationSourcePageModel:
       type: object
       properties:
@@ -179,6 +154,31 @@ components:
             - Desc
             type: string
           description: The properties and directions the data is sorted by.
+      additionalProperties: false
+    BoardCertificationSourceModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this board certification source.
+          format: uuid
+        name:
+          type: string
+          description: Board certification source name.
+        availability:
+          enum:
+          - Available
+          - Disabled
+          - ComingSoon
+          type: string
+          description: Availability indicator of the source. Only sources that are `Available` should be used for board certification verifications.
+        isDegraded:
+          type: boolean
+          description: The sources we use for verifications are not hosted by Verifiable. In some cases we detect the source to be unavailable. In that case `isDegraded` will be set to `true`.
+        url:
+          type: string
+          description: The URL used to fetch the certification data for this source.
+          format: uri
       additionalProperties: false
   securitySchemes:
     Bearer:
