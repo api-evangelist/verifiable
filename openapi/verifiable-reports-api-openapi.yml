@@ -123,7 +123,7 @@ components:
           type: string
           description: Path to the report.
       additionalProperties: false
-    RosterReportInfoModel:
+    SanctionsAndExclusionsReportInfoModel:
       type: object
       properties:
         date:
@@ -134,7 +134,7 @@ components:
           type: string
           description: Path to the report.
       additionalProperties: false
-    SanctionsAndExclusionsReportInfoModel:
+    RosterReportInfoModel:
       type: object
       properties:
         date:

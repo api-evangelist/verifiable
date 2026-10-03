@@ -233,6 +233,126 @@ paths:
       - Bearer: []
 components:
   schemas:
+    ProviderAddressModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located.
+        zipCode:
+          minLength: 1
+          type: string
+          description: The postal code associated with the address.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+        id:
+          type: string
+          description: Unique identifier for this address.
+          format: uuid
+      additionalProperties: false
+    ProviderAliasModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          type: string
+          description: The last (family) name of this alias.
+        id:
+          type: string
+          description: Unique identifier for this alias.
+          format: uuid
+      additionalProperties: false
+    ProviderTypeModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider type.
+          format: uuid
+        name:
+          type: string
+          description: Associated provider type name.
+      additionalProperties: false
     ProviderModel:
       required:
       - credentialingStatus
@@ -467,6 +587,89 @@ components:
           description: Timestamp when this provider was created.
           format: date-time
       additionalProperties: false
+    DismissRequestModel:
+      type: object
+      properties:
+        dismissalNote:
+          type: string
+          description: A note that explains why this alert was dismissed.
+      additionalProperties: false
+    AlertModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - LicenseChanged
+          - LicenseExpiresSoon
+          - LicenseExpired
+          - ProfileImportCompleted
+          type: string
+          description: The type of event that led to this alert.
+        providerId:
+          type: string
+          description: Identifier of the provider related to this alert.
+          format: uuid
+        provider:
+          $ref: '#/components/schemas/ProviderModel'
+        entityType:
+          enum:
+          - License
+          - Verification
+          - Alert
+          - NpiRecord
+          - Note
+          - BoardCertification
+          - BoardCertificationVerification
+          - DeaVerification
+          - DatasetScan
+          - DatasetRecord
+          - File
+          - ProfileImport
+          - NpdbVerificationRequest
+          type: string
+          description: If set, the type of the entity that `EntityId` refers to.
+        entityId:
+          type: string
+          description: Identifier of the related entity that's relevant to this alert type.
+          format: uuid
+        data:
+          $ref: '#/components/schemas/AlertData'
+        timestamp:
+          type: string
+          description: The date and time when this alert was triggered.
+          format: date-time
+        dismissalTimestamp:
+          type: string
+          description: The date and time when this alert was dismissed, if at all.
+          format: date-time
+        dismissalNote:
+          type: string
+          description: The note supplied as reason for dismissal, if and when this alert was dismissed.
+        id:
+          type: string
+          description: Unique identifier for this alert.
+          format: uuid
+      additionalProperties: false
+    AlertData:
+      type: object
+      properties:
+        messageTemplate:
+          type: string
+          description: An informative human readable message describing the action in the audit log entry.
+        messageParams:
+          type: object
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
+        data:
+          type: object
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+      additionalProperties: false
     TaxonomyGroupModel:
       type: object
       properties:
@@ -481,17 +684,6 @@ components:
       example:
         id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
         name: Allopathic & Osteopathic Physicians
-    ProviderTypeModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this provider type.
-          format: uuid
-        name:
-          type: string
-          description: Associated provider type name.
-      additionalProperties: false
     SegmentModel:
       type: object
       properties:
@@ -506,154 +698,6 @@ components:
       example:
         id: 3516a6ba-c998-4bfb-9017-322f8cf63674
         name: acme-corp
-    DismissRequestModel:
-      type: object
-      properties:
-        dismissalNote:
-          type: string
-          description: A note that explains why this alert was dismissed.
-      additionalProperties: false
-    ProviderAddressModel:
-      required:
-      - addressLine1
-      - city
-      - state
-      - zipCode
-      type: object
-      properties:
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: Abbreviation of the state in which the city is located.
-        zipCode:
-          minLength: 1
-          type: string
-          description: The postal code associated with the address.
-        city:
-          minLength: 1
-          type: string
-          description: The city in which the address is located.
-        addressLine1:
-          minLength: 1
-          type: string
-          description: The street address.
-        addressLine2:
-          type: string
-          description: The secondary address information.
-        type:
-          enum:
-          - Unspecified
-          - Home
-          - Work
-          type: string
-          description: The type of address.
-        id:
-          type: string
-          description: Unique identifier for this address.
-          format: uuid
-      additionalProperties: false
-    ProviderEmailModel:
-      type: object
-      properties:
-        email:
-          type: string
-          description: The email associated with the provider.
-        type:
-          enum:
-          - Unspecified
-          - Personal
-          - Work
-          type: string
-          description: The type of the email.
-        id:
-          type: string
-          description: Unique identifier for this specific email.
-          format: uuid
-      additionalProperties: false
-    AlertAggregationsModel:
-      type: object
-      properties:
-        active:
-          type: integer
-          description: The total number of active alerts.
-          format: int32
-        dismissed:
-          type: integer
-          description: The total number of dismissed alerts.
-          format: int32
-        licenseChanged:
-          type: integer
-          description: The total number of active `License Changed` alerts.
-          format: int32
-        licenseExpiresSoon:
-          type: integer
-          description: The total number of active `License Expires Soon` alerts.
-          format: int32
-        licenseExpired:
-          type: integer
-          description: The total number of active `License Expired` alerts.
-          format: int32
-        profileImportCompleted:
-          type: integer
-          description: The total number of active `Profile Import Completed` alerts.
-          format: int32
-      additionalProperties: false
     AlertPageModel:
       type: object
       properties:
@@ -738,94 +782,50 @@ components:
         sortDirection: Asc
         sort:
           Timestamp: Asc
-    AlertModel:
+    AlertAggregationsModel:
       type: object
       properties:
+        active:
+          type: integer
+          description: The total number of active alerts.
+          format: int32
+        dismissed:
+          type: integer
+          description: The total number of dismissed alerts.
+          format: int32
+        licenseChanged:
+          type: integer
+          description: The total number of active `License Changed` alerts.
+          format: int32
+        licenseExpiresSoon:
+          type: integer
+          description: The total number of active `License Expires Soon` alerts.
+          format: int32
+        licenseExpired:
+          type: integer
+          description: The total number of active `License Expired` alerts.
+          format: int32
+        profileImportCompleted:
+          type: integer
+          description: The total number of active `Profile Import Completed` alerts.
+          format: int32
+      additionalProperties: false
+    ProviderEmailModel:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email associated with the provider.
         type:
           enum:
-          - LicenseChanged
-          - LicenseExpiresSoon
-          - LicenseExpired
-          - ProfileImportCompleted
+          - Unspecified
+          - Personal
+          - Work
           type: string
-          description: The type of event that led to this alert.
-        providerId:
-          type: string
-          description: Identifier of the provider related to this alert.
-          format: uuid
-        provider:
-          $ref: '#/components/schemas/ProviderModel'
-        entityType:
-          enum:
-          - License
-          - Verification
-          - Alert
-          - NpiRecord
-          - Note
-          - BoardCertification
-          - BoardCertificationVerification
-          - DeaVerification
-          - DatasetScan
-          - DatasetRecord
-          - File
-          - ProfileImport
-          - NpdbVerificationRequest
-          type: string
-          description: If set, the type of the entity that `EntityId` refers to.
-        entityId:
-          type: string
-          description: Identifier of the related entity that's relevant to this alert type.
-          format: uuid
-        data:
-          $ref: '#/components/schemas/AlertData'
-        timestamp:
-          type: string
-          description: The date and time when this alert was triggered.
-          format: date-time
-        dismissalTimestamp:
-          type: string
-          description: The date and time when this alert was dismissed, if at all.
-          format: date-time
-        dismissalNote:
-          type: string
-          description: The note supplied as reason for dismissal, if and when this alert was dismissed.
+          description: The type of the email.
         id:
           type: string
-          description: Unique identifier for this alert.
-          format: uuid
-      additionalProperties: false
-    AlertData:
-      type: object
-      properties:
-        messageTemplate:
-          type: string
-          description: An informative human readable message describing the action in the audit log entry.
-        messageParams:
-          type: object
-          additionalProperties:
-            type:
-            - string
-            - 'null'
-          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
-        data:
-          type: object
-          additionalProperties:
-            type:
-            - string
-            - 'null'
-      additionalProperties: false
-    ProviderAliasModel:
-      type: object
-      properties:
-        firstName:
-          type: string
-          description: The first (given) name of this alias.
-        lastName:
-          type: string
-          description: The last (family) name of this alias.
-        id:
-          type: string
-          description: Unique identifier for this alias.
+          description: Unique identifier for this specific email.
           format: uuid
       additionalProperties: false
   securitySchemes:

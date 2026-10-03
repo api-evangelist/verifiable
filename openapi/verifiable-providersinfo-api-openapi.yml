@@ -2716,6 +2716,1629 @@ paths:
       - Bearer: []
 components:
   schemas:
+    ProviderSpecialtyModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the specialty was created or last modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this specialty.
+          format: uuid
+        type:
+          enum:
+          - Primary
+          - Secondary
+          - Additional
+          type: string
+          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed).
+        taxonomyId:
+          type: string
+          description: Identifier of the taxonomy associated with this specialty. The same taxonomy cannot be used across multiple specialties for the same provider.
+          format: uuid
+      additionalProperties: false
+    CertificateInfoPatchModel:
+      type: object
+      properties:
+        firstName:
+          type:
+          - string
+          - 'null'
+        lastName:
+          type:
+          - string
+          - 'null'
+        certificateNumber:
+          type:
+          - string
+          - 'null'
+        issueDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        certifyingOrganization:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    AdmittingPrivilegesModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Always `AdmittingPrivileges`.
+          readOnly: true
+        lastUpdatedAt:
+          type: string
+          description: The date and time the entry was last updated.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier of the hospital affiliation.
+          format: uuid
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting privilege status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        isPrimaryHospital:
+          type: boolean
+          description: Indicates whether this is the provider's primary hospital.
+        privilegeType:
+          enum:
+          - FullAndUnrestricted
+          - Temporary
+          - Limited
+          type: string
+          description: The type of admitting privilege.
+        department:
+          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
+        admissionPercent:
+          type: string
+          description: The percentage of admissions at this hospital.
+        admitsPerMonth:
+          type: string
+          description: The average number of admissions per month.
+        specialtyLimitationsAtInstitution:
+          type: string
+          description: Any specialty limitations at this institution.
+        privilegeRestrictionExplanation:
+          type: string
+          description: Explanation for any privilege restrictions.
+        timeSpentPercentAtThisFacility:
+          type: string
+          description: The percentage of time the provider spends at this facility.
+        admitClientsFromPracticeLocations:
+          type: string
+          description: The practice locations from which clients are admitted.
+        isMilitaryHospital:
+          type: boolean
+          description: Indicates whether this is a military hospital.
+        exitExplanation:
+          type: string
+          description: Explanation for exiting the affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Response model for an admitting privileges hospital affiliation.
+    TrainingModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this training
+          format: uuid
+        trainingType:
+          enum:
+          - Internship
+          - Residency
+          - Fellowship
+          - OtherTraining
+          - FacultyPositions
+          - Unspecified
+          type: string
+          description: The type of training pursued
+        institutionName:
+          type: string
+          description: Name of the institution where training occurred
+        schoolCode:
+          type: string
+          description: School code as defined by the National Student Clearinghouse Participation List
+        schoolName:
+          type: string
+          description: Affiliated Medical School Name
+        startDate:
+          type: string
+          description: Timestamp when this provider started the training program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished the training program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed the training program at this institution
+        speciality:
+          type: string
+          description: Designated Speciality of the training record
+        sponsoringState:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Sponsoring State of the training record
+      additionalProperties: false
+    MedicaidEnrollmentModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this Medicaid enrollment.
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: State of the Medicaid enrollment.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
+      additionalProperties: false
+    ProviderAliasRequestModel:
+      required:
+      - firstName
+      - lastName
+      type: object
+      properties:
+        firstName:
+          minLength: 1
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          minLength: 1
+          type: string
+          description: The last (family) name of this alias.
+      additionalProperties: false
+    HospitalAffiliationHospitalContactInfoModel:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: The hospital's phone number.
+        faxNumber:
+          type: string
+          description: The hospital's fax number.
+        emailAddress:
+          type: string
+          description: The hospital's email address.
+      additionalProperties: false
+      description: Contact information for a hospital associated with a provider's affiliation.
+    ProviderAddressRequestModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - type
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located.
+        zipCode:
+          minLength: 1
+          type: string
+          description: The postal code associated with the address.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+      additionalProperties: false
+    HospitalAffiliationModel:
+      oneOf:
+      - $ref: '#/components/schemas/AdmittingPrivilegesModel'
+      - $ref: '#/components/schemas/AdmittingArrangementsModel'
+      - $ref: '#/components/schemas/NonAdmittingAffiliationsModel'
+      discriminator:
+        propertyName: type
+        mapping:
+          AdmittingPrivileges: '#/components/schemas/AdmittingPrivilegesModel'
+          AdmittingArrangements: '#/components/schemas/AdmittingArrangementsModel'
+          NonAdmittingAffiliations: '#/components/schemas/NonAdmittingAffiliationsModel'
+    WorkHistoryRequestModel:
+      type: object
+      properties:
+        workHistoryType:
+          enum:
+          - Employment
+          - Gap
+          type: string
+          description: '`Gap` identifies a time period when this provider was not employed'
+        name:
+          type: string
+          description: Name or employer
+        jobTitle:
+          type: string
+          description: Job title while working for this employer
+        address:
+          $ref: '#/components/schemas/WorkHistoryAddressModel'
+        phone:
+          type: string
+          description: Employer phone number
+        startDate:
+          type: string
+          description: Timestamp when this provider started working for the employer
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished working for the employer
+          format: date-time
+        isCurrentEmployer:
+          type: boolean
+          description: Identifies if the provider is currently employed by the employer
+        departureReason:
+          type: string
+          description: Reason provider left this employer
+        gapExplanation:
+          type: string
+          description: If work history type is set to Gap provider must explain reason for the gap in employment
+      additionalProperties: false
+    NonVerifiedBoardCertificationInfoModel:
+      type: object
+      properties:
+        initialCertificationDate:
+          type: string
+          description: Initial certification date for this board certificate.
+          format: date-time
+        recertificationDate:
+          type: string
+          description: Last recertification date for this board certificate.
+          format: date-time
+        expirationDate:
+          type: string
+          description: Expiration date for this board certificate.
+          format: date-time
+      additionalProperties: false
+    CaqhLoginInfoModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        caqhId:
+          type: string
+          description: ' CAQH provider ID.'
+      additionalProperties: false
+    HospitalAffiliationRequestModel:
+      oneOf:
+      - $ref: '#/components/schemas/AdmittingPrivilegesRequestModel'
+      - $ref: '#/components/schemas/AdmittingArrangementsRequestModel'
+      - $ref: '#/components/schemas/NonAdmittingAffiliationsRequestModel'
+      description: The base request model for creating a hospital affiliation. Use one of the concrete types based on the `type` discriminator.
+      discriminator:
+        propertyName: type
+        mapping:
+          AdmittingPrivileges: '#/components/schemas/AdmittingPrivilegesRequestModel'
+          AdmittingArrangements: '#/components/schemas/AdmittingArrangementsRequestModel'
+          NonAdmittingAffiliations: '#/components/schemas/NonAdmittingAffiliationsRequestModel'
+    WorkHistoryPatchModel:
+      type: object
+      properties:
+        workHistoryType:
+          enum:
+          - Employment
+          - Gap
+          type: string
+          description: '`Gap` identifies a time period when this provider was not employed'
+        name:
+          type: string
+          description: Name or employer
+        jobTitle:
+          type: string
+          description: Job title while working for this employer
+        address:
+          $ref: '#/components/schemas/WorkHistoryAddressModel'
+        phone:
+          type: string
+          description: Employer phone number
+        startDate:
+          type: string
+          description: Timestamp when this provider started working for the employer
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished working for the employer
+          format: date-time
+        isCurrentEmployer:
+          type: boolean
+          description: Identifies if the provider is currently employed by the employer
+        departureReason:
+          type: string
+          description: Reason provider left this employer
+        gapExplanation:
+          type: string
+          description: If work history type is set to Gap provider must explain reason for the gap in employment
+      additionalProperties: false
+    ProviderSpecialtyPatchModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - Primary
+          - Secondary
+          - Additional
+          type: string
+          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed). When changing the type, validation ensures only one Primary and one Secondary specialty exists per provider.
+        taxonomyId:
+          type: string
+          description: Identifier of the taxonomy associated with this specialty. Must reference a valid taxonomy. The same taxonomy cannot be used across multiple specialties for the same provider.
+          format: uuid
+      additionalProperties: false
+    BoardCertificationInfoRequestModel:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          enum:
+          - AmericanBoardofMedicalSpecialties
+          - NationalBoardforCertifiedCounselors
+          - AmericanBoardofClinicalSocialWork
+          - AmericanSpeechLanguageHearingAssociation
+          - AmericanNursesCredentialingCenter
+          - AmericanAcademyofNursePractitioners
+          - AmericanOsteopathicAssociation
+          - AmericanMedicalAssociation
+          - NationalBoardofCertificationandRecertificationforNurseAnesthetists
+          - AmericanAssociationofCriticalCareNurses
+          - AmericanMidwiferyCertificationBoard
+          - AmericanBoardofPodiatricMedicine
+          - AmericanBoardofOralImplantology
+          - AmericanBoardofOralMedicine
+          - AmericanBoardofOrofacialPain
+          - NuclearMedicineTechnologyCertificationBoard
+          - AmericanDentalBoardofAnesthesiology
+          - AmericanBoardofDentalPublicHealth
+          - AmericanBoardofPediatricDentistry
+          - AmericanBoardofPeriodontology
+          - AmericanBoardofInternalMedicine
+          - NationalCommissiononCertificationofPhysicianAssistants
+          - AmericanBoardofAllergyandImmunology
+          - AmericanBoardofAnesthesiology
+          - AmericanBoardofColonandRectalSurgery
+          - AmericanBoardofDermatology
+          - AmericanBoardofEmergencyMedicine
+          - AmericanBoardofFamilyMedicine
+          - AmericanBoardofGeneticsandGenomics
+          - AmericanBoardofNeurologicalSurgery
+          - AmericanBoardofNuclearMedicine
+          - AmericanBoardofObstetricsandGynecology
+          - AmericanBoardofOphthalmology
+          - AmericanBoardofOptometry
+          - AmericanBoardofOrthopaedicSurgery
+          - AmericanBoardofOtolaryngologyHeadandNeckSurgery
+          - AmericanBoardofPathology
+          - AmericanBoardofPediatrics
+          - AmericanBoardofPhysicalMedicineandRehabilitation
+          - AmericanBoardofPlasticSurgery
+          - AmericanBoardofPreventiveMedicine
+          - AmericanBoardofProfessionalPsychology
+          - AmericanBoardofPsychiatryandNeurology
+          - AmericanBoardofRadiology
+          - AmericanBoardofSurgery
+          - AmericanBoardofThoracicSurgery
+          - AmericanBoardofUrology
+          - AmericanOptometricAssociation
+          - AssociationofSocialWorkBoards
+          - AmericanBoardofFootandAnkleSurgery
+          - AmericanBoardofOralandMaxillofacialPathology
+          - AmericanBoardofOralandMaxillofacialSurgery
+          - AmericanBoardofOrthodontics
+          - AmericanBoardofEndodontics
+          - AmericanBoardofProsthodontics
+          - NationalBoardforCertificationinOccupationalTherapy
+          - BehaviorAnalystCertificationBoard
+          - InternationalBoardofLactationConsultantExaminers
+          - CommissionOnDieteticRegistration
+          - NationalCertificationCommissionforAcupunctureandOrientalMedicine
+          - PediatricNursingCertification
+          - NationalCertificationCorporation
+          - OncologyNursingCertificationCorporation
+          - AmericanBoardOfCardiovascularMedicine
+          - AmericanAcademyOfHIVMedicine
+          - NationalBoardOfPhysiciansAndSurgeons
+          - BoardOfPharmacySpecialties
+          - AmericanBoardofOralandMaxillofacialRadiology
+          - AmericanBoardofGeneralDentistry
+          - NationalAssociationofSchoolPsychologists
+          - NationalPhlebotomyAssociation
+          - NationalCenterForCompetencyTesting
+          - AmericanRegistryofRadiologyTechnologists
+          - DentalAssistingNationalBoard
+          - AmericanMedicalCertificationAssociation
+          - AmericanBoardofAddictionMedicine
+          - AmericanRegistryForDiagnosticMedicalSonography
+          - AmericanBoardofMultipleSpecialtiesinPodiatry
+          - AmericanBoardOfObesityMedicine
+          - NationalCommissionForCertificationOfAnesthesiologistAssistants
+          - CardiovascularCredentialingInternational
+          - NationalBoardOfEchocardiography
+          - AmericanAlliedHealth
+          - AmericanMedicalTechnologists
+          - NationalAssociationForHealthProfessionals
+          - NationalHealthCareerAssociation
+          - NationalPhlebotomyCertificationExamination
+          - NationalAssociationOfPhlebotomyTechnicians
+          - NationalHealthcareCertificationOrganization
+          - NationalPerformanceSpecialists
+          - NationalRegistryOfAlliedHealthProfessionals
+          - NationalRegistryofEmergencyMedicalTechnicians
+          - BoardofCertificationforEmergencyNursing
+          - CertificationBoardforMusicTherapists
+          - AmericanBoardOfChiropracticInternists
+          - AmericanBoardOfPhysicalTherapySpecialties
+          - AmericanBoardofPhysicianSpecialties
+          - AmericanAcademyofOptometry
+          - PharmacyTechnicianCertificationBoard
+          - NationalBoardofSurgicalTechnologyandSurgicalAssisting
+          - AmericanBoardofPainMedicine
+          - ArtTherapyCredentialsBoard
+          - BehavioralInterventionCertificationCouncil
+          - AmericanOsteopathicBoardOfAnesthesiology
+          - AmericanOsteopathicBoardOfDermatology
+          - AmericanOsteopathicBoardOfEmergencyMedicine
+          - AmericanOsteopathicBoardOfFamilyPhysicians
+          - AmericanOsteopathicBoardOfInternalMedicine
+          - AmericanOsteopathicBoardOfNeurologyAndPsychiatry
+          - AmericanOsteopathicBoardOfNeuromusculoskeletalMedicine
+          - AmericanOsteopathicBoardOfNuclearMedicine
+          - AmericanOsteopathicBoardOfObstetricsAndGynecology
+          - AmericanOsteopathicBoardOfOphthalmologyAndOtolaryngology
+          - AmericanOsteopathicBoardOfOrthopedicSurgery
+          - AmericanOsteopathicBoardOfPathology
+          - AmericanOsteopathicBoardOfPediatrics
+          - AmericanOsteopathicBoardOfPhysicalMedicineAndRehabilitation
+          - AmericanOsteopathicBoardOfPreventiveMedicine
+          - AmericanOsteopathicBoardOfProctology
+          - AmericanOsteopathicBoardOfRadiology
+          - AmericanOsteopathicBoardOfSurgery
+          type: string
+          description: Board certification type.
+        firstName:
+          type: string
+          description: Provider first name mentioned on the board certification. This field will be used for board certification lookup.
+        lastName:
+          type: string
+          description: Provider last name mentioned on the board certification. This field will be used for board certification lookup.
+        isPrimary:
+          type: boolean
+          description: If the flag is set, certification will be set as primary for the provider.
+        boardCertificationNumber:
+          type: string
+          description: A unique Id provided by certification board to the provider. This will be used for board certification lookup.
+        specialty:
+          type: string
+        taxonomyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of NUCC taxonomy IDs to associate with this board certification. Each ID must reference a valid taxonomy id. Must be unique. Optional - can be null or empty array.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/NonVerifiedBoardCertificationInfoModel'
+      additionalProperties: false
+    HospitalAffiliationNonAdmittingAffiliationsPatchModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `NonAdmittingAffiliations`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's non-admitting affiliation status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        description:
+          type: string
+          description: Description of the non-admitting affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: 'The reason the affiliation was discontinued. Allowed values: `VoluntaryResignation`, `Suspension`, `TerminationWithCause`, `HospitalClosed`.'
+      additionalProperties: false
+      description: Patch model for updating a non-admitting hospital affiliation.
+    NonAdmittingAffiliationsRequestModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `NonAdmittingAffiliations`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's non-admitting affiliation status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        description:
+          type: string
+          description: Description of the non-admitting affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Request model for creating a non-admitting hospital affiliation.
+    TrainingPatchModel:
+      type: object
+      properties:
+        trainingType:
+          enum:
+          - Internship
+          - Residency
+          - Fellowship
+          - OtherTraining
+          - FacultyPositions
+          - Unspecified
+          type: string
+          description: The type of training pursued
+        institutionName:
+          type: string
+          description: Name of the institution where training occurred
+        schoolCode:
+          type: string
+          description: School code as defined by the National Student Clearinghouse Participation List
+        schoolName:
+          type: string
+          description: Affiliated Medical School Name
+        startDate:
+          type: string
+          description: Timestamp when this provider started the training program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished the training program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed the training program at this institution
+        speciality:
+          type: string
+          description: Designated Speciality of the training record
+        sponsoringState:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Sponsoring State of the training record
+      additionalProperties: false
+    EducationRequestModel:
+      type: object
+      properties:
+        ecfmgNumber:
+          type: string
+          description: Educational Commission for Foreign Medical Graduates number
+        ecfmgIssueDate:
+          type: string
+          description: Timestamp when the certificate was issued
+          format: date-time
+        graduateType:
+          enum:
+          - Undergraduate
+          - Professional
+          - FifthPathway
+          type: string
+          description: Degree program type
+        schoolName:
+          type: string
+          description: Name of school
+        schoolCode:
+          type: string
+          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
+        branchCode:
+          type: string
+          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
+        startDate:
+          type: string
+          description: Timestamp when this provider started their degree program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished their degree program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed their graduate education at this school
+        degree:
+          type: string
+          description: Degree awarded
+      additionalProperties: false
+    LiabilityInsuranceRequestModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of insurance
+        isSelfInsured:
+          type: boolean
+          description: Indicates whether the provider is self insured
+        originalEffectiveDate:
+          type: string
+          description: Timestamp of when the initial insurance coverage became effective
+          format: date-time
+        currentEffectiveDate:
+          type: string
+          description: Timestamp of when the current insurance coverage became effective
+          format: date-time
+        currentExpirationDate:
+          type: string
+          description: Timestamp of when the current insurance expires
+          format: date-time
+        coverageType:
+          enum:
+          - Individual
+          - Shared
+          - Occurrence
+          - ClaimsMade
+          type: string
+          description: 'Insurance type of coverage. Default: `Individual`'
+        isUnlimitedCoverage:
+          type: boolean
+          description: Does this insurance have unlimited coverage?
+        includesTailCoverage:
+          type: boolean
+          description: Indicates tail coverage status
+        occurrenceCoverageAmount:
+          type: number
+          description: Amount of coverage provided by this insurance per occurrence
+          format: double
+        aggregateCoverageAmount:
+          type: number
+          description: Amount of aggregated coverage provided by this insurance
+          format: double
+        policyNumber:
+          type: string
+          description: Insurance policy number
+      additionalProperties: false
+    EducationPatchModel:
+      type: object
+      properties:
+        ecfmgNumber:
+          type: string
+          description: Educational Commission for Foreign Medical Graduates number
+        ecfmgIssueDate:
+          type: string
+          description: Timestamp when the certificate was issued
+          format: date-time
+        graduateType:
+          enum:
+          - Undergraduate
+          - Professional
+          - FifthPathway
+          type: string
+          description: Degree program type
+        schoolName:
+          type: string
+          description: Name of school
+        schoolCode:
+          type: string
+          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
+        branchCode:
+          type: string
+          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
+        startDate:
+          type: string
+          description: Timestamp when this provider started their degree program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished their degree program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed their graduate education at this school
+        degree:
+          type: string
+          description: Degree awarded
+      additionalProperties: false
+    HospitalAffiliationAdmittingPrivilegesPatchModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `AdmittingPrivileges`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting privilege status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        isPrimaryHospital:
+          type: boolean
+          description: Indicates whether this is the provider's primary hospital.
+        privilegeType:
+          enum:
+          - FullAndUnrestricted
+          - Temporary
+          - Limited
+          type: string
+          description: The type of admitting privilege.
+        department:
+          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
+        admissionPercent:
+          type: string
+          description: The percentage of admissions at this hospital.
+        admitsPerMonth:
+          type: string
+          description: The average number of admissions per month.
+        specialtyLimitationsAtInstitution:
+          type: string
+          description: Any specialty limitations at this institution.
+        privilegeRestrictionExplanation:
+          type: string
+          description: Explanation for any privilege restrictions.
+        timeSpentPercentAtThisFacility:
+          type: string
+          description: The percentage of time the provider spends at this facility.
+        admitClientsFromPracticeLocations:
+          type: string
+          description: The practice locations from which clients are admitted.
+        isMilitaryHospital:
+          type: boolean
+          description: Indicates whether this is a military hospital.
+        exitExplanation:
+          type: string
+          description: Explanation for exiting the affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Patch model for updating an admitting privileges hospital affiliation.
+    HospitalAffiliationAdmittingArrangementsContactModel:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: The contact's phone number.
+        emailAddress:
+          type: string
+          description: The contact's email address.
+      additionalProperties: false
+      description: Contact information for the provider or organization managing admitting arrangements.
+    LiabilityInsuranceModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this insurance
+          format: uuid
+        name:
+          type: string
+          description: Name of insurance
+        isSelfInsured:
+          type: boolean
+          description: Indicates whether the provider is self insured
+        originalEffectiveDate:
+          type: string
+          description: Timestamp of when the initial insurance coverage became effective
+          format: date-time
+        currentEffectiveDate:
+          type: string
+          description: Timestamp of when the current insurance coverage became effective
+          format: date-time
+        currentExpirationDate:
+          type: string
+          description: Timestamp of when the current insurance expires
+          format: date-time
+        coverageType:
+          enum:
+          - Individual
+          - Shared
+          - Occurrence
+          - ClaimsMade
+          type: string
+          description: 'Insurance type of coverage. Default: `Individual`'
+        isUnlimitedCoverage:
+          type: boolean
+          description: Does this insurance have unlimited coverage?
+        includesTailCoverage:
+          type: boolean
+          description: Indicates tail coverage status
+        occurrenceCoverageAmount:
+          type: number
+          description: Amount of coverage provided by this insurance per occurrence
+          format: double
+        aggregateCoverageAmount:
+          type: number
+          description: Amount of aggregated coverage provided by this insurance
+          format: double
+        policyNumber:
+          type: string
+          description: Insurance policy number
+      additionalProperties: false
+    MedicaidEnrollmentNonVerifiedInfoModel:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The effective date of this Medicaid enrollment.
+          format: date-time
+        providerType:
+          type: string
+          description: The type of provider of this Medicaid enrollment.
+        providerSpecialty:
+          type: string
+          description: Provider specialty associated with the Medicaid enrollment.
+        address:
+          type: string
+          description: Provider address.
+        inState:
+          type: boolean
+      additionalProperties: false
+    AdmittingArrangementsRequestModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `AdmittingArrangements`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting arrangement status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        whoAdmitsForYou:
+          enum:
+          - AProviderInMyPractice
+          - AProviderNotInMyPractice
+          - AHospitalistGroup
+          - Other
+          type: string
+          description: Indicates who admits patients on behalf of the provider.
+        admittingProvider:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
+        admittingOrganization:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
+        department:
+          type: string
+          description: The department associated with the admitting arrangement.
+        details:
+          type: string
+          description: Additional details about the admitting arrangement.
+      additionalProperties: false
+      description: Request model for creating an admitting arrangements hospital affiliation.
+    LiabilityInsurancePatchModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of insurance
+        isSelfInsured:
+          type: boolean
+          description: Indicates whether the provider is self insured
+        originalEffectiveDate:
+          type: string
+          description: Timestamp of when the initial insurance coverage became effective
+          format: date-time
+        currentEffectiveDate:
+          type: string
+          description: Timestamp of when the current insurance coverage became effective
+          format: date-time
+        currentExpirationDate:
+          type: string
+          description: Timestamp of when the current insurance expires
+          format: date-time
+        coverageType:
+          enum:
+          - Individual
+          - Shared
+          - Occurrence
+          - ClaimsMade
+          type: string
+          description: 'Insurance type of coverage. Default: `Individual`'
+        isUnlimitedCoverage:
+          type: boolean
+          description: Does this insurance have unlimited coverage?
+        includesTailCoverage:
+          type: boolean
+          description: Indicates tail coverage status
+        occurrenceCoverageAmount:
+          type: number
+          description: Amount of coverage provided by this insurance per occurrence
+          format: double
+        aggregateCoverageAmount:
+          type: number
+          description: Amount of aggregated coverage provided by this insurance
+          format: double
+        policyNumber:
+          type: string
+          description: Insurance policy number
+      additionalProperties: false
+    AdmittingPrivilegesRequestModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `AdmittingPrivileges`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting privilege status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        isPrimaryHospital:
+          type: boolean
+          description: Indicates whether this is the provider's primary hospital.
+        privilegeType:
+          enum:
+          - FullAndUnrestricted
+          - Temporary
+          - Limited
+          type: string
+          description: The type of admitting privilege.
+        department:
+          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
+        admissionPercent:
+          type: string
+          description: The percentage of admissions at this hospital.
+        admitsPerMonth:
+          type: string
+          description: The average number of admissions per month.
+        specialtyLimitationsAtInstitution:
+          type: string
+          description: Any specialty limitations at this institution.
+        privilegeRestrictionExplanation:
+          type: string
+          description: Explanation for any privilege restrictions.
+        timeSpentPercentAtThisFacility:
+          type: string
+          description: The percentage of time the provider spends at this facility.
+        admitClientsFromPracticeLocations:
+          type: string
+          description: The practice locations from which clients are admitted.
+        isMilitaryHospital:
+          type: boolean
+          description: Indicates whether this is a military hospital.
+        exitExplanation:
+          type: string
+          description: Explanation for exiting the affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Request model for creating an admitting privileges hospital affiliation.
+    ProviderEmailRequestModel:
+      required:
+      - email
+      - type
+      type: object
+      properties:
+        email:
+          minLength: 1
+          type: string
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
+          type: string
+          description: The type of the email.
+      additionalProperties: false
+    AdmittingArrangementsModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Always `AdmittingArrangements`.
+          readOnly: true
+        lastUpdatedAt:
+          type: string
+          description: The date and time the entry was last updated.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier of the hospital affiliation.
+          format: uuid
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting arrangement status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        whoAdmitsForYou:
+          enum:
+          - AProviderInMyPractice
+          - AProviderNotInMyPractice
+          - AHospitalistGroup
+          - Other
+          type: string
+          description: Indicates who admits patients on behalf of the provider.
+        admittingProvider:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
+        admittingOrganization:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
+        department:
+          type: string
+          description: The department associated with the admitting arrangement.
+        details:
+          type: string
+          description: Additional details about the admitting arrangement.
+      additionalProperties: false
+      description: Response model for an admitting arrangements hospital affiliation.
+    DeaRegistrationInfoPatchModel:
+      required:
+      - registrationNumber
+      type: object
+      properties:
+        registrationNumber:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    ProviderEmailModel:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
+          type: string
+          description: The type of the email.
+        id:
+          type: string
+          description: Unique identifier for this specific email.
+          format: uuid
+      additionalProperties: false
+    NonAdmittingAffiliationsModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Always `NonAdmittingAffiliations`.
+          readOnly: true
+        lastUpdatedAt:
+          type: string
+          description: The date and time the entry was last updated.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier of the hospital affiliation.
+          format: uuid
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's non-admitting affiliation status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        description:
+          type: string
+          description: Description of the non-admitting affiliation.
+        discontinuanceReason:
+          enum:
+          - VoluntaryResignation
+          - Suspension
+          - TerminationWithCause
+          - HospitalClosed
+          type: string
+          description: The reason the affiliation was discontinued.
+      additionalProperties: false
+      description: Response model for a non-admitting hospital affiliation.
+    ProviderAddressModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located.
+        zipCode:
+          minLength: 1
+          type: string
+          description: The postal code associated with the address.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+        id:
+          type: string
+          description: Unique identifier for this address.
+          format: uuid
+      additionalProperties: false
+    DeaRegistrationInfoModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid
+        registrationNumber:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     CertificateInfoRequestModel:
       required:
       - certificateNumber
@@ -2760,6 +4383,429 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    MedicaidEnrollmentPatchModel:
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type:
+          - string
+          - 'null'
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
+      additionalProperties: false
+    DeaRegistrationInfoRequestModel:
+      required:
+      - registrationNumber
+      type: object
+      properties:
+        registrationNumber:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    CertificateInfoModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid
+        type:
+          enum:
+          - AhaBasicLifeSupport
+          - AhaAdvancedCardiacLifeSupport
+          - AhaNeonatalAdvancedLifeSupport
+          - AhaPediatricAdvancedLifeSupport
+          - CaliforniaCertifiedWellnessCoach
+          - AhaAdvancedCardiovascularLifeSupport
+          - AhaAdvancedStrokeLifeSupport
+          - AhaPears
+          - AhaHeartsaver
+          type: string
+        firstName:
+          type:
+          - string
+          - 'null'
+        lastName:
+          type:
+          - string
+          - 'null'
+        certificateNumber:
+          type:
+          - string
+          - 'null'
+        issueDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        certifyingOrganization:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    MedicaidEnrollmentRequestModel:
+      required:
+      - state
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: State of the Medicaid enrollment.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
+      additionalProperties: false
+    BoardCertificationInfoPatchModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Provider first name mentioned on the board certification. This field will be used for board certification lookup.
+        lastName:
+          type: string
+          description: Provider last name mentioned on the board certification. This field will be used for board certification lookup.
+        isPrimary:
+          type: boolean
+          description: If the flag is set, certification will be set as primary for the provider.
+        boardCertificationNumber:
+          type: string
+          description: A unique Id provided by certification board to the provider. This will be used for board certification lookup.
+        specialty:
+          type: string
+        taxonomyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Array of NUCC taxonomy IDs to associate with this board certification. Each ID must reference a valid taxonomy id. Must be unique. Set to empty array to remove all taxonomies. Set to null to leave unchanged.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/NonVerifiedBoardCertificationInfoModel'
+      additionalProperties: false
+    HospitalAffiliationAdmittingPrivilegeDepartmentContactModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The contact's first name.
+        middleInitial:
+          type: string
+          description: The contact's middle initial.
+        lastName:
+          type: string
+          description: The contact's last name.
+        phone:
+          type: string
+          description: The contact's phone number.
+        email:
+          type: string
+          description: The contact's email address.
+        fax:
+          type: string
+          description: The contact's fax number.
+      additionalProperties: false
+      description: Contact information for a department associated with an admitting privileges affiliation.
+    ProviderAliasModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          type: string
+          description: The last (family) name of this alias.
+        id:
+          type: string
+          description: Unique identifier for this alias.
+          format: uuid
+      additionalProperties: false
+    EducationModel:
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the object was created or modified.
+          format: date-time
+        id:
+          type: string
+          description: Unique identifier associated with this education
+          format: uuid
+        ecfmgNumber:
+          type: string
+          description: Educational Commission for Foreign Medical Graduates number
+        ecfmgIssueDate:
+          type: string
+          description: Timestamp when the certificate was issued
+          format: date-time
+        graduateType:
+          enum:
+          - Undergraduate
+          - Professional
+          - FifthPathway
+          type: string
+          description: Degree program type
+        schoolName:
+          type: string
+          description: Name of school
+        schoolCode:
+          type: string
+          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
+        branchCode:
+          type: string
+          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
+        startDate:
+          type: string
+          description: Timestamp when this provider started their degree program
+          format: date-time
+        endDate:
+          type: string
+          description: Timestamp when this provider finished their degree program
+          format: date-time
+        completed:
+          type: boolean
+          description: Identifies if this provider completed their graduate education at this school
+        degree:
+          type: string
+          description: Degree awarded
+      additionalProperties: false
+    HospitalAffiliationAddressModel:
+      required:
+      - addressLine1
+      - city
+      type: object
+      properties:
+        addressLine1:
+          minLength: 1
+          type: string
+          description: Primary street address.
+        addressLine2:
+          type: string
+          description: Secondary address information
+        city:
+          minLength: 1
+          type: string
+          description: City.
+        state:
+          type: string
+          description: State or province.
+        zipCode:
+          type: string
+          description: ZIP or postal code.
+        country:
+          type: string
+          description: Country.
+      additionalProperties: false
+      description: Physical address of a hospital associated with a provider's affiliation.
+    HospitalAffiliationAdmittingOrganizationModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the admitting organization.
+        npi:
+          type: integer
+          description: The National Provider Identifier (NPI) of the admitting organization.
+          format: int64
+      additionalProperties: false
+      description: Information about the organization that admits patients on behalf of the provider.
+    HospitalAffiliationHospitalInfoModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the hospital.
+        address:
+          $ref: '#/components/schemas/HospitalAffiliationAddressModel'
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalContactInfoModel'
+      additionalProperties: false
+      description: Information about the hospital associated with a provider's affiliation.
+    ProviderSpecialtyRequestModel:
+      required:
+      - taxonomyId
+      - type
+      type: object
+      properties:
+        type:
+          enum:
+          - Primary
+          - Secondary
+          - Additional
+          type: string
+          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed).
+        taxonomyId:
+          type: string
+          description: Identifier of the taxonomy associated with this specialty. Must reference a valid taxonomy. The same taxonomy cannot be used across multiple specialties for the same provider.
+          format: uuid
+      additionalProperties: false
+    HospitalAffiliationAdmittingArrangementsPatchModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - AdmittingPrivileges
+          - AdmittingArrangements
+          - NonAdmittingAffiliations
+          type: string
+          description: The type of hospital affiliation. Must be `AdmittingArrangements`.
+        hospital:
+          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
+        status:
+          enum:
+          - Active
+          - Inactive
+          - Pending
+          type: string
+          description: Provider's admitting arrangement status.
+        startDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital began.
+          format: date
+        endDate:
+          type: string
+          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
+          format: date
+        whoAdmitsForYou:
+          enum:
+          - AProviderInMyPractice
+          - AProviderNotInMyPractice
+          - AHospitalistGroup
+          - Other
+          type: string
+          description: Indicates who admits patients on behalf of the provider.
+        admittingProvider:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
+        admittingOrganization:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
+        contact:
+          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
+        department:
+          type: string
+          description: The department associated with the admitting arrangement.
+        details:
+          type: string
+          description: Additional details about the admitting arrangement.
+      additionalProperties: false
+      description: Patch model for updating an admitting arrangements hospital affiliation.
     BoardCertificationInfoModel:
       type: object
       properties:
@@ -2919,726 +4965,6 @@ components:
           type: boolean
           description: If the flag is set, certification will be set as primary for the provider.
       additionalProperties: false
-    DeaRegistrationInfoRequestModel:
-      required:
-      - registrationNumber
-      type: object
-      properties:
-        registrationNumber:
-          minLength: 1
-          type: string
-      additionalProperties: false
-    HospitalAffiliationHospitalContactInfoModel:
-      type: object
-      properties:
-        phoneNumber:
-          type: string
-          description: The hospital's phone number.
-        faxNumber:
-          type: string
-          description: The hospital's fax number.
-        emailAddress:
-          type: string
-          description: The hospital's email address.
-      additionalProperties: false
-      description: Contact information for a hospital associated with a provider's affiliation.
-    ProviderAddressRequestModel:
-      required:
-      - addressLine1
-      - city
-      - state
-      - type
-      - zipCode
-      type: object
-      properties:
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: Abbreviation of the state in which the city is located.
-        zipCode:
-          minLength: 1
-          type: string
-          description: The postal code associated with the address.
-        city:
-          minLength: 1
-          type: string
-          description: The city in which the address is located.
-        addressLine1:
-          minLength: 1
-          type: string
-          description: The street address.
-        addressLine2:
-          type: string
-          description: The secondary address information.
-        type:
-          enum:
-          - Unspecified
-          - Home
-          - Work
-          type: string
-          description: The type of address.
-      additionalProperties: false
-    NonAdmittingAffiliationsModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Always `NonAdmittingAffiliations`.
-          readOnly: true
-        lastUpdatedAt:
-          type: string
-          description: The date and time the entry was last updated.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier of the hospital affiliation.
-          format: uuid
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's non-admitting affiliation status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        description:
-          type: string
-          description: Description of the non-admitting affiliation.
-        discontinuanceReason:
-          enum:
-          - VoluntaryResignation
-          - Suspension
-          - TerminationWithCause
-          - HospitalClosed
-          type: string
-          description: The reason the affiliation was discontinued.
-      additionalProperties: false
-      description: Response model for a non-admitting hospital affiliation.
-    ProviderSpecialtyModel:
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the specialty was created or last modified.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier associated with this specialty.
-          format: uuid
-        type:
-          enum:
-          - Primary
-          - Secondary
-          - Additional
-          type: string
-          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed).
-        taxonomyId:
-          type: string
-          description: Identifier of the taxonomy associated with this specialty. The same taxonomy cannot be used across multiple specialties for the same provider.
-          format: uuid
-      additionalProperties: false
-    HospitalAffiliationAdmittingOrganizationModel:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the admitting organization.
-        npi:
-          type: integer
-          description: The National Provider Identifier (NPI) of the admitting organization.
-          format: int64
-      additionalProperties: false
-      description: Information about the organization that admits patients on behalf of the provider.
-    LiabilityInsurancePatchModel:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of insurance
-        isSelfInsured:
-          type: boolean
-          description: Indicates whether the provider is self insured
-        originalEffectiveDate:
-          type: string
-          description: Timestamp of when the initial insurance coverage became effective
-          format: date-time
-        currentEffectiveDate:
-          type: string
-          description: Timestamp of when the current insurance coverage became effective
-          format: date-time
-        currentExpirationDate:
-          type: string
-          description: Timestamp of when the current insurance expires
-          format: date-time
-        coverageType:
-          enum:
-          - Individual
-          - Shared
-          - Occurrence
-          - ClaimsMade
-          type: string
-          description: 'Insurance type of coverage. Default: `Individual`'
-        isUnlimitedCoverage:
-          type: boolean
-          description: Does this insurance have unlimited coverage?
-        includesTailCoverage:
-          type: boolean
-          description: Indicates tail coverage status
-        occurrenceCoverageAmount:
-          type: number
-          description: Amount of coverage provided by this insurance per occurrence
-          format: double
-        aggregateCoverageAmount:
-          type: number
-          description: Amount of aggregated coverage provided by this insurance
-          format: double
-        policyNumber:
-          type: string
-          description: Insurance policy number
-      additionalProperties: false
-    AdmittingPrivilegesRequestModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Must be `AdmittingPrivileges`.
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's admitting privilege status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        isPrimaryHospital:
-          type: boolean
-          description: Indicates whether this is the provider's primary hospital.
-        privilegeType:
-          enum:
-          - FullAndUnrestricted
-          - Temporary
-          - Limited
-          type: string
-          description: The type of admitting privilege.
-        department:
-          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
-        admissionPercent:
-          type: string
-          description: The percentage of admissions at this hospital.
-        admitsPerMonth:
-          type: string
-          description: The average number of admissions per month.
-        specialtyLimitationsAtInstitution:
-          type: string
-          description: Any specialty limitations at this institution.
-        privilegeRestrictionExplanation:
-          type: string
-          description: Explanation for any privilege restrictions.
-        timeSpentPercentAtThisFacility:
-          type: string
-          description: The percentage of time the provider spends at this facility.
-        admitClientsFromPracticeLocations:
-          type: string
-          description: The practice locations from which clients are admitted.
-        isMilitaryHospital:
-          type: boolean
-          description: Indicates whether this is a military hospital.
-        exitExplanation:
-          type: string
-          description: Explanation for exiting the affiliation.
-        discontinuanceReason:
-          enum:
-          - VoluntaryResignation
-          - Suspension
-          - TerminationWithCause
-          - HospitalClosed
-          type: string
-          description: The reason the affiliation was discontinued.
-      additionalProperties: false
-      description: Request model for creating an admitting privileges hospital affiliation.
-    EducationPatchModel:
-      type: object
-      properties:
-        ecfmgNumber:
-          type: string
-          description: Educational Commission for Foreign Medical Graduates number
-        ecfmgIssueDate:
-          type: string
-          description: Timestamp when the certificate was issued
-          format: date-time
-        graduateType:
-          enum:
-          - Undergraduate
-          - Professional
-          - FifthPathway
-          type: string
-          description: Degree program type
-        schoolName:
-          type: string
-          description: Name of school
-        schoolCode:
-          type: string
-          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
-        branchCode:
-          type: string
-          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
-        startDate:
-          type: string
-          description: Timestamp when this provider started their degree program
-          format: date-time
-        endDate:
-          type: string
-          description: Timestamp when this provider finished their degree program
-          format: date-time
-        completed:
-          type: boolean
-          description: Identifies if this provider completed their graduate education at this school
-        degree:
-          type: string
-          description: Degree awarded
-      additionalProperties: false
-    HospitalAffiliationNonAdmittingAffiliationsPatchModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Must be `NonAdmittingAffiliations`.
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's non-admitting affiliation status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        description:
-          type: string
-          description: Description of the non-admitting affiliation.
-        discontinuanceReason:
-          enum:
-          - VoluntaryResignation
-          - Suspension
-          - TerminationWithCause
-          - HospitalClosed
-          type: string
-          description: 'The reason the affiliation was discontinued. Allowed values: `VoluntaryResignation`, `Suspension`, `TerminationWithCause`, `HospitalClosed`.'
-      additionalProperties: false
-      description: Patch model for updating a non-admitting hospital affiliation.
-    HospitalAffiliationPatchModel:
-      oneOf:
-      - $ref: '#/components/schemas/HospitalAffiliationAdmittingPrivilegesPatchModel'
-      - $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsPatchModel'
-      - $ref: '#/components/schemas/HospitalAffiliationNonAdmittingAffiliationsPatchModel'
-      description: The base patch model for updating a hospital affiliation. Use one of the concrete types based on the `type` discriminator.
-      discriminator:
-        propertyName: type
-        mapping:
-          AdmittingPrivileges: '#/components/schemas/HospitalAffiliationAdmittingPrivilegesPatchModel'
-          AdmittingArrangements: '#/components/schemas/HospitalAffiliationAdmittingArrangementsPatchModel'
-          NonAdmittingAffiliations: '#/components/schemas/HospitalAffiliationNonAdmittingAffiliationsPatchModel'
-    TrainingModel:
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the object was created or modified.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier associated with this training
-          format: uuid
-        trainingType:
-          enum:
-          - Internship
-          - Residency
-          - Fellowship
-          - OtherTraining
-          - FacultyPositions
-          - Unspecified
-          type: string
-          description: The type of training pursued
-        institutionName:
-          type: string
-          description: Name of the institution where training occurred
-        schoolCode:
-          type: string
-          description: School code as defined by the National Student Clearinghouse Participation List
-        schoolName:
-          type: string
-          description: Affiliated Medical School Name
-        startDate:
-          type: string
-          description: Timestamp when this provider started the training program
-          format: date-time
-        endDate:
-          type: string
-          description: Timestamp when this provider finished the training program
-          format: date-time
-        completed:
-          type: boolean
-          description: Identifies if this provider completed the training program at this institution
-        speciality:
-          type: string
-          description: Designated Speciality of the training record
-        sponsoringState:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: Sponsoring State of the training record
-      additionalProperties: false
-    LiabilityInsuranceModel:
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the object was created or modified.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier associated with this insurance
-          format: uuid
-        name:
-          type: string
-          description: Name of insurance
-        isSelfInsured:
-          type: boolean
-          description: Indicates whether the provider is self insured
-        originalEffectiveDate:
-          type: string
-          description: Timestamp of when the initial insurance coverage became effective
-          format: date-time
-        currentEffectiveDate:
-          type: string
-          description: Timestamp of when the current insurance coverage became effective
-          format: date-time
-        currentExpirationDate:
-          type: string
-          description: Timestamp of when the current insurance expires
-          format: date-time
-        coverageType:
-          enum:
-          - Individual
-          - Shared
-          - Occurrence
-          - ClaimsMade
-          type: string
-          description: 'Insurance type of coverage. Default: `Individual`'
-        isUnlimitedCoverage:
-          type: boolean
-          description: Does this insurance have unlimited coverage?
-        includesTailCoverage:
-          type: boolean
-          description: Indicates tail coverage status
-        occurrenceCoverageAmount:
-          type: number
-          description: Amount of coverage provided by this insurance per occurrence
-          format: double
-        aggregateCoverageAmount:
-          type: number
-          description: Amount of aggregated coverage provided by this insurance
-          format: double
-        policyNumber:
-          type: string
-          description: Insurance policy number
-      additionalProperties: false
-    MedicaidEnrollmentNonVerifiedInfoModel:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The effective date of this Medicaid enrollment.
-          format: date-time
-        providerType:
-          type: string
-          description: The type of provider of this Medicaid enrollment.
-        providerSpecialty:
-          type: string
-          description: Provider specialty associated with the Medicaid enrollment.
-        address:
-          type: string
-          description: Provider address.
-        inState:
-          type: boolean
-      additionalProperties: false
-    NonVerifiedBoardCertificationInfoModel:
-      type: object
-      properties:
-        initialCertificationDate:
-          type: string
-          description: Initial certification date for this board certificate.
-          format: date-time
-        recertificationDate:
-          type: string
-          description: Last recertification date for this board certificate.
-          format: date-time
-        expirationDate:
-          type: string
-          description: Expiration date for this board certificate.
-          format: date-time
-      additionalProperties: false
-    HospitalAffiliationAddressModel:
-      required:
-      - addressLine1
-      - city
-      type: object
-      properties:
-        addressLine1:
-          minLength: 1
-          type: string
-          description: Primary street address.
-        addressLine2:
-          type: string
-          description: Secondary address information
-        city:
-          minLength: 1
-          type: string
-          description: City.
-        state:
-          type: string
-          description: State or province.
-        zipCode:
-          type: string
-          description: ZIP or postal code.
-        country:
-          type: string
-          description: Country.
-      additionalProperties: false
-      description: Physical address of a hospital associated with a provider's affiliation.
-    MedicaidEnrollmentPatchModel:
-      type: object
-      properties:
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type:
-          - string
-          - 'null'
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
-      additionalProperties: false
-    ProviderEmailModel:
-      type: object
-      properties:
-        email:
-          type: string
-          description: The email associated with the provider.
-        type:
-          enum:
-          - Unspecified
-          - Personal
-          - Work
-          type: string
-          description: The type of the email.
-        id:
-          type: string
-          description: Unique identifier for this specific email.
-          format: uuid
-      additionalProperties: false
     HospitalAffiliationDepartmentModel:
       type: object
       properties:
@@ -3649,390 +4975,17 @@ components:
           $ref: '#/components/schemas/HospitalAffiliationAdmittingPrivilegeDepartmentContactModel'
       additionalProperties: false
       description: Department information associated with an admitting privileges affiliation.
-    NonAdmittingAffiliationsRequestModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Must be `NonAdmittingAffiliations`.
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's non-admitting affiliation status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        description:
-          type: string
-          description: Description of the non-admitting affiliation.
-        discontinuanceReason:
-          enum:
-          - VoluntaryResignation
-          - Suspension
-          - TerminationWithCause
-          - HospitalClosed
-          type: string
-          description: The reason the affiliation was discontinued.
-      additionalProperties: false
-      description: Request model for creating a non-admitting hospital affiliation.
-    EducationRequestModel:
-      type: object
-      properties:
-        ecfmgNumber:
-          type: string
-          description: Educational Commission for Foreign Medical Graduates number
-        ecfmgIssueDate:
-          type: string
-          description: Timestamp when the certificate was issued
-          format: date-time
-        graduateType:
-          enum:
-          - Undergraduate
-          - Professional
-          - FifthPathway
-          type: string
-          description: Degree program type
-        schoolName:
-          type: string
-          description: Name of school
-        schoolCode:
-          type: string
-          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
-        branchCode:
-          type: string
-          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
-        startDate:
-          type: string
-          description: Timestamp when this provider started their degree program
-          format: date-time
-        endDate:
-          type: string
-          description: Timestamp when this provider finished their degree program
-          format: date-time
-        completed:
-          type: boolean
-          description: Identifies if this provider completed their graduate education at this school
-        degree:
-          type: string
-          description: Degree awarded
-      additionalProperties: false
-    DeaRegistrationInfoModel:
+    WorkHistoryModel:
       type: object
       properties:
         lastUpdatedAt:
           type: string
+          description: The date and time when the object was created or modified.
           format: date-time
         id:
           type: string
+          description: Unique identifier associated with this work history entry
           format: uuid
-        registrationNumber:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    AdmittingArrangementsModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Always `AdmittingArrangements`.
-          readOnly: true
-        lastUpdatedAt:
-          type: string
-          description: The date and time the entry was last updated.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier of the hospital affiliation.
-          format: uuid
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's admitting arrangement status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        whoAdmitsForYou:
-          enum:
-          - AProviderInMyPractice
-          - AProviderNotInMyPractice
-          - AHospitalistGroup
-          - Other
-          type: string
-          description: Indicates who admits patients on behalf of the provider.
-        admittingProvider:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
-        admittingOrganization:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
-        contact:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
-        department:
-          type: string
-          description: The department associated with the admitting arrangement.
-        details:
-          type: string
-          description: Additional details about the admitting arrangement.
-      additionalProperties: false
-      description: Response model for an admitting arrangements hospital affiliation.
-    ProviderSpecialtyPatchModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - Primary
-          - Secondary
-          - Additional
-          type: string
-          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed). When changing the type, validation ensures only one Primary and one Secondary specialty exists per provider.
-        taxonomyId:
-          type: string
-          description: Identifier of the taxonomy associated with this specialty. Must reference a valid taxonomy. The same taxonomy cannot be used across multiple specialties for the same provider.
-          format: uuid
-      additionalProperties: false
-    DeaRegistrationInfoPatchModel:
-      required:
-      - registrationNumber
-      type: object
-      properties:
-        registrationNumber:
-          minLength: 1
-          type: string
-      additionalProperties: false
-    HospitalAffiliationAdmittingPrivilegeDepartmentContactModel:
-      type: object
-      properties:
-        firstName:
-          type: string
-          description: The contact's first name.
-        middleInitial:
-          type: string
-          description: The contact's middle initial.
-        lastName:
-          type: string
-          description: The contact's last name.
-        phone:
-          type: string
-          description: The contact's phone number.
-        email:
-          type: string
-          description: The contact's email address.
-        fax:
-          type: string
-          description: The contact's fax number.
-      additionalProperties: false
-      description: Contact information for a department associated with an admitting privileges affiliation.
-    AdmittingArrangementsRequestModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Must be `AdmittingArrangements`.
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's admitting arrangement status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        whoAdmitsForYou:
-          enum:
-          - AProviderInMyPractice
-          - AProviderNotInMyPractice
-          - AHospitalistGroup
-          - Other
-          type: string
-          description: Indicates who admits patients on behalf of the provider.
-        admittingProvider:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
-        admittingOrganization:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
-        contact:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
-        department:
-          type: string
-          description: The department associated with the admitting arrangement.
-        details:
-          type: string
-          description: Additional details about the admitting arrangement.
-      additionalProperties: false
-      description: Request model for creating an admitting arrangements hospital affiliation.
-    CaqhLoginInfoRequestModel:
-      type: object
-      properties:
-        caqhId:
-          type: string
-          description: ' CAQH provider ID.'
-      additionalProperties: false
-      example:
-        caqhId: string
-    HospitalAffiliationAdmittingPrivilegesPatchModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Must be `AdmittingPrivileges`.
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's admitting privilege status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        isPrimaryHospital:
-          type: boolean
-          description: Indicates whether this is the provider's primary hospital.
-        privilegeType:
-          enum:
-          - FullAndUnrestricted
-          - Temporary
-          - Limited
-          type: string
-          description: The type of admitting privilege.
-        department:
-          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
-        admissionPercent:
-          type: string
-          description: The percentage of admissions at this hospital.
-        admitsPerMonth:
-          type: string
-          description: The average number of admissions per month.
-        specialtyLimitationsAtInstitution:
-          type: string
-          description: Any specialty limitations at this institution.
-        privilegeRestrictionExplanation:
-          type: string
-          description: Explanation for any privilege restrictions.
-        timeSpentPercentAtThisFacility:
-          type: string
-          description: The percentage of time the provider spends at this facility.
-        admitClientsFromPracticeLocations:
-          type: string
-          description: The practice locations from which clients are admitted.
-        isMilitaryHospital:
-          type: boolean
-          description: Indicates whether this is a military hospital.
-        exitExplanation:
-          type: string
-          description: Explanation for exiting the affiliation.
-        discontinuanceReason:
-          enum:
-          - VoluntaryResignation
-          - Suspension
-          - TerminationWithCause
-          - HospitalClosed
-          type: string
-          description: The reason the affiliation was discontinued.
-      additionalProperties: false
-      description: Patch model for updating an admitting privileges hospital affiliation.
-    HospitalAffiliationRequestModel:
-      oneOf:
-      - $ref: '#/components/schemas/AdmittingPrivilegesRequestModel'
-      - $ref: '#/components/schemas/AdmittingArrangementsRequestModel'
-      - $ref: '#/components/schemas/NonAdmittingAffiliationsRequestModel'
-      description: The base request model for creating a hospital affiliation. Use one of the concrete types based on the `type` discriminator.
-      discriminator:
-        propertyName: type
-        mapping:
-          AdmittingPrivileges: '#/components/schemas/AdmittingPrivilegesRequestModel'
-          AdmittingArrangements: '#/components/schemas/AdmittingArrangementsRequestModel'
-          NonAdmittingAffiliations: '#/components/schemas/NonAdmittingAffiliationsRequestModel'
-    WorkHistoryPatchModel:
-      type: object
-      properties:
-        workHistoryType:
-          enum:
-          - Employment
-          - Gap
-          type: string
-          description: '`Gap` identifies a time period when this provider was not employed'
-        name:
-          type: string
-          description: Name or employer
-        jobTitle:
-          type: string
-          description: Job title while working for this employer
-        address:
-          $ref: '#/components/schemas/WorkHistoryAddressModel'
-        phone:
-          type: string
-          description: Employer phone number
-        startDate:
-          type: string
-          description: Timestamp when this provider started working for the employer
-          format: date-time
-        endDate:
-          type: string
-          description: Timestamp when this provider finished working for the employer
-          format: date-time
-        isCurrentEmployer:
-          type: boolean
-          description: Identifies if the provider is currently employed by the employer
-        departureReason:
-          type: string
-          description: Reason provider left this employer
-        gapExplanation:
-          type: string
-          description: If work history type is set to Gap provider must explain reason for the gap in employment
-      additionalProperties: false
-    WorkHistoryRequestModel:
-      type: object
-      properties:
         workHistoryType:
           enum:
           - Employment
@@ -4165,922 +5118,6 @@ components:
           type: string
           description: Sponsoring State of the training record
       additionalProperties: false
-    ProviderAddressModel:
-      required:
-      - addressLine1
-      - city
-      - state
-      - zipCode
-      type: object
-      properties:
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: Abbreviation of the state in which the city is located.
-        zipCode:
-          minLength: 1
-          type: string
-          description: The postal code associated with the address.
-        city:
-          minLength: 1
-          type: string
-          description: The city in which the address is located.
-        addressLine1:
-          minLength: 1
-          type: string
-          description: The street address.
-        addressLine2:
-          type: string
-          description: The secondary address information.
-        type:
-          enum:
-          - Unspecified
-          - Home
-          - Work
-          type: string
-          description: The type of address.
-        id:
-          type: string
-          description: Unique identifier for this address.
-          format: uuid
-      additionalProperties: false
-    CertificateInfoModel:
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: string
-          format: date-time
-        id:
-          type: string
-          format: uuid
-        type:
-          enum:
-          - AhaBasicLifeSupport
-          - AhaAdvancedCardiacLifeSupport
-          - AhaNeonatalAdvancedLifeSupport
-          - AhaPediatricAdvancedLifeSupport
-          - CaliforniaCertifiedWellnessCoach
-          - AhaAdvancedCardiovascularLifeSupport
-          - AhaAdvancedStrokeLifeSupport
-          - AhaPears
-          - AhaHeartsaver
-          type: string
-        firstName:
-          type:
-          - string
-          - 'null'
-        lastName:
-          type:
-          - string
-          - 'null'
-        certificateNumber:
-          type:
-          - string
-          - 'null'
-        issueDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        expirationDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        certifyingOrganization:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    HospitalAffiliationAdmittingArrangementsPatchModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Must be `AdmittingArrangements`.
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's admitting arrangement status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        whoAdmitsForYou:
-          enum:
-          - AProviderInMyPractice
-          - AProviderNotInMyPractice
-          - AHospitalistGroup
-          - Other
-          type: string
-          description: Indicates who admits patients on behalf of the provider.
-        admittingProvider:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsProviderModel'
-        admittingOrganization:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingOrganizationModel'
-        contact:
-          $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsContactModel'
-        department:
-          type: string
-          description: The department associated with the admitting arrangement.
-        details:
-          type: string
-          description: Additional details about the admitting arrangement.
-      additionalProperties: false
-      description: Patch model for updating an admitting arrangements hospital affiliation.
-    HospitalAffiliationAdmittingArrangementsProviderModel:
-      type: object
-      properties:
-        firstName:
-          type: string
-          description: The admitting provider's first name.
-        lastName:
-          type: string
-          description: The admitting provider's last name.
-        isSpecialityMatching:
-          type: boolean
-          description: Indicates whether the admitting provider's specialty matches the credentialed provider's specialty.
-        npi:
-          type: integer
-          description: The National Provider Identifier (NPI) of the admitting provider.
-          format: int64
-      additionalProperties: false
-      description: Information about the provider who admits patients on behalf of the provider.
-    LiabilityInsuranceRequestModel:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of insurance
-        isSelfInsured:
-          type: boolean
-          description: Indicates whether the provider is self insured
-        originalEffectiveDate:
-          type: string
-          description: Timestamp of when the initial insurance coverage became effective
-          format: date-time
-        currentEffectiveDate:
-          type: string
-          description: Timestamp of when the current insurance coverage became effective
-          format: date-time
-        currentExpirationDate:
-          type: string
-          description: Timestamp of when the current insurance expires
-          format: date-time
-        coverageType:
-          enum:
-          - Individual
-          - Shared
-          - Occurrence
-          - ClaimsMade
-          type: string
-          description: 'Insurance type of coverage. Default: `Individual`'
-        isUnlimitedCoverage:
-          type: boolean
-          description: Does this insurance have unlimited coverage?
-        includesTailCoverage:
-          type: boolean
-          description: Indicates tail coverage status
-        occurrenceCoverageAmount:
-          type: number
-          description: Amount of coverage provided by this insurance per occurrence
-          format: double
-        aggregateCoverageAmount:
-          type: number
-          description: Amount of aggregated coverage provided by this insurance
-          format: double
-        policyNumber:
-          type: string
-          description: Insurance policy number
-      additionalProperties: false
-    EducationModel:
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the object was created or modified.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier associated with this education
-          format: uuid
-        ecfmgNumber:
-          type: string
-          description: Educational Commission for Foreign Medical Graduates number
-        ecfmgIssueDate:
-          type: string
-          description: Timestamp when the certificate was issued
-          format: date-time
-        graduateType:
-          enum:
-          - Undergraduate
-          - Professional
-          - FifthPathway
-          type: string
-          description: Degree program type
-        schoolName:
-          type: string
-          description: Name of school
-        schoolCode:
-          type: string
-          description: School code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-school-codes)
-        branchCode:
-          type: string
-          description: Branch code as defined by the [National Student Clearinghouse](https://docs.studentclearinghouse.org/vs/v/json-field-descriptions/appendix-branch-code-values)
-        startDate:
-          type: string
-          description: Timestamp when this provider started their degree program
-          format: date-time
-        endDate:
-          type: string
-          description: Timestamp when this provider finished their degree program
-          format: date-time
-        completed:
-          type: boolean
-          description: Identifies if this provider completed their graduate education at this school
-        degree:
-          type: string
-          description: Degree awarded
-      additionalProperties: false
-    HospitalAffiliationAdmittingArrangementsContactModel:
-      type: object
-      properties:
-        phoneNumber:
-          type: string
-          description: The contact's phone number.
-        emailAddress:
-          type: string
-          description: The contact's email address.
-      additionalProperties: false
-      description: Contact information for the provider or organization managing admitting arrangements.
-    CertificateInfoPatchModel:
-      type: object
-      properties:
-        firstName:
-          type:
-          - string
-          - 'null'
-        lastName:
-          type:
-          - string
-          - 'null'
-        certificateNumber:
-          type:
-          - string
-          - 'null'
-        issueDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        expirationDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        certifyingOrganization:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    TrainingPatchModel:
-      type: object
-      properties:
-        trainingType:
-          enum:
-          - Internship
-          - Residency
-          - Fellowship
-          - OtherTraining
-          - FacultyPositions
-          - Unspecified
-          type: string
-          description: The type of training pursued
-        institutionName:
-          type: string
-          description: Name of the institution where training occurred
-        schoolCode:
-          type: string
-          description: School code as defined by the National Student Clearinghouse Participation List
-        schoolName:
-          type: string
-          description: Affiliated Medical School Name
-        startDate:
-          type: string
-          description: Timestamp when this provider started the training program
-          format: date-time
-        endDate:
-          type: string
-          description: Timestamp when this provider finished the training program
-          format: date-time
-        completed:
-          type: boolean
-          description: Identifies if this provider completed the training program at this institution
-        speciality:
-          type: string
-          description: Designated Speciality of the training record
-        sponsoringState:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: Sponsoring State of the training record
-      additionalProperties: false
-    AdmittingPrivilegesModel:
-      type: object
-      properties:
-        type:
-          enum:
-          - AdmittingPrivileges
-          - AdmittingArrangements
-          - NonAdmittingAffiliations
-          type: string
-          description: The type of hospital affiliation. Always `AdmittingPrivileges`.
-          readOnly: true
-        lastUpdatedAt:
-          type: string
-          description: The date and time the entry was last updated.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier of the hospital affiliation.
-          format: uuid
-        status:
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          type: string
-          description: Provider's admitting privilege status.
-        startDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital began.
-          format: date
-        endDate:
-          type: string
-          description: Date provider's affiliation/privileges at the hospital ended. Null = currently active.
-          format: date
-        hospital:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalInfoModel'
-        isPrimaryHospital:
-          type: boolean
-          description: Indicates whether this is the provider's primary hospital.
-        privilegeType:
-          enum:
-          - FullAndUnrestricted
-          - Temporary
-          - Limited
-          type: string
-          description: The type of admitting privilege.
-        department:
-          $ref: '#/components/schemas/HospitalAffiliationDepartmentModel'
-        admissionPercent:
-          type: string
-          description: The percentage of admissions at this hospital.
-        admitsPerMonth:
-          type: string
-          description: The average number of admissions per month.
-        specialtyLimitationsAtInstitution:
-          type: string
-          description: Any specialty limitations at this institution.
-        privilegeRestrictionExplanation:
-          type: string
-          description: Explanation for any privilege restrictions.
-        timeSpentPercentAtThisFacility:
-          type: string
-          description: The percentage of time the provider spends at this facility.
-        admitClientsFromPracticeLocations:
-          type: string
-          description: The practice locations from which clients are admitted.
-        isMilitaryHospital:
-          type: boolean
-          description: Indicates whether this is a military hospital.
-        exitExplanation:
-          type: string
-          description: Explanation for exiting the affiliation.
-        discontinuanceReason:
-          enum:
-          - VoluntaryResignation
-          - Suspension
-          - TerminationWithCause
-          - HospitalClosed
-          type: string
-          description: The reason the affiliation was discontinued.
-      additionalProperties: false
-      description: Response model for an admitting privileges hospital affiliation.
-    HospitalAffiliationHospitalInfoModel:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the hospital.
-        address:
-          $ref: '#/components/schemas/HospitalAffiliationAddressModel'
-        contact:
-          $ref: '#/components/schemas/HospitalAffiliationHospitalContactInfoModel'
-      additionalProperties: false
-      description: Information about the hospital associated with a provider's affiliation.
-    HospitalAffiliationModel:
-      oneOf:
-      - $ref: '#/components/schemas/AdmittingPrivilegesModel'
-      - $ref: '#/components/schemas/AdmittingArrangementsModel'
-      - $ref: '#/components/schemas/NonAdmittingAffiliationsModel'
-      discriminator:
-        propertyName: type
-        mapping:
-          AdmittingPrivileges: '#/components/schemas/AdmittingPrivilegesModel'
-          AdmittingArrangements: '#/components/schemas/AdmittingArrangementsModel'
-          NonAdmittingAffiliations: '#/components/schemas/NonAdmittingAffiliationsModel'
-    WorkHistoryModel:
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the object was created or modified.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier associated with this work history entry
-          format: uuid
-        workHistoryType:
-          enum:
-          - Employment
-          - Gap
-          type: string
-          description: '`Gap` identifies a time period when this provider was not employed'
-        name:
-          type: string
-          description: Name or employer
-        jobTitle:
-          type: string
-          description: Job title while working for this employer
-        address:
-          $ref: '#/components/schemas/WorkHistoryAddressModel'
-        phone:
-          type: string
-          description: Employer phone number
-        startDate:
-          type: string
-          description: Timestamp when this provider started working for the employer
-          format: date-time
-        endDate:
-          type: string
-          description: Timestamp when this provider finished working for the employer
-          format: date-time
-        isCurrentEmployer:
-          type: boolean
-          description: Identifies if the provider is currently employed by the employer
-        departureReason:
-          type: string
-          description: Reason provider left this employer
-        gapExplanation:
-          type: string
-          description: If work history type is set to Gap provider must explain reason for the gap in employment
-      additionalProperties: false
-    MedicaidEnrollmentModel:
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the object was created or modified.
-          format: date-time
-        id:
-          type: string
-          description: Unique identifier associated with this Medicaid enrollment.
-          format: uuid
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: State of the Medicaid enrollment.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
-      additionalProperties: false
-    BoardCertificationInfoPatchModel:
-      type: object
-      properties:
-        firstName:
-          type: string
-          description: Provider first name mentioned on the board certification. This field will be used for board certification lookup.
-        lastName:
-          type: string
-          description: Provider last name mentioned on the board certification. This field will be used for board certification lookup.
-        isPrimary:
-          type: boolean
-          description: If the flag is set, certification will be set as primary for the provider.
-        boardCertificationNumber:
-          type: string
-          description: A unique Id provided by certification board to the provider. This will be used for board certification lookup.
-        specialty:
-          type: string
-        taxonomyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: Array of NUCC taxonomy IDs to associate with this board certification. Each ID must reference a valid taxonomy id. Must be unique. Set to empty array to remove all taxonomies. Set to null to leave unchanged.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/NonVerifiedBoardCertificationInfoModel'
-      additionalProperties: false
-    BoardCertificationInfoRequestModel:
-      required:
-      - type
-      type: object
-      properties:
-        type:
-          enum:
-          - AmericanBoardofMedicalSpecialties
-          - NationalBoardforCertifiedCounselors
-          - AmericanBoardofClinicalSocialWork
-          - AmericanSpeechLanguageHearingAssociation
-          - AmericanNursesCredentialingCenter
-          - AmericanAcademyofNursePractitioners
-          - AmericanOsteopathicAssociation
-          - AmericanMedicalAssociation
-          - NationalBoardofCertificationandRecertificationforNurseAnesthetists
-          - AmericanAssociationofCriticalCareNurses
-          - AmericanMidwiferyCertificationBoard
-          - AmericanBoardofPodiatricMedicine
-          - AmericanBoardofOralImplantology
-          - AmericanBoardofOralMedicine
-          - AmericanBoardofOrofacialPain
-          - NuclearMedicineTechnologyCertificationBoard
-          - AmericanDentalBoardofAnesthesiology
-          - AmericanBoardofDentalPublicHealth
-          - AmericanBoardofPediatricDentistry
-          - AmericanBoardofPeriodontology
-          - AmericanBoardofInternalMedicine
-          - NationalCommissiononCertificationofPhysicianAssistants
-          - AmericanBoardofAllergyandImmunology
-          - AmericanBoardofAnesthesiology
-          - AmericanBoardofColonandRectalSurgery
-          - AmericanBoardofDermatology
-          - AmericanBoardofEmergencyMedicine
-          - AmericanBoardofFamilyMedicine
-          - AmericanBoardofGeneticsandGenomics
-          - AmericanBoardofNeurologicalSurgery
-          - AmericanBoardofNuclearMedicine
-          - AmericanBoardofObstetricsandGynecology
-          - AmericanBoardofOphthalmology
-          - AmericanBoardofOptometry
-          - AmericanBoardofOrthopaedicSurgery
-          - AmericanBoardofOtolaryngologyHeadandNeckSurgery
-          - AmericanBoardofPathology
-          - AmericanBoardofPediatrics
-          - AmericanBoardofPhysicalMedicineandRehabilitation
-          - AmericanBoardofPlasticSurgery
-          - AmericanBoardofPreventiveMedicine
-          - AmericanBoardofProfessionalPsychology
-          - AmericanBoardofPsychiatryandNeurology
-          - AmericanBoardofRadiology
-          - AmericanBoardofSurgery
-          - AmericanBoardofThoracicSurgery
-          - AmericanBoardofUrology
-          - AmericanOptometricAssociation
-          - AssociationofSocialWorkBoards
-          - AmericanBoardofFootandAnkleSurgery
-          - AmericanBoardofOralandMaxillofacialPathology
-          - AmericanBoardofOralandMaxillofacialSurgery
-          - AmericanBoardofOrthodontics
-          - AmericanBoardofEndodontics
-          - AmericanBoardofProsthodontics
-          - NationalBoardforCertificationinOccupationalTherapy
-          - BehaviorAnalystCertificationBoard
-          - InternationalBoardofLactationConsultantExaminers
-          - CommissionOnDieteticRegistration
-          - NationalCertificationCommissionforAcupunctureandOrientalMedicine
-          - PediatricNursingCertification
-          - NationalCertificationCorporation
-          - OncologyNursingCertificationCorporation
-          - AmericanBoardOfCardiovascularMedicine
-          - AmericanAcademyOfHIVMedicine
-          - NationalBoardOfPhysiciansAndSurgeons
-          - BoardOfPharmacySpecialties
-          - AmericanBoardofOralandMaxillofacialRadiology
-          - AmericanBoardofGeneralDentistry
-          - NationalAssociationofSchoolPsychologists
-          - NationalPhlebotomyAssociation
-          - NationalCenterForCompetencyTesting
-          - AmericanRegistryofRadiologyTechnologists
-          - DentalAssistingNationalBoard
-          - AmericanMedicalCertificationAssociation
-          - AmericanBoardofAddictionMedicine
-          - AmericanRegistryForDiagnosticMedicalSonography
-          - AmericanBoardofMultipleSpecialtiesinPodiatry
-          - AmericanBoardOfObesityMedicine
-          - NationalCommissionForCertificationOfAnesthesiologistAssistants
-          - CardiovascularCredentialingInternational
-          - NationalBoardOfEchocardiography
-          - AmericanAlliedHealth
-          - AmericanMedicalTechnologists
-          - NationalAssociationForHealthProfessionals
-          - NationalHealthCareerAssociation
-          - NationalPhlebotomyCertificationExamination
-          - NationalAssociationOfPhlebotomyTechnicians
-          - NationalHealthcareCertificationOrganization
-          - NationalPerformanceSpecialists
-          - NationalRegistryOfAlliedHealthProfessionals
-          - NationalRegistryofEmergencyMedicalTechnicians
-          - BoardofCertificationforEmergencyNursing
-          - CertificationBoardforMusicTherapists
-          - AmericanBoardOfChiropracticInternists
-          - AmericanBoardOfPhysicalTherapySpecialties
-          - AmericanBoardofPhysicianSpecialties
-          - AmericanAcademyofOptometry
-          - PharmacyTechnicianCertificationBoard
-          - NationalBoardofSurgicalTechnologyandSurgicalAssisting
-          - AmericanBoardofPainMedicine
-          - ArtTherapyCredentialsBoard
-          - BehavioralInterventionCertificationCouncil
-          - AmericanOsteopathicBoardOfAnesthesiology
-          - AmericanOsteopathicBoardOfDermatology
-          - AmericanOsteopathicBoardOfEmergencyMedicine
-          - AmericanOsteopathicBoardOfFamilyPhysicians
-          - AmericanOsteopathicBoardOfInternalMedicine
-          - AmericanOsteopathicBoardOfNeurologyAndPsychiatry
-          - AmericanOsteopathicBoardOfNeuromusculoskeletalMedicine
-          - AmericanOsteopathicBoardOfNuclearMedicine
-          - AmericanOsteopathicBoardOfObstetricsAndGynecology
-          - AmericanOsteopathicBoardOfOphthalmologyAndOtolaryngology
-          - AmericanOsteopathicBoardOfOrthopedicSurgery
-          - AmericanOsteopathicBoardOfPathology
-          - AmericanOsteopathicBoardOfPediatrics
-          - AmericanOsteopathicBoardOfPhysicalMedicineAndRehabilitation
-          - AmericanOsteopathicBoardOfPreventiveMedicine
-          - AmericanOsteopathicBoardOfProctology
-          - AmericanOsteopathicBoardOfRadiology
-          - AmericanOsteopathicBoardOfSurgery
-          type: string
-          description: Board certification type.
-        firstName:
-          type: string
-          description: Provider first name mentioned on the board certification. This field will be used for board certification lookup.
-        lastName:
-          type: string
-          description: Provider last name mentioned on the board certification. This field will be used for board certification lookup.
-        isPrimary:
-          type: boolean
-          description: If the flag is set, certification will be set as primary for the provider.
-        boardCertificationNumber:
-          type: string
-          description: A unique Id provided by certification board to the provider. This will be used for board certification lookup.
-        specialty:
-          type: string
-        taxonomyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: Array of NUCC taxonomy IDs to associate with this board certification. Each ID must reference a valid taxonomy id. Must be unique. Optional - can be null or empty array.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/NonVerifiedBoardCertificationInfoModel'
-      additionalProperties: false
-    MedicaidEnrollmentRequestModel:
-      required:
-      - state
-      type: object
-      properties:
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: State of the Medicaid enrollment.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/MedicaidEnrollmentNonVerifiedInfoModel'
-      additionalProperties: false
     WorkHistoryAddressModel:
       required:
       - addressLine1
@@ -5173,82 +5210,45 @@ components:
           description: The ID of the country from the countries list.
           format: uuid
       additionalProperties: false
-    ProviderEmailRequestModel:
-      required:
-      - email
-      - type
+    CaqhLoginInfoRequestModel:
       type: object
       properties:
-        email:
-          minLength: 1
-          type: string
-          description: The email associated with the provider.
-        type:
-          enum:
-          - Unspecified
-          - Personal
-          - Work
-          type: string
-          description: The type of the email.
-      additionalProperties: false
-    CaqhLoginInfoModel:
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the object was created or modified.
-          format: date-time
         caqhId:
           type: string
           description: ' CAQH provider ID.'
       additionalProperties: false
-    ProviderAliasRequestModel:
-      required:
-      - firstName
-      - lastName
-      type: object
-      properties:
-        firstName:
-          minLength: 1
-          type: string
-          description: The first (given) name of this alias.
-        lastName:
-          minLength: 1
-          type: string
-          description: The last (family) name of this alias.
-      additionalProperties: false
-    ProviderSpecialtyRequestModel:
-      required:
-      - taxonomyId
-      - type
-      type: object
-      properties:
-        type:
-          enum:
-          - Primary
-          - Secondary
-          - Additional
-          type: string
-          description: Type of specialty. Can be Primary (only one allowed), Secondary (only one allowed), or Additional (multiple allowed).
-        taxonomyId:
-          type: string
-          description: Identifier of the taxonomy associated with this specialty. Must reference a valid taxonomy. The same taxonomy cannot be used across multiple specialties for the same provider.
-          format: uuid
-      additionalProperties: false
-    ProviderAliasModel:
+      example:
+        caqhId: string
+    HospitalAffiliationPatchModel:
+      oneOf:
+      - $ref: '#/components/schemas/HospitalAffiliationAdmittingPrivilegesPatchModel'
+      - $ref: '#/components/schemas/HospitalAffiliationAdmittingArrangementsPatchModel'
+      - $ref: '#/components/schemas/HospitalAffiliationNonAdmittingAffiliationsPatchModel'
+      description: The base patch model for updating a hospital affiliation. Use one of the concrete types based on the `type` discriminator.
+      discriminator:
+        propertyName: type
+        mapping:
+          AdmittingPrivileges: '#/components/schemas/HospitalAffiliationAdmittingPrivilegesPatchModel'
+          AdmittingArrangements: '#/components/schemas/HospitalAffiliationAdmittingArrangementsPatchModel'
+          NonAdmittingAffiliations: '#/components/schemas/HospitalAffiliationNonAdmittingAffiliationsPatchModel'
+    HospitalAffiliationAdmittingArrangementsProviderModel:
       type: object
       properties:
         firstName:
           type: string
-          description: The first (given) name of this alias.
+          description: The admitting provider's first name.
         lastName:
           type: string
-          description: The last (family) name of this alias.
-        id:
-          type: string
-          description: Unique identifier for this alias.
-          format: uuid
+          description: The admitting provider's last name.
+        isSpecialityMatching:
+          type: boolean
+          description: Indicates whether the admitting provider's specialty matches the credentialed provider's specialty.
+        npi:
+          type: integer
+          description: The National Provider Identifier (NPI) of the admitting provider.
+          format: int64
       additionalProperties: false
+      description: Information about the provider who admits patients on behalf of the provider.
   securitySchemes:
     Bearer:
       type: http

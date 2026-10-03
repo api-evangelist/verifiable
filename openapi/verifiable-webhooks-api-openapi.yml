@@ -305,42 +305,66 @@ paths:
       - Bearer: []
 components:
   schemas:
-    WebhookRequestModel:
-      required:
-      - type
-      - url
+    WebhooksLogPageModel:
       type: object
       properties:
-        type:
+        sort:
+          type:
+          - object
+          - 'null'
+          properties:
+            Keys:
+              enum:
+              - Timestamp
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+        previousCursor:
+          type:
+          - string
+          - 'null'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+        nextOffset:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        totalCount:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WebhookLogModel'
+        sortedBy:
           enum:
-          - VerificationCompleted
-          - ExportCompleted
-          - LicenseExpiresSoon
-          - LicenseExpired
-          - LicenseChanged
-          - DatasetScanCompleted
-          - LicenseStatusChanged
-          - ProviderStatusChanged
-          - ProviderProfileImportCompleted
-          - CredentialingRequestChanged
-          - GenerateReport
-          - DatasetScanMatchesChanged
-          - NpdbUpdateRequestRejected
-          type: string
-          description: The event type that should trigger this webhook.
-        url:
-          type: string
-          description: The URL we will make an HTTP POST request to when an event of `type` occurs.
-          format: uri
-        secret:
-          type: string
-          description: An optional secret which will be passed in the `X-Secret` header to the webhook callback URL.
-        allowInsecureUrl:
-          type: boolean
-          description: Set to true to allow insecure callback URLs such as URLs without SSL or URLs with self signed certificates.
-        includeSensitiveInfo:
-          type: boolean
-          description: If set to false, the sensitive info will be masked in the webhook payload. The default value is true.
+          - Timestamp
+          type:
+          - string
+          - 'null'
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     WebhookLogModel:
       type: object
@@ -447,6 +471,43 @@ components:
           type: boolean
           description: If set to false, the sensitive info will be masked in the webhook payload. The default value is true.
       additionalProperties: false
+    WebhookRequestModel:
+      required:
+      - type
+      - url
+      type: object
+      properties:
+        type:
+          enum:
+          - VerificationCompleted
+          - ExportCompleted
+          - LicenseExpiresSoon
+          - LicenseExpired
+          - LicenseChanged
+          - DatasetScanCompleted
+          - LicenseStatusChanged
+          - ProviderStatusChanged
+          - ProviderProfileImportCompleted
+          - CredentialingRequestChanged
+          - GenerateReport
+          - DatasetScanMatchesChanged
+          - NpdbUpdateRequestRejected
+          type: string
+          description: The event type that should trigger this webhook.
+        url:
+          type: string
+          description: The URL we will make an HTTP POST request to when an event of `type` occurs.
+          format: uri
+        secret:
+          type: string
+          description: An optional secret which will be passed in the `X-Secret` header to the webhook callback URL.
+        allowInsecureUrl:
+          type: boolean
+          description: Set to true to allow insecure callback URLs such as URLs without SSL or URLs with self signed certificates.
+        includeSensitiveInfo:
+          type: boolean
+          description: If set to false, the sensitive info will be masked in the webhook payload. The default value is true.
+      additionalProperties: false
     WebhookPatchModel:
       type: object
       properties:
@@ -463,67 +524,6 @@ components:
         includeSensitiveInfo:
           type: boolean
           description: If set to false, the sensitive info will be masked in the webhook payload. The default value is true.
-      additionalProperties: false
-    WebhooksLogPageModel:
-      type: object
-      properties:
-        sort:
-          type:
-          - object
-          - 'null'
-          properties:
-            Keys:
-              enum:
-              - Timestamp
-              type: string
-            Values:
-              enum:
-              - Asc
-              - Desc
-              type: string
-        previousCursor:
-          type:
-          - string
-          - 'null'
-        nextCursor:
-          type:
-          - string
-          - 'null'
-        nextOffset:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        count:
-          type: integer
-          format: int32
-        totalCount:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/WebhookLogModel'
-        sortedBy:
-          enum:
-          - Timestamp
-          type:
-          - string
-          - 'null'
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type:
-          - string
-          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

@@ -280,6 +280,20 @@ components:
           format: date-time
           readOnly: true
       additionalProperties: false
+    TaxonomyGroupModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the taxonomy group.
+          format: uuid
+        name:
+          type: string
+          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
+      additionalProperties: false
+      example:
+        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        name: Allopathic & Osteopathic Physicians
     TaxonomyModel:
       type: object
       properties:
@@ -314,20 +328,6 @@ components:
         specialization: Cardiovascular Disease
         section: Section 1
         displayName: Internal Medicine - Cardiovascular Disease
-    TaxonomyGroupModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the taxonomy group.
-          format: uuid
-        name:
-          type: string
-          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
-      additionalProperties: false
-      example:
-        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-        name: Allopathic & Osteopathic Physicians
     TaxonomyGroupPageModel:
       type: object
       properties:

@@ -1413,6 +1413,123 @@ paths:
       - Bearer: []
 components:
   schemas:
+    FacilityNpiNonVerifiedInfoModel:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          description: Indicates if the NPI is active or not.
+      additionalProperties: false
+    FacilityAccreditationPatchModel:
+      type: object
+      properties:
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        accreditationNumber:
+          type: string
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityAccreditationNonVerifiedInfoPatchModel'
+      additionalProperties: false
+    FacilityDeaModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of this DEA.
+          format: uuid
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the DEA was created or modified.
+          format: date-time
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        deaNumber:
+          type: string
+          description: The 9 digit DEA number.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityDeaNonVerifiedInfoModel'
+      additionalProperties: false
+    FacilityCmsCertificationNonVerifiedInfoPatchModel:
+      type: object
+      properties:
+        certificationDate:
+          type: string
+          description: If set, the `certification date` of the CMS Certification will be updated with this value.
+          format: date
+      additionalProperties: false
+    FacilityLiabilityInsuranceRequestModel:
+      required:
+      - appliesTo
+      - liabilityInsurer
+      type: object
+      properties:
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        liabilityInsurer:
+          minLength: 1
+          type: string
+          description: The name of the liability insurer.
+        policyNumber:
+          type: string
+          description: Policy number for this Liability Insurance.
+        effectiveDate:
+          type: string
+          description: Effective date associated with this Liability Insurance.
+          format: date
+        expirationDate:
+          type: string
+          description: Expiration date associated with this Liability Insurance.
+          format: date
+        coverageType:
+          type: string
+          description: Coverage type for this Liability Insurance.
+        primaryLimitPerClaim:
+          type: number
+          description: Primary limit per claim for this Liability Insurance.
+          format: double
+        excessLimitPerClaim:
+          type: number
+          description: Excess limit per claim for this Liability Insurance.
+          format: double
+        primaryLimitAggregate:
+          type: number
+          description: Primary limit aggregate for this Liability Insurance.
+          format: double
+        excessLimitAggregate:
+          type: number
+          description: Excess limit aggregate for this Liability Insurance.
+          format: double
+      additionalProperties: false
     FacilityDeaNonVerifiedInfoModel:
       type: object
       properties:
@@ -1496,6 +1613,45 @@ components:
           type: boolean
           description: Indicates if the DEA registration is active or not.
       additionalProperties: false
+    FacilityCmsCertificationPatchModel:
+      type: object
+      properties:
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityCmsCertificationNonVerifiedInfoPatchModel'
+      additionalProperties: false
+    FacilityMedicareEnrollmentNonVerifiedInfoPatchModel:
+      type: object
+      properties:
+        pecosEnrollmentIdentifier:
+          type: string
+      additionalProperties: false
+    FacilityLicenseNonVerifiedInfoPatchModel:
+      type: object
+      properties:
+        issueDate:
+          type: string
+          description: If set, the `issue date` of the License will be updated with this value.
+          format: date
+        expirationDate:
+          type: string
+          description: If set, the `expiration date` of the License will be updated with this value.
+          format: date
+        licenseStatus:
+          type: string
+          description: If set, the `license status` of the License will be updated with this value.
+      additionalProperties: false
     FacilityLicenseNonVerifiedInfoRequestModel:
       type: object
       properties:
@@ -1511,212 +1667,13 @@ components:
           type: string
           description: The status of this license.
       additionalProperties: false
-    FacilityAccreditationNonVerifiedInfoPatchModel:
+    FacilityCmsCertificationNonVerifiedInfoRequestModel:
       type: object
       properties:
-        decision:
+        certificationDate:
           type: string
-          description: If set, the `decision` of the Accreditation will be updated with this value.
-        effectiveDate:
-          type: string
-          description: If set, the `effective date` of the Accreditation will be updated with this value.
+          description: The date of this CMS Certification.
           format: date
-        expirationDate:
-          type: string
-          description: If set, the `expiration date` of the Accreditation will be updated with this value.
-          format: date
-      additionalProperties: false
-    FacilityMedicareEnrollmentNonVerifiedInfoRequestModel:
-      type: object
-      properties:
-        pecosEnrollmentIdentifier:
-          type: string
-      additionalProperties: false
-    FacilityMedicareEnrollmentNonVerifiedInfoPatchModel:
-      type: object
-      properties:
-        pecosEnrollmentIdentifier:
-          type: string
-      additionalProperties: false
-    FacilityAccreditationNonVerifiedInfoRequestModel:
-      type: object
-      properties:
-        decision:
-          type: string
-          description: The decision for this Accreditation.
-        effectiveDate:
-          type: string
-          description: The effective date of this Accreditation.
-          format: date
-        expirationDate:
-          type: string
-          description: The expiration date of this Accreditation.
-          format: date
-      additionalProperties: false
-    FacilityAccreditationPatchModel:
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        accreditationNumber:
-          type: string
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityAccreditationNonVerifiedInfoPatchModel'
-      additionalProperties: false
-    FacilityCmsCertificationRequestModel:
-      required:
-      - appliesTo
-      - certificationNumber
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        certificationNumber:
-          minLength: 1
-          type: string
-          description: The Certification number.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityCmsCertificationNonVerifiedInfoRequestModel'
-      additionalProperties: false
-    FacilityMedicareEnrollmentRequestModel:
-      required:
-      - appliesTo
-      - enrollmentTypeId
-      - pecosPacIdentifier
-      - state
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        pecosPacIdentifier:
-          minLength: 1
-          type: string
-          description: The unique identifier of the Pecos Pac.
-        enrollmentTypeId:
-          type: string
-          description: Medicare Enrollment Type unique identifier of the enrollment.
-          format: uuid
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: State of the Medicare Enrollment.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityMedicareEnrollmentNonVerifiedInfoRequestModel'
-      additionalProperties: false
-    FacilityDeaModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The identifier of this DEA.
-          format: uuid
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the DEA was created or modified.
-          format: date-time
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        deaNumber:
-          type: string
-          description: The 9 digit DEA number.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityDeaNonVerifiedInfoModel'
       additionalProperties: false
     FacilityNpiModel:
       type: object
@@ -1748,14 +1705,6 @@ components:
         nonVerifiedInfo:
           $ref: '#/components/schemas/FacilityNpiNonVerifiedInfoModel'
       additionalProperties: false
-    FacilityCmsCertificationNonVerifiedInfoModel:
-      type: object
-      properties:
-        certificationDate:
-          type: string
-          description: The date of this CMS Certification.
-          format: date
-      additionalProperties: false
     FacilityDeaRequestModel:
       required:
       - appliesTo
@@ -1781,251 +1730,11 @@ components:
         nonVerifiedInfo:
           $ref: '#/components/schemas/FacilityDeaNonVerifiedInfoRequestModel'
       additionalProperties: false
-    FacilityLicenseNonVerifiedInfoModel:
+    FacilityMedicareEnrollmentNonVerifiedInfoRequestModel:
       type: object
       properties:
-        issueDate:
+        pecosEnrollmentIdentifier:
           type: string
-          description: The date at which this Licence was issued.
-          format: date
-        expirationDate:
-          type: string
-          description: The date at which this Licence expires.
-          format: date
-        licenseStatus:
-          type: string
-          description: The status of this license.
-      additionalProperties: false
-    FacilityMedicareEnrollmentModel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        lastUpdatedAt:
-          type: string
-          format: date-time
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        pecosPacIdentifier:
-          type: string
-          description: The unique identifier of the Pecos Pac.
-        enrollmentTypeId:
-          type: string
-          description: Medicare Enrollment Type unique identifier of the enrollment.
-          format: uuid
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: State of the Medicare Enrollment.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityMedicareEnrollmentNonVerifiedInfoModel'
-      additionalProperties: false
-    FacilityDeaPatchModel:
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityDeaNonVerifiedInfoPatchModel'
-      additionalProperties: false
-    FacilityLicenseNonVerifiedInfoPatchModel:
-      type: object
-      properties:
-        issueDate:
-          type: string
-          description: If set, the `issue date` of the License will be updated with this value.
-          format: date
-        expirationDate:
-          type: string
-          description: If set, the `expiration date` of the License will be updated with this value.
-          format: date
-        licenseStatus:
-          type: string
-          description: If set, the `license status` of the License will be updated with this value.
-      additionalProperties: false
-    FacilityLicensePatchModel:
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        isPrimary:
-          type: boolean
-          description: If set, the `is primary` of the License will be updated with this value.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityLicenseNonVerifiedInfoPatchModel'
-      additionalProperties: false
-    FacilityCmsCertificationNonVerifiedInfoRequestModel:
-      type: object
-      properties:
-        certificationDate:
-          type: string
-          description: The date of this CMS Certification.
-          format: date
-      additionalProperties: false
-    FacilityLiabilityInsuranceRequestModel:
-      required:
-      - appliesTo
-      - liabilityInsurer
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        liabilityInsurer:
-          minLength: 1
-          type: string
-          description: The name of the liability insurer.
-        policyNumber:
-          type: string
-          description: Policy number for this Liability Insurance.
-        effectiveDate:
-          type: string
-          description: Effective date associated with this Liability Insurance.
-          format: date
-        expirationDate:
-          type: string
-          description: Expiration date associated with this Liability Insurance.
-          format: date
-        coverageType:
-          type: string
-          description: Coverage type for this Liability Insurance.
-        primaryLimitPerClaim:
-          type: number
-          description: Primary limit per claim for this Liability Insurance.
-          format: double
-        excessLimitPerClaim:
-          type: number
-          description: Excess limit per claim for this Liability Insurance.
-          format: double
-        primaryLimitAggregate:
-          type: number
-          description: Primary limit aggregate for this Liability Insurance.
-          format: double
-        excessLimitAggregate:
-          type: number
-          description: Excess limit aggregate for this Liability Insurance.
-          format: double
-      additionalProperties: false
-    FacilityNpiNonVerifiedInfoRequestModel:
-      type: object
-      properties:
-        isActive:
-          type: boolean
-          description: Indicates if the NPI is active or not.
-      additionalProperties: false
-    FacilityMedicareEnrollmentPatchModel:
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityMedicareEnrollmentNonVerifiedInfoPatchModel'
       additionalProperties: false
     FacilityCmsCertificationModel:
       type: object
@@ -2056,17 +1765,12 @@ components:
         nonVerifiedInfo:
           $ref: '#/components/schemas/FacilityCmsCertificationNonVerifiedInfoModel'
       additionalProperties: false
-    FacilityLiabilityInsuranceModel:
+    FacilityNpiRequestModel:
+      required:
+      - appliesTo
+      - npi
       type: object
       properties:
-        id:
-          type: string
-          description: The identifier of this Liability Insurance.
-          format: uuid
-        lastUpdatedAt:
-          type: string
-          description: The date and time when the Liability Insurance was created or modified.
-          format: date-time
         appliesTo:
           enum:
           - SelfOnly
@@ -2079,41 +1783,21 @@ components:
           items:
             type: string
             format: uuid
-        liabilityInsurer:
-          type: string
-          description: The name of the liability insurer.
-        policyNumber:
-          type: string
-          description: Policy number for this Liability Insurance.
-        effectiveDate:
-          type: string
-          description: Effective date associated with this Liability Insurance.
-          format: date
-        expirationDate:
-          type: string
-          description: Expiration date associated with this Liability Insurance.
-          format: date
-        coverageType:
-          type: string
-          description: Coverage type for this Liability Insurance.
-        primaryLimitPerClaim:
-          type: number
-          description: Primary limit per claim for this Liability Insurance.
-          format: double
-        excessLimitPerClaim:
-          type: number
-          description: Excess limit per claim for this Liability Insurance.
-          format: double
-        primaryLimitAggregate:
-          type: number
-          description: Primary limit aggregate for this Liability Insurance.
-          format: double
-        excessLimitAggregate:
-          type: number
-          description: Excess limit aggregate for this Liability Insurance.
-          format: double
+        npi:
+          type: integer
+          description: The 10 digit NPI number.
+          format: int64
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityNpiNonVerifiedInfoRequestModel'
       additionalProperties: false
-    FacilityCmsCertificationPatchModel:
+    FacilityNpiNonVerifiedInfoRequestModel:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          description: Indicates if the NPI is active or not.
+      additionalProperties: false
+    FacilityNpiPatchModel:
       type: object
       properties:
         appliesTo:
@@ -2129,90 +1813,7 @@ components:
             type: string
             format: uuid
         nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityCmsCertificationNonVerifiedInfoPatchModel'
-      additionalProperties: false
-    FacilityDeaNonVerifiedInfoPatchModel:
-      type: object
-      properties:
-        drugSchedules:
-          type: string
-          description: If set, the `drug schedules` of the DEA registration will be updated with this value.
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: If set, the `state` of the DEA registration will be updated with this value.
-        expirationDate:
-          type: string
-          description: If set, the `expiration date` of the DEA registration will be updated with this value.
-          format: date
-        businessActivityCode:
-          type: string
-          description: If set, the `business activity code` of the DEA registration will be updated with this value.
-        paymentIndicator:
-          enum:
-          - Paid
-          - Exempt
-          type: string
-          description: If set, the `payment indicator` of the DEA registration will be updated with this value.
-        isActive:
-          type: boolean
-          description: If set, the `is active` of the DEA registration will be updated with this value.
+          $ref: '#/components/schemas/FacilityNpiNonVerifiedInfoPatchModel'
       additionalProperties: false
     FacilityLicenseRequestModel:
       required:
@@ -2308,192 +1909,6 @@ components:
           description: Flag to indicate if the license will be set as primary.
         nonVerifiedInfo:
           $ref: '#/components/schemas/FacilityLicenseNonVerifiedInfoRequestModel'
-      additionalProperties: false
-    FacilityLiabilityInsurancePatchModel:
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        liabilityInsurer:
-          type: string
-          description: If set, the `liability insurer` of the Liability Insurance will be updated with this value.
-        policyNumber:
-          type: string
-          description: If set, the `policy number` of the Liability Insurance will be updated with this value.
-        effectiveDate:
-          type: string
-          description: If set, the `effective date` of the Liability Insurance will be updated with this value.
-          format: date
-        expirationDate:
-          type: string
-          description: If set, the `expiration date` of the Liability Insurance will be updated with this value.
-          format: date
-        coverageType:
-          type: string
-          description: If set, the `coverage type` of the Liability Insurance will be updated with this value.
-        primaryLimitPerClaim:
-          type: number
-          description: If set, the `primary limit per claim` of the Liability Insurance will be updated with this value.
-          format: double
-        excessLimitPerClaim:
-          type: number
-          description: If set, the `excess limit per claim` of the Liability Insurance will be updated with this value.
-          format: double
-        primaryLimitAggregate:
-          type: number
-          description: If set, the `primary limit aggregate` of the Liability Insurance will be updated with this value.
-          format: double
-        excessLimitAggregate:
-          type: number
-          description: If set, the `excess limit aggregate` of the Liability Insurance will be updated with this value.
-          format: double
-      additionalProperties: false
-    FacilityDeaNonVerifiedInfoRequestModel:
-      type: object
-      properties:
-        drugSchedules:
-          type: string
-          description: The drug schedules for the DEA registration.
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: The state of the DEA registration holder.
-        expirationDate:
-          type: string
-          description: The date at which this DEA registration expires.
-          format: date
-        businessActivityCode:
-          type: string
-          description: The business activity code for the DEA registration.
-        paymentIndicator:
-          enum:
-          - Paid
-          - Exempt
-          type: string
-          description: The payment indicator for the DEA registration.
-        isActive:
-          type: boolean
-          description: Indicates if the DEA registration is active or not.
-      additionalProperties: false
-    FacilityMedicareEnrollmentNonVerifiedInfoModel:
-      type: object
-      properties:
-        pecosEnrollmentIdentifier:
-          type: string
-      additionalProperties: false
-    FacilityCmsCertificationNonVerifiedInfoPatchModel:
-      type: object
-      properties:
-        certificationDate:
-          type: string
-          description: If set, the `certification date` of the CMS Certification will be updated with this value.
-          format: date
-      additionalProperties: false
-    FacilityNpiNonVerifiedInfoPatchModel:
-      type: object
-      properties:
-        isActive:
-          type: boolean
-          description: If set, the `is active` of the NPI will be updated with this value.
-      additionalProperties: false
-    FacilityAccreditationRequestModel:
-      required:
-      - accreditationAgencyId
-      - accreditationProgramId
-      - appliesTo
-      type: object
-      properties:
-        appliesTo:
-          enum:
-          - SelfOnly
-          - SelfAndAllChildren
-          - Custom
-          type: string
-          example: Custom
-        associatedFacilitySpecialtyIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        accreditationAgencyId:
-          type: string
-          description: The identifier of the agency for this Accreditation.
-          format: uuid
-        accreditationProgramId:
-          type: string
-          description: The identifier of the agency's program for this Accreditation.
-          format: uuid
-        accreditationNumber:
-          type: string
-          description: The Accreditation number.
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityAccreditationNonVerifiedInfoRequestModel'
       additionalProperties: false
     FacilityLicenseModel:
       type: object
@@ -2591,6 +2006,463 @@ components:
         nonVerifiedInfo:
           $ref: '#/components/schemas/FacilityLicenseNonVerifiedInfoModel'
       additionalProperties: false
+    FacilityDeaPatchModel:
+      type: object
+      properties:
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityDeaNonVerifiedInfoPatchModel'
+      additionalProperties: false
+    FacilityCmsCertificationNonVerifiedInfoModel:
+      type: object
+      properties:
+        certificationDate:
+          type: string
+          description: The date of this CMS Certification.
+          format: date
+      additionalProperties: false
+    FacilityMedicareEnrollmentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        lastUpdatedAt:
+          type: string
+          format: date-time
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        pecosPacIdentifier:
+          type: string
+          description: The unique identifier of the Pecos Pac.
+        enrollmentTypeId:
+          type: string
+          description: Medicare Enrollment Type unique identifier of the enrollment.
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: State of the Medicare Enrollment.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityMedicareEnrollmentNonVerifiedInfoModel'
+      additionalProperties: false
+    FacilityLiabilityInsuranceModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of this Liability Insurance.
+          format: uuid
+        lastUpdatedAt:
+          type: string
+          description: The date and time when the Liability Insurance was created or modified.
+          format: date-time
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        liabilityInsurer:
+          type: string
+          description: The name of the liability insurer.
+        policyNumber:
+          type: string
+          description: Policy number for this Liability Insurance.
+        effectiveDate:
+          type: string
+          description: Effective date associated with this Liability Insurance.
+          format: date
+        expirationDate:
+          type: string
+          description: Expiration date associated with this Liability Insurance.
+          format: date
+        coverageType:
+          type: string
+          description: Coverage type for this Liability Insurance.
+        primaryLimitPerClaim:
+          type: number
+          description: Primary limit per claim for this Liability Insurance.
+          format: double
+        excessLimitPerClaim:
+          type: number
+          description: Excess limit per claim for this Liability Insurance.
+          format: double
+        primaryLimitAggregate:
+          type: number
+          description: Primary limit aggregate for this Liability Insurance.
+          format: double
+        excessLimitAggregate:
+          type: number
+          description: Excess limit aggregate for this Liability Insurance.
+          format: double
+      additionalProperties: false
+    FacilityAccreditationRequestModel:
+      required:
+      - accreditationAgencyId
+      - accreditationProgramId
+      - appliesTo
+      type: object
+      properties:
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        accreditationAgencyId:
+          type: string
+          description: The identifier of the agency for this Accreditation.
+          format: uuid
+        accreditationProgramId:
+          type: string
+          description: The identifier of the agency's program for this Accreditation.
+          format: uuid
+        accreditationNumber:
+          type: string
+          description: The Accreditation number.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityAccreditationNonVerifiedInfoRequestModel'
+      additionalProperties: false
+    FacilityMedicareEnrollmentRequestModel:
+      required:
+      - appliesTo
+      - enrollmentTypeId
+      - pecosPacIdentifier
+      - state
+      type: object
+      properties:
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        pecosPacIdentifier:
+          minLength: 1
+          type: string
+          description: The unique identifier of the Pecos Pac.
+        enrollmentTypeId:
+          type: string
+          description: Medicare Enrollment Type unique identifier of the enrollment.
+          format: uuid
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: State of the Medicare Enrollment.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityMedicareEnrollmentNonVerifiedInfoRequestModel'
+      additionalProperties: false
+    FacilityAccreditationNonVerifiedInfoModel:
+      type: object
+      properties:
+        decision:
+          type: string
+          description: The decision for this Accreditation.
+        effectiveDate:
+          type: string
+          description: The effective date of this Accreditation.
+          format: date
+        expirationDate:
+          type: string
+          description: The expiration date of this Accreditation.
+          format: date
+      additionalProperties: false
+    FacilityAccreditationNonVerifiedInfoRequestModel:
+      type: object
+      properties:
+        decision:
+          type: string
+          description: The decision for this Accreditation.
+        effectiveDate:
+          type: string
+          description: The effective date of this Accreditation.
+          format: date
+        expirationDate:
+          type: string
+          description: The expiration date of this Accreditation.
+          format: date
+      additionalProperties: false
+    FacilityCmsCertificationRequestModel:
+      required:
+      - appliesTo
+      - certificationNumber
+      type: object
+      properties:
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        certificationNumber:
+          minLength: 1
+          type: string
+          description: The Certification number.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityCmsCertificationNonVerifiedInfoRequestModel'
+      additionalProperties: false
+    FacilityMedicareEnrollmentNonVerifiedInfoModel:
+      type: object
+      properties:
+        pecosEnrollmentIdentifier:
+          type: string
+      additionalProperties: false
+    FacilityAccreditationNonVerifiedInfoPatchModel:
+      type: object
+      properties:
+        decision:
+          type: string
+          description: If set, the `decision` of the Accreditation will be updated with this value.
+        effectiveDate:
+          type: string
+          description: If set, the `effective date` of the Accreditation will be updated with this value.
+          format: date
+        expirationDate:
+          type: string
+          description: If set, the `expiration date` of the Accreditation will be updated with this value.
+          format: date
+      additionalProperties: false
+    FacilityDeaNonVerifiedInfoRequestModel:
+      type: object
+      properties:
+        drugSchedules:
+          type: string
+          description: The drug schedules for the DEA registration.
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: The state of the DEA registration holder.
+        expirationDate:
+          type: string
+          description: The date at which this DEA registration expires.
+          format: date
+        businessActivityCode:
+          type: string
+          description: The business activity code for the DEA registration.
+        paymentIndicator:
+          enum:
+          - Paid
+          - Exempt
+          type: string
+          description: The payment indicator for the DEA registration.
+        isActive:
+          type: boolean
+          description: Indicates if the DEA registration is active or not.
+      additionalProperties: false
     FacilityAccreditationModel:
       type: object
       properties:
@@ -2628,10 +2500,90 @@ components:
         nonVerifiedInfo:
           $ref: '#/components/schemas/FacilityAccreditationNonVerifiedInfoModel'
       additionalProperties: false
-    FacilityNpiRequestModel:
-      required:
-      - appliesTo
-      - npi
+    FacilityDeaNonVerifiedInfoPatchModel:
+      type: object
+      properties:
+        drugSchedules:
+          type: string
+          description: If set, the `drug schedules` of the DEA registration will be updated with this value.
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: If set, the `state` of the DEA registration will be updated with this value.
+        expirationDate:
+          type: string
+          description: If set, the `expiration date` of the DEA registration will be updated with this value.
+          format: date
+        businessActivityCode:
+          type: string
+          description: If set, the `business activity code` of the DEA registration will be updated with this value.
+        paymentIndicator:
+          enum:
+          - Paid
+          - Exempt
+          type: string
+          description: If set, the `payment indicator` of the DEA registration will be updated with this value.
+        isActive:
+          type: boolean
+          description: If set, the `is active` of the DEA registration will be updated with this value.
+      additionalProperties: false
+    FacilityLiabilityInsurancePatchModel:
       type: object
       properties:
         appliesTo:
@@ -2646,29 +2598,77 @@ components:
           items:
             type: string
             format: uuid
-        npi:
-          type: integer
-          description: The 10 digit NPI number.
-          format: int64
-        nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityNpiNonVerifiedInfoRequestModel'
-      additionalProperties: false
-    FacilityAccreditationNonVerifiedInfoModel:
-      type: object
-      properties:
-        decision:
+        liabilityInsurer:
           type: string
-          description: The decision for this Accreditation.
+          description: If set, the `liability insurer` of the Liability Insurance will be updated with this value.
+        policyNumber:
+          type: string
+          description: If set, the `policy number` of the Liability Insurance will be updated with this value.
         effectiveDate:
           type: string
-          description: The effective date of this Accreditation.
+          description: If set, the `effective date` of the Liability Insurance will be updated with this value.
           format: date
         expirationDate:
           type: string
-          description: The expiration date of this Accreditation.
+          description: If set, the `expiration date` of the Liability Insurance will be updated with this value.
           format: date
+        coverageType:
+          type: string
+          description: If set, the `coverage type` of the Liability Insurance will be updated with this value.
+        primaryLimitPerClaim:
+          type: number
+          description: If set, the `primary limit per claim` of the Liability Insurance will be updated with this value.
+          format: double
+        excessLimitPerClaim:
+          type: number
+          description: If set, the `excess limit per claim` of the Liability Insurance will be updated with this value.
+          format: double
+        primaryLimitAggregate:
+          type: number
+          description: If set, the `primary limit aggregate` of the Liability Insurance will be updated with this value.
+          format: double
+        excessLimitAggregate:
+          type: number
+          description: If set, the `excess limit aggregate` of the Liability Insurance will be updated with this value.
+          format: double
       additionalProperties: false
-    FacilityNpiPatchModel:
+    FacilityLicensePatchModel:
+      type: object
+      properties:
+        appliesTo:
+          enum:
+          - SelfOnly
+          - SelfAndAllChildren
+          - Custom
+          type: string
+          example: Custom
+        associatedFacilitySpecialtyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        isPrimary:
+          type: boolean
+          description: If set, the `is primary` of the License will be updated with this value.
+        nonVerifiedInfo:
+          $ref: '#/components/schemas/FacilityLicenseNonVerifiedInfoPatchModel'
+      additionalProperties: false
+    FacilityLicenseNonVerifiedInfoModel:
+      type: object
+      properties:
+        issueDate:
+          type: string
+          description: The date at which this Licence was issued.
+          format: date
+        expirationDate:
+          type: string
+          description: The date at which this Licence expires.
+          format: date
+        licenseStatus:
+          type: string
+          description: The status of this license.
+      additionalProperties: false
+    FacilityMedicareEnrollmentPatchModel:
       type: object
       properties:
         appliesTo:
@@ -2684,14 +2684,14 @@ components:
             type: string
             format: uuid
         nonVerifiedInfo:
-          $ref: '#/components/schemas/FacilityNpiNonVerifiedInfoPatchModel'
+          $ref: '#/components/schemas/FacilityMedicareEnrollmentNonVerifiedInfoPatchModel'
       additionalProperties: false
-    FacilityNpiNonVerifiedInfoModel:
+    FacilityNpiNonVerifiedInfoPatchModel:
       type: object
       properties:
         isActive:
           type: boolean
-          description: Indicates if the NPI is active or not.
+          description: If set, the `is active` of the NPI will be updated with this value.
       additionalProperties: false
   securitySchemes:
     Bearer:

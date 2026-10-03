@@ -174,16 +174,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    PayerRequestModel:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          minLength: 1
-          type: string
-          description: The name associated with this payer.
-      additionalProperties: false
     PayerPatchModel:
       type: object
       properties:
@@ -202,6 +192,16 @@ components:
           type: string
           description: Unique identifier associated with this payer.
           format: uuid
+        name:
+          minLength: 1
+          type: string
+          description: The name associated with this payer.
+      additionalProperties: false
+    PayerRequestModel:
+      required:
+      - name
+      type: object
+      properties:
         name:
           minLength: 1
           type: string

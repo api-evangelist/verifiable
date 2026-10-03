@@ -82,14 +82,10 @@ paths:
       - Bearer: []
 components:
   schemas:
-    FountainStage:
+    FountainWebhookResponseModel:
       type: object
       properties:
-        title:
-          type:
-          - string
-          - 'null'
-        id:
+        requestId:
           type: string
           format: uuid
       additionalProperties: false
@@ -110,6 +106,23 @@ components:
           items:
             type: string
           description: Array of Salesforce identifiers to which the uploaded content document will be linked.
+      additionalProperties: false
+    FountainWebhookRequestModel:
+      type: object
+      properties:
+        applicant:
+          $ref: '#/components/schemas/FountainApplicantModel'
+      additionalProperties: false
+    FountainFunnel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     FountainApplicantModel:
       type: object
@@ -149,27 +162,14 @@ components:
           - 'null'
           additionalProperties: {}
       additionalProperties: false
-    FountainFunnel:
+    FountainStage:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
         title:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    FountainWebhookRequestModel:
-      type: object
-      properties:
-        applicant:
-          $ref: '#/components/schemas/FountainApplicantModel'
-      additionalProperties: false
-    FountainWebhookResponseModel:
-      type: object
-      properties:
-        requestId:
+        id:
           type: string
           format: uuid
       additionalProperties: false

@@ -217,6 +217,126 @@ paths:
       - Bearer: []
 components:
   schemas:
+    ProviderAddressModel:
+      required:
+      - addressLine1
+      - city
+      - state
+      - zipCode
+      type: object
+      properties:
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: Abbreviation of the state in which the city is located.
+        zipCode:
+          minLength: 1
+          type: string
+          description: The postal code associated with the address.
+        city:
+          minLength: 1
+          type: string
+          description: The city in which the address is located.
+        addressLine1:
+          minLength: 1
+          type: string
+          description: The street address.
+        addressLine2:
+          type: string
+          description: The secondary address information.
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Work
+          type: string
+          description: The type of address.
+        id:
+          type: string
+          description: Unique identifier for this address.
+          format: uuid
+      additionalProperties: false
+    ProviderAliasModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          type: string
+          description: The last (family) name of this alias.
+        id:
+          type: string
+          description: Unique identifier for this alias.
+          format: uuid
+      additionalProperties: false
+    ProviderTypeModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider type.
+          format: uuid
+        name:
+          type: string
+          description: Associated provider type name.
+      additionalProperties: false
     ProviderModel:
       required:
       - credentialingStatus
@@ -451,168 +571,6 @@ components:
           description: Timestamp when this provider was created.
           format: date-time
       additionalProperties: false
-    TaxonomyGroupModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the taxonomy group.
-          format: uuid
-        name:
-          type: string
-          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
-      additionalProperties: false
-      example:
-        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-        name: Allopathic & Osteopathic Physicians
-    ProviderTypeModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this provider type.
-          format: uuid
-        name:
-          type: string
-          description: Associated provider type name.
-      additionalProperties: false
-    SegmentModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the segment.
-          format: uuid
-        name:
-          type: string
-          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
-      additionalProperties: false
-      example:
-        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
-        name: acme-corp
-    ProviderAddressModel:
-      required:
-      - addressLine1
-      - city
-      - state
-      - zipCode
-      type: object
-      properties:
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: Abbreviation of the state in which the city is located.
-        zipCode:
-          minLength: 1
-          type: string
-          description: The postal code associated with the address.
-        city:
-          minLength: 1
-          type: string
-          description: The city in which the address is located.
-        addressLine1:
-          minLength: 1
-          type: string
-          description: The street address.
-        addressLine2:
-          type: string
-          description: The secondary address information.
-        type:
-          enum:
-          - Unspecified
-          - Home
-          - Work
-          type: string
-          description: The type of address.
-        id:
-          type: string
-          description: Unique identifier for this address.
-          format: uuid
-      additionalProperties: false
-    ProviderEmailModel:
-      type: object
-      properties:
-        email:
-          type: string
-          description: The email associated with the provider.
-        type:
-          enum:
-          - Unspecified
-          - Personal
-          - Work
-          type: string
-          description: The type of the email.
-        id:
-          type: string
-          description: Unique identifier for this specific email.
-          format: uuid
-      additionalProperties: false
-    ProviderNotesRequestModel:
-      required:
-      - note
-      type: object
-      properties:
-        note:
-          minLength: 1
-          type: string
-          description: The contents of the note.
-      additionalProperties: false
     AlertModel:
       type: object
       properties:
@@ -669,6 +627,16 @@ components:
           description: Unique identifier for this alert.
           format: uuid
       additionalProperties: false
+    ProviderNotesRequestModel:
+      required:
+      - note
+      type: object
+      properties:
+        note:
+          minLength: 1
+          type: string
+          description: The contents of the note.
+      additionalProperties: false
     AlertData:
       type: object
       properties:
@@ -689,6 +657,34 @@ components:
             - string
             - 'null'
       additionalProperties: false
+    TaxonomyGroupModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the taxonomy group.
+          format: uuid
+        name:
+          type: string
+          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
+      additionalProperties: false
+      example:
+        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        name: Allopathic & Osteopathic Physicians
+    SegmentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the segment.
+          format: uuid
+        name:
+          type: string
+          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
+      additionalProperties: false
+      example:
+        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
+        name: acme-corp
     ProviderNotesModel:
       type: object
       properties:
@@ -710,18 +706,22 @@ components:
         alert:
           $ref: '#/components/schemas/AlertModel'
       additionalProperties: false
-    ProviderAliasModel:
+    ProviderEmailModel:
       type: object
       properties:
-        firstName:
+        email:
           type: string
-          description: The first (given) name of this alias.
-        lastName:
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
           type: string
-          description: The last (family) name of this alias.
+          description: The type of the email.
         id:
           type: string
-          description: Unique identifier for this alias.
+          description: Unique identifier for this specific email.
           format: uuid
       additionalProperties: false
   securitySchemes:
