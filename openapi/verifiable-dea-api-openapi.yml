@@ -372,17 +372,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    DeaxVerificationResult:
-      type: object
-      properties:
-        number:
-          type: string
-          description: DEA-X number.
-        certifiedPatientLimit:
-          type: integer
-          description: Certified Patient Limit.
-          format: int32
-      additionalProperties: false
     DeaVerificationModel:
       type: object
       properties:
@@ -436,6 +425,17 @@ components:
           $ref: '#/components/schemas/DeaVerificationModel'
         diff:
           description: Diff in [jsondiffpatch](https://github.com/benjamine/jsondiffpatch) format.
+      additionalProperties: false
+    DeaxVerificationResult:
+      type: object
+      properties:
+        number:
+          type: string
+          description: DEA-X number.
+        certifiedPatientLimit:
+          type: integer
+          description: Certified Patient Limit.
+          format: int32
       additionalProperties: false
     DeaVerificationResult:
       type: object

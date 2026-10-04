@@ -529,7 +529,7 @@ paths:
       - Bearer: []
 components:
   schemas:
-    FacilityAccreditationAgencyPageModel:
+    FacilityLicenseTypePageModel:
       type: object
       properties:
         sort:
@@ -538,7 +538,7 @@ components:
             Keys:
               enum:
               - Id
-              - AgencyName
+              - Name
               type: string
             Values:
               enum:
@@ -572,12 +572,12 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/FacilityAccreditationAgencyModel'
-          description: The facility accreditations in the current page.
+            $ref: '#/components/schemas/FacilityLicenseTypeModel'
+          description: The facility license types in the current page.
         sortedBy:
           enum:
           - Id
-          - AgencyName
+          - Name
           type: string
           description: The property by which the data is sorted.
         sortDirection:
@@ -596,166 +596,16 @@ components:
         totalCount: 0
         items:
         - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-          agencyName: string
-          programs:
-          - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-            programName: string
-        sort:
-          Id: Asc
-    MedicareEnrollmentTypePageModel:
-      type: object
-      properties:
-        sort:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            enum:
-            - Asc
-            - Desc
-            type: string
-        previousCursor:
-          type:
-          - string
-          - 'null'
-        nextCursor:
-          type:
-          - string
-          - 'null'
-        nextOffset:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        count:
-          type: integer
-          format: int32
-        totalCount:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/MedicareEnrollmentTypeModel'
-        sortedBy:
-          enum:
-          - Code
-          - Description
-          type:
-          - string
-          - 'null'
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    FacilityTaxonomyModel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        code:
-          type:
-          - string
-          - 'null'
-        name:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    FacilityTaxonomyPageModel:
-      type: object
-      properties:
-        sort:
-          type: object
-          properties:
-            Keys:
-              enum:
-              - Id
-              - Code
-              type: string
-            Values:
-              enum:
-              - Asc
-              - Desc
-              type: string
-          description: The properties and directions the data is sorted by.
-        previousCursor:
-          type: string
-          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
-        nextCursor:
-          type: string
-          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
-        nextOffset:
-          type: integer
-          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
-          format: int32
-          deprecated: true
-        pageSize:
-          type: integer
-          description: The maximum number of items included in this page.
-          format: int32
-        count:
-          type: integer
-          description: The number of items in this page.
-          format: int32
-        totalCount:
-          type: integer
-          description: The total number of items in all pages combined.
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/FacilityTaxonomyModel'
-          description: The facility taxonomies in the current page.
-        sortedBy:
-          enum:
-          - Id
-          - Code
-          type: string
-          description: The property by which the data is sorted.
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type: string
-          description: The direction in which the data is sorted.
-      additionalProperties: false
-      example:
-        previousCursor: string
-        nextCursor: string
-        nextOffset: 0
-        pageSize: 0
-        count: 0
-        totalCount: 0
-        items:
-        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-          code: string
           name: string
         sort:
-          Code: Asc
-    MedicareEnrollmentTypeModel:
+          Id: Asc
+    FacilityLicenseTypeModel:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        code:
-          type:
-          - string
-          - 'null'
-        description:
+        name:
           type:
           - string
           - 'null'
@@ -879,115 +729,6 @@ components:
         medicaidNumber:
           type: string
       additionalProperties: false
-    FacilityLicenseTypeModel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    FacilityAccreditationProgramModel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        programName:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    FacilityAccreditationAgencyModel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        agencyName:
-          type:
-          - string
-          - 'null'
-        programs:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FacilityAccreditationProgramModel'
-      additionalProperties: false
-    FacilityLicenseTypePageModel:
-      type: object
-      properties:
-        sort:
-          type: object
-          properties:
-            Keys:
-              enum:
-              - Id
-              - Name
-              type: string
-            Values:
-              enum:
-              - Asc
-              - Desc
-              type: string
-          description: The properties and directions the data is sorted by.
-        previousCursor:
-          type: string
-          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
-        nextCursor:
-          type: string
-          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
-        nextOffset:
-          type: integer
-          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
-          format: int32
-          deprecated: true
-        pageSize:
-          type: integer
-          description: The maximum number of items included in this page.
-          format: int32
-        count:
-          type: integer
-          description: The number of items in this page.
-          format: int32
-        totalCount:
-          type: integer
-          description: The total number of items in all pages combined.
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/FacilityLicenseTypeModel'
-          description: The facility license types in the current page.
-        sortedBy:
-          enum:
-          - Id
-          - Name
-          type: string
-          description: The property by which the data is sorted.
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type: string
-          description: The direction in which the data is sorted.
-      additionalProperties: false
-      example:
-        previousCursor: string
-        nextCursor: string
-        nextOffset: 0
-        pageSize: 0
-        count: 0
-        totalCount: 0
-        items:
-        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-          name: string
-        sort:
-          Id: Asc
     FacilityPageModel:
       type: object
       properties:
@@ -1073,6 +814,217 @@ components:
         sortDirection: Asc
         sort:
           Id: Asc
+    FacilityTaxonomyPageModel:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Id
+              - Code
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityTaxonomyModel'
+          description: The facility taxonomies in the current page.
+        sortedBy:
+          enum:
+          - Id
+          - Code
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          code: string
+          name: string
+        sort:
+          Code: Asc
+    FacilityPatchModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: If set, the facility's `name` will be updated with this value.
+        deactivated:
+          type: boolean
+          description: If set to true, the facility will be deactivated. If set to false, the facility will be activated.
+        parentFacilityId:
+          type: string
+          format: uuid
+        dba:
+          type: string
+          description: If set, the facility's `DBA` will be updated with this value.
+        addressLine1:
+          type: string
+          description: If set, the facility's `street address` will be updated with this value.
+        addressLine2:
+          type: string
+          description: If set, the facility's `secondary address` will be updated with this value.
+        city:
+          type: string
+          description: If set, the facility's `city` will be updated with this value.
+        state:
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AS
+          - GU
+          - MP
+          - PR
+          - VI
+          type: string
+          description: If set, the facility's `state` will be updated with this value.
+        zipCode:
+          type: string
+          description: If set, the facility's `zip code` will be updated with this value.
+        phoneNumber:
+          type: string
+          description: If set, the facility's `phone number` will be updated with this value.
+        faxNumber:
+          type: string
+          description: If set, the facility's `fax number` will be updated with this value.
+        groupTaxId:
+          type: string
+          description: If set, the facility's `group tax id` will be updated with this value.
+        facilityTaxId:
+          type: string
+          description: If set, the facility's `facility tax id` will be updated with this value.
+        contactName:
+          type: string
+          description: If set, the facility's `contact name` will be updated with this value.
+        contactEmail:
+          type: string
+          description: If set, the facility's `contact email` will be updated with this value.
+        medicarePartANumber:
+          type: string
+        medicarePartBNumber:
+          type: string
+        medicaidNumber:
+          type: string
+      additionalProperties: false
+    FacilityAccreditationAgencyModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        agencyName:
+          type:
+          - string
+          - 'null'
+        programs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FacilityAccreditationProgramModel'
+      additionalProperties: false
+    FacilityAccreditationProgramModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        programName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     FacilityModel:
       type: object
       properties:
@@ -1192,118 +1144,166 @@ components:
         medicaidNumber:
           type: string
       additionalProperties: false
-    FacilityPatchModel:
+    FacilityTaxonomyModel:
       type: object
       properties:
-        name:
-          type: string
-          description: If set, the facility's `name` will be updated with this value.
-        deactivated:
-          type: boolean
-          description: If set to true, the facility will be deactivated. If set to false, the facility will be activated.
-        parentFacilityId:
+        id:
           type: string
           format: uuid
-        dba:
-          type: string
-          description: If set, the facility's `DBA` will be updated with this value.
-        addressLine1:
-          type: string
-          description: If set, the facility's `street address` will be updated with this value.
-        addressLine2:
-          type: string
-          description: If set, the facility's `secondary address` will be updated with this value.
-        city:
-          type: string
-          description: If set, the facility's `city` will be updated with this value.
-        state:
-          enum:
-          - AL
-          - AK
-          - AZ
-          - AR
-          - CA
-          - CO
-          - CT
-          - DE
-          - DC
-          - FL
-          - GA
-          - HI
-          - ID
-          - IL
-          - IN
-          - IA
-          - KS
-          - KY
-          - LA
-          - ME
-          - MD
-          - MA
-          - MI
-          - MN
-          - MS
-          - MO
-          - MT
-          - NE
-          - NV
-          - NH
-          - NJ
-          - NM
-          - NY
-          - NC
-          - ND
-          - OH
-          - OK
-          - OR
-          - PA
-          - RI
-          - SC
-          - SD
-          - TN
-          - TX
-          - UT
-          - VT
-          - VA
-          - WA
-          - WV
-          - WI
-          - WY
-          - AS
-          - GU
-          - MP
-          - PR
-          - VI
-          type: string
-          description: If set, the facility's `state` will be updated with this value.
-        zipCode:
-          type: string
-          description: If set, the facility's `zip code` will be updated with this value.
-        phoneNumber:
-          type: string
-          description: If set, the facility's `phone number` will be updated with this value.
-        faxNumber:
-          type: string
-          description: If set, the facility's `fax number` will be updated with this value.
-        groupTaxId:
-          type: string
-          description: If set, the facility's `group tax id` will be updated with this value.
-        facilityTaxId:
-          type: string
-          description: If set, the facility's `facility tax id` will be updated with this value.
-        contactName:
-          type: string
-          description: If set, the facility's `contact name` will be updated with this value.
-        contactEmail:
-          type: string
-          description: If set, the facility's `contact email` will be updated with this value.
-        medicarePartANumber:
-          type: string
-        medicarePartBNumber:
-          type: string
-        medicaidNumber:
-          type: string
+        code:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
+    MedicareEnrollmentTypeModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    MedicareEnrollmentTypePageModel:
+      type: object
+      properties:
+        sort:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            enum:
+            - Asc
+            - Desc
+            type: string
+        previousCursor:
+          type:
+          - string
+          - 'null'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+        nextOffset:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        totalCount:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MedicareEnrollmentTypeModel'
+        sortedBy:
+          enum:
+          - Code
+          - Description
+          type:
+          - string
+          - 'null'
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    FacilityAccreditationAgencyPageModel:
+      type: object
+      properties:
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Id
+              - AgencyName
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityAccreditationAgencyModel'
+          description: The facility accreditations in the current page.
+        sortedBy:
+          enum:
+          - Id
+          - AgencyName
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          agencyName: string
+          programs:
+          - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+            programName: string
+        sort:
+          Id: Asc
   securitySchemes:
     Bearer:
       type: http

@@ -43,19 +43,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    SensitiveString:
-      type: object
-      additionalProperties: false
-      description: If `includeSensitiveInfo` query parameter set to true the value will be shown in the response, otherwise it will be masked with *.
-      example: '***'
-    SsoAuthModel:
-      required:
-      - accessToken
-      type: object
-      properties:
-        accessToken:
-          $ref: '#/components/schemas/SensitiveString'
-      additionalProperties: false
     AuthResponseModel:
       type: object
       properties:
@@ -84,6 +71,11 @@ components:
       example:
         tokenId: 0847312d-19fe-49d2-9e21-5825735b511a
         token: MtetyFcIW...xgXXX-Z4yy
+    SensitiveString:
+      type: object
+      additionalProperties: false
+      description: If `includeSensitiveInfo` query parameter set to true the value will be shown in the response, otherwise it will be masked with *.
+      example: '***'
     UserRoleModel:
       type: object
       properties:
@@ -110,6 +102,14 @@ components:
             - Write
             - Allowed
             type: string
+      additionalProperties: false
+    SsoAuthModel:
+      required:
+      - accessToken
+      type: object
+      properties:
+        accessToken:
+          $ref: '#/components/schemas/SensitiveString'
       additionalProperties: false
   securitySchemes:
     Bearer:

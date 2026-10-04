@@ -89,30 +89,6 @@ components:
           type: string
           format: uuid
       additionalProperties: false
-    SalesforceDocumentRequestRequestModel:
-      required:
-      - document
-      - relatedIds
-      type: object
-      properties:
-        document:
-          minLength: 1
-          type: string
-          description: Path to the document (stored in this organization) to be uploaded to Salesforce.
-        pathOnClient:
-          type: string
-        relatedIds:
-          type: array
-          items:
-            type: string
-          description: Array of Salesforce identifiers to which the uploaded content document will be linked.
-      additionalProperties: false
-    FountainWebhookRequestModel:
-      type: object
-      properties:
-        applicant:
-          $ref: '#/components/schemas/FountainApplicantModel'
-      additionalProperties: false
     FountainFunnel:
       type: object
       properties:
@@ -161,6 +137,30 @@ components:
           - object
           - 'null'
           additionalProperties: {}
+      additionalProperties: false
+    FountainWebhookRequestModel:
+      type: object
+      properties:
+        applicant:
+          $ref: '#/components/schemas/FountainApplicantModel'
+      additionalProperties: false
+    SalesforceDocumentRequestRequestModel:
+      required:
+      - document
+      - relatedIds
+      type: object
+      properties:
+        document:
+          minLength: 1
+          type: string
+          description: Path to the document (stored in this organization) to be uploaded to Salesforce.
+        pathOnClient:
+          type: string
+        relatedIds:
+          type: array
+          items:
+            type: string
+          description: Array of Salesforce identifiers to which the uploaded content document will be linked.
       additionalProperties: false
     FountainStage:
       type: object

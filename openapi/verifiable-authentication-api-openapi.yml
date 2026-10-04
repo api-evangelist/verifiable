@@ -305,6 +305,70 @@ paths:
           description: Server Error
 components:
   schemas:
+    InvalidateAllAccessTokensRequestModel:
+      type: object
+      properties:
+        invalidateCurrent:
+          type: boolean
+        tokenIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+      additionalProperties: false
+    PasswordResetRequestModel:
+      required:
+      - newPassword
+      - token
+      type: object
+      properties:
+        token:
+          type: string
+          description: The token received via e-mail.
+        newPassword:
+          type: string
+          description: The new password that will be set to the user associated with the token.
+      additionalProperties: false
+    OAuthTokenResponseModel:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The access token to use to access the Verifiable API.
+        token_type:
+          type: string
+          description: The OAuth 2.0 token type (ex. `Bearer`).
+        expires_in:
+          type: integer
+          description: The number of seconds in which the access token will expire.
+          format: int32
+      additionalProperties: false
+    AccessTokenModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the access token.
+          format: uuid
+        lastUserAgent:
+          type: string
+          description: The user agent of the remote user that last used this access token.
+        lastIpAddress:
+          type: string
+          description: The IP address of the remote user that last used this access token.
+        lastUsed:
+          type: string
+          description: The timestamp when this access token was last used.
+          format: date-time
+        isCurrent:
+          type: boolean
+          description: Set to true if this access token was used in the current request.
+        expiresAt:
+          type: string
+          format: date-time
+      additionalProperties: false
     PasswordAuthModel:
       required:
       - email
@@ -348,74 +412,44 @@ components:
       example:
         code: 4/yU4cQZT...4z7U4UmAI
         timeToLive: 00:30:00
-    InvalidateAllAccessTokensRequestModel:
-      type: object
-      properties:
-        invalidateCurrent:
-          type: boolean
-        tokenIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            format: uuid
-      additionalProperties: false
-    OAuthTokenResponseModel:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: The access token to use to access the Verifiable API.
-        token_type:
-          type: string
-          description: The OAuth 2.0 token type (ex. `Bearer`).
-        expires_in:
-          type: integer
-          description: The number of seconds in which the access token will expire.
-          format: int32
-      additionalProperties: false
-    PasswordResetRequestModel:
+    RequestPasswordResetRequestModel:
       required:
-      - newPassword
-      - token
+      - email
       type: object
       properties:
-        token:
-          type: string
-          description: The token received via e-mail.
-        newPassword:
-          type: string
-          description: The new password that will be set to the user associated with the token.
-      additionalProperties: false
-    AuthResponseModel:
-      type: object
-      properties:
-        tokenId:
-          type: string
-          description: Unique identifier for this token. This can be used to invalidate a token.
-          format: uuid
-        token:
-          type: string
-          description: The access token to be used in following API calls.
         email:
+          minLength: 1
           type: string
-          description: The e-mail address of the user. It will either be the same e-mail address used on the password authentication or the e-mail address of the Google account in the case of Google authentication.
-        role:
-          $ref: '#/components/schemas/UserRoleModel'
-        expiresAt:
-          type: string
-          description: Expiration time of the access token.
-          format: date-time
-        persistenceHint:
-          enum:
-          - Persistent
-          - Ephemeral
-          type: string
+          description: The e-mail address from the account which should have the password reset.
+          format: email
       additionalProperties: false
-      example:
-        tokenId: 0847312d-19fe-49d2-9e21-5825735b511a
-        token: MtetyFcIW...xgXXX-Z4yy
+    UserRoleModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          enum:
+          - Admin
+          - LimitedAdmin
+          - Credentialing
+          - LimitedCredentialing
+          - Reader
+          - LimitedReader
+          type: string
+        permissions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            enum:
+            - None
+            - Read
+            - Write
+            - Allowed
+            type: string
+      additionalProperties: false
     AccessTokenPageModel:
       type: object
       properties:
@@ -490,68 +524,34 @@ components:
         sortDirection: Asc
         sort:
           Id: Asc
-    RequestPasswordResetRequestModel:
-      required:
-      - email
+    AuthResponseModel:
       type: object
       properties:
+        tokenId:
+          type: string
+          description: Unique identifier for this token. This can be used to invalidate a token.
+          format: uuid
+        token:
+          type: string
+          description: The access token to be used in following API calls.
         email:
-          minLength: 1
           type: string
-          description: The e-mail address from the account which should have the password reset.
-          format: email
-      additionalProperties: false
-    UserRoleModel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          enum:
-          - Admin
-          - LimitedAdmin
-          - Credentialing
-          - LimitedCredentialing
-          - Reader
-          - LimitedReader
-          type: string
-        permissions:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            enum:
-            - None
-            - Read
-            - Write
-            - Allowed
-            type: string
-      additionalProperties: false
-    AccessTokenModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the access token.
-          format: uuid
-        lastUserAgent:
-          type: string
-          description: The user agent of the remote user that last used this access token.
-        lastIpAddress:
-          type: string
-          description: The IP address of the remote user that last used this access token.
-        lastUsed:
-          type: string
-          description: The timestamp when this access token was last used.
-          format: date-time
-        isCurrent:
-          type: boolean
-          description: Set to true if this access token was used in the current request.
+          description: The e-mail address of the user. It will either be the same e-mail address used on the password authentication or the e-mail address of the Google account in the case of Google authentication.
+        role:
+          $ref: '#/components/schemas/UserRoleModel'
         expiresAt:
           type: string
+          description: Expiration time of the access token.
           format: date-time
+        persistenceHint:
+          enum:
+          - Persistent
+          - Ephemeral
+          type: string
       additionalProperties: false
+      example:
+        tokenId: 0847312d-19fe-49d2-9e21-5825735b511a
+        token: MtetyFcIW...xgXXX-Z4yy
   securitySchemes:
     Bearer:
       type: http

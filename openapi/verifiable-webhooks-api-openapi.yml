@@ -366,6 +366,41 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    WebhookModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this webhook.
+          format: uuid
+        type:
+          enum:
+          - VerificationCompleted
+          - ExportCompleted
+          - LicenseExpiresSoon
+          - LicenseExpired
+          - LicenseChanged
+          - DatasetScanCompleted
+          - LicenseStatusChanged
+          - ProviderStatusChanged
+          - ProviderProfileImportCompleted
+          - CredentialingRequestChanged
+          - GenerateReport
+          - DatasetScanMatchesChanged
+          - NpdbUpdateRequestRejected
+          type: string
+          description: The event type that should trigger this webhook.
+        url:
+          type: string
+          description: The URL we will make an HTTP POST request to when an event of `type` occurs.
+          format: uri
+        allowInsecureUrl:
+          type: boolean
+          description: Set to true if the webhook was created to allow insecure URLs that use no SSL or self signed certificates.
+        includeSensitiveInfo:
+          type: boolean
+          description: If set to false, the sensitive info will be masked in the webhook payload. The default value is true.
+      additionalProperties: false
     WebhookLogModel:
       type: object
       properties:
@@ -435,41 +470,6 @@ components:
         webhookId:
           type: string
           format: uuid
-      additionalProperties: false
-    WebhookModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this webhook.
-          format: uuid
-        type:
-          enum:
-          - VerificationCompleted
-          - ExportCompleted
-          - LicenseExpiresSoon
-          - LicenseExpired
-          - LicenseChanged
-          - DatasetScanCompleted
-          - LicenseStatusChanged
-          - ProviderStatusChanged
-          - ProviderProfileImportCompleted
-          - CredentialingRequestChanged
-          - GenerateReport
-          - DatasetScanMatchesChanged
-          - NpdbUpdateRequestRejected
-          type: string
-          description: The event type that should trigger this webhook.
-        url:
-          type: string
-          description: The URL we will make an HTTP POST request to when an event of `type` occurs.
-          format: uri
-        allowInsecureUrl:
-          type: boolean
-          description: Set to true if the webhook was created to allow insecure URLs that use no SSL or self signed certificates.
-        includeSensitiveInfo:
-          type: boolean
-          description: If set to false, the sensitive info will be masked in the webhook payload. The default value is true.
       additionalProperties: false
     WebhookRequestModel:
       required:
