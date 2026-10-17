@@ -82,12 +82,23 @@ paths:
       - Bearer: []
 components:
   schemas:
-    FountainWebhookResponseModel:
+    SalesforceDocumentRequestRequestModel:
+      required:
+      - document
+      - relatedIds
       type: object
       properties:
-        requestId:
+        document:
+          minLength: 1
           type: string
-          format: uuid
+          description: Path to the document (stored in this organization) to be uploaded to Salesforce.
+        pathOnClient:
+          type: string
+        relatedIds:
+          type: array
+          items:
+            type: string
+          description: Array of Salesforce identifiers to which the uploaded content document will be linked.
       additionalProperties: false
     FountainFunnel:
       type: object
@@ -99,6 +110,24 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    FountainStage:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        id:
+          type: string
+          format: uuid
+      additionalProperties: false
+    FountainWebhookResponseModel:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
       additionalProperties: false
     FountainApplicantModel:
       type: object
@@ -143,35 +172,6 @@ components:
       properties:
         applicant:
           $ref: '#/components/schemas/FountainApplicantModel'
-      additionalProperties: false
-    SalesforceDocumentRequestRequestModel:
-      required:
-      - document
-      - relatedIds
-      type: object
-      properties:
-        document:
-          minLength: 1
-          type: string
-          description: Path to the document (stored in this organization) to be uploaded to Salesforce.
-        pathOnClient:
-          type: string
-        relatedIds:
-          type: array
-          items:
-            type: string
-          description: Array of Salesforce identifiers to which the uploaded content document will be linked.
-      additionalProperties: false
-    FountainStage:
-      type: object
-      properties:
-        title:
-          type:
-          - string
-          - 'null'
-        id:
-          type: string
-          format: uuid
       additionalProperties: false
   securitySchemes:
     Bearer:

@@ -372,71 +372,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    DeaVerificationModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for this verification.
-          format: uuid
-        timestamp:
-          type: string
-          description: Timestamp of when the verification took place.
-          format: date-time
-        lastUpdated:
-          type: string
-          description: Timestamp of the last update for DEA records.
-          format: date-time
-        lastSync:
-          type: string
-          description: Timestamp of the last DEA data sync.
-          format: date-time
-        status:
-          enum:
-          - Found
-          - Failed
-          - NeedsReview
-          - NotFound
-          - Pending
-          - Working
-          type: string
-          description: The current status for this verification. If you patch the verification status (in case the status is `NeedsReview`) this property will be updated, but `originalStatus` will remain the same.
-        originalStatus:
-          enum:
-          - Found
-          - Failed
-          - NeedsReview
-          - NotFound
-          - Pending
-          - Working
-          type: string
-          description: The original status as our verification process determined. Unlike `status` the `originalStatus` can never change.
-        results:
-          $ref: '#/components/schemas/DeaVerificationResult'
-        deaxResults:
-          $ref: '#/components/schemas/DeaxVerificationResult'
-      additionalProperties: false
-    DeaVerificationDiffModel:
-      type: object
-      properties:
-        old:
-          $ref: '#/components/schemas/DeaVerificationModel'
-        new:
-          $ref: '#/components/schemas/DeaVerificationModel'
-        diff:
-          description: Diff in [jsondiffpatch](https://github.com/benjamine/jsondiffpatch) format.
-      additionalProperties: false
-    DeaxVerificationResult:
-      type: object
-      properties:
-        number:
-          type: string
-          description: DEA-X number.
-        certifiedPatientLimit:
-          type: integer
-          description: Certified Patient Limit.
-          format: int32
-      additionalProperties: false
     DeaVerificationResult:
       type: object
       properties:
@@ -497,6 +432,41 @@ components:
           description: Textual description of the bussiness code and sub-code.
           readOnly: true
       additionalProperties: false
+    DeaxVerificationResult:
+      type: object
+      properties:
+        number:
+          type: string
+          description: DEA-X number.
+        certifiedPatientLimit:
+          type: integer
+          description: Certified Patient Limit.
+          format: int32
+      additionalProperties: false
+    DeaVerificationResolutionModel:
+      type: object
+      properties:
+        status:
+          enum:
+          - Found
+          - Failed
+          - NeedsReview
+          - NotFound
+          - Pending
+          - Working
+          type: string
+          description: The correct status for this verification.
+      additionalProperties: false
+    DeaVerificationDiffModel:
+      type: object
+      properties:
+        old:
+          $ref: '#/components/schemas/DeaVerificationModel'
+        new:
+          $ref: '#/components/schemas/DeaVerificationModel'
+        diff:
+          description: Diff in [jsondiffpatch](https://github.com/benjamine/jsondiffpatch) format.
+      additionalProperties: false
     DeaRegistrationModel:
       type: object
       properties:
@@ -513,9 +483,25 @@ components:
         currentVerification:
           $ref: '#/components/schemas/DeaVerificationModel'
       additionalProperties: false
-    DeaVerificationResolutionModel:
+    DeaVerificationModel:
       type: object
       properties:
+        id:
+          type: string
+          description: Unique identifier for this verification.
+          format: uuid
+        timestamp:
+          type: string
+          description: Timestamp of when the verification took place.
+          format: date-time
+        lastUpdated:
+          type: string
+          description: Timestamp of the last update for DEA records.
+          format: date-time
+        lastSync:
+          type: string
+          description: Timestamp of the last DEA data sync.
+          format: date-time
         status:
           enum:
           - Found
@@ -525,7 +511,21 @@ components:
           - Pending
           - Working
           type: string
-          description: The correct status for this verification.
+          description: The current status for this verification. If you patch the verification status (in case the status is `NeedsReview`) this property will be updated, but `originalStatus` will remain the same.
+        originalStatus:
+          enum:
+          - Found
+          - Failed
+          - NeedsReview
+          - NotFound
+          - Pending
+          - Working
+          type: string
+          description: The original status as our verification process determined. Unlike `status` the `originalStatus` can never change.
+        results:
+          $ref: '#/components/schemas/DeaVerificationResult'
+        deaxResults:
+          $ref: '#/components/schemas/DeaxVerificationResult'
       additionalProperties: false
   securitySchemes:
     Bearer:

@@ -233,103 +233,12 @@ paths:
       - Bearer: []
 components:
   schemas:
-    AlertPageModel:
+    DismissRequestModel:
       type: object
       properties:
-        sort:
-          type: object
-          properties:
-            Keys:
-              enum:
-              - Timestamp
-              type: string
-            Values:
-              enum:
-              - Asc
-              - Desc
-              type: string
-          description: The properties and directions the data is sorted by.
-        previousCursor:
+        dismissalNote:
           type: string
-          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
-        nextCursor:
-          type: string
-          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
-        nextOffset:
-          type: integer
-          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
-          format: int32
-          deprecated: true
-        pageSize:
-          type: integer
-          description: The maximum number of items included in this page.
-          format: int32
-        count:
-          type: integer
-          description: The number of items in this page.
-          format: int32
-        totalCount:
-          type: integer
-          description: The total number of items in all pages combined.
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AlertModel'
-          description: The audit log entries in the current page.
-        sortedBy:
-          enum:
-          - Timestamp
-          type: string
-          description: The property by which the data is sorted.
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type: string
-          description: The direction in which the data is sorted.
-      additionalProperties: false
-      example:
-        previousCursor: string
-        nextCursor: string
-        nextOffset: 0
-        pageSize: 0
-        count: 0
-        totalCount: 0
-        items:
-        - type: LicenseChanged
-          providerId: 4834bcdc-4a64-444d-966b-1a6fe381da24
-          entityType: License
-          entityId: 156e622c-6cdf-4c27-9bc9-2f2db69919f5
-          data:
-            messageTemplate: string
-            messageParams:
-              property1: string
-              property2: string
-            data:
-              property1: string
-              property2: string
-          timestamp: '2019-08-24T14:15:22.0000000Z'
-          dismissalTimestamp: '2019-08-24T14:15:22.0000000Z'
-          dismissalNote: string
-          id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-        sortedBy: Timestamp
-        sortDirection: Asc
-        sort:
-          Timestamp: Asc
-    ProviderAliasModel:
-      type: object
-      properties:
-        firstName:
-          type: string
-          description: The first (given) name of this alias.
-        lastName:
-          type: string
-          description: The last (family) name of this alias.
-        id:
-          type: string
-          description: Unique identifier for this alias.
-          format: uuid
+          description: A note that explains why this alert was dismissed.
       additionalProperties: false
     ProviderModel:
       required:
@@ -565,6 +474,139 @@ components:
           description: Timestamp when this provider was created.
           format: date-time
       additionalProperties: false
+    ProviderTypeModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider type.
+          format: uuid
+        name:
+          type: string
+          description: Associated provider type name.
+      additionalProperties: false
+    AlertData:
+      type: object
+      properties:
+        messageTemplate:
+          type: string
+          description: An informative human readable message describing the action in the audit log entry.
+        messageParams:
+          type: object
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
+        data:
+          type: object
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+      additionalProperties: false
+    SegmentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the segment.
+          format: uuid
+        name:
+          type: string
+          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
+      additionalProperties: false
+      example:
+        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
+        name: acme-corp
+    ProviderEmailModel:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email associated with the provider.
+        type:
+          enum:
+          - Unspecified
+          - Personal
+          - Work
+          type: string
+          description: The type of the email.
+        id:
+          type: string
+          description: Unique identifier for this specific email.
+          format: uuid
+      additionalProperties: false
+    ProviderAliasModel:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first (given) name of this alias.
+        lastName:
+          type: string
+          description: The last (family) name of this alias.
+        id:
+          type: string
+          description: Unique identifier for this alias.
+          format: uuid
+      additionalProperties: false
+    AlertModel:
+      type: object
+      properties:
+        type:
+          enum:
+          - LicenseChanged
+          - LicenseExpiresSoon
+          - LicenseExpired
+          - ProfileImportCompleted
+          type: string
+          description: The type of event that led to this alert.
+        providerId:
+          type: string
+          description: Identifier of the provider related to this alert.
+          format: uuid
+        provider:
+          $ref: '#/components/schemas/ProviderModel'
+        entityType:
+          enum:
+          - License
+          - Verification
+          - Alert
+          - NpiRecord
+          - Note
+          - BoardCertification
+          - BoardCertificationVerification
+          - DeaVerification
+          - DatasetScan
+          - DatasetRecord
+          - File
+          - ProfileImport
+          - NpdbVerificationRequest
+          type: string
+          description: If set, the type of the entity that `EntityId` refers to.
+        entityId:
+          type: string
+          description: Identifier of the related entity that's relevant to this alert type.
+          format: uuid
+        data:
+          $ref: '#/components/schemas/AlertData'
+        timestamp:
+          type: string
+          description: The date and time when this alert was triggered.
+          format: date-time
+        dismissalTimestamp:
+          type: string
+          description: The date and time when this alert was dismissed, if at all.
+          format: date-time
+        dismissalNote:
+          type: string
+          description: The note supplied as reason for dismissal, if and when this alert was dismissed.
+        id:
+          type: string
+          description: Unique identifier for this alert.
+          format: uuid
+      additionalProperties: false
     ProviderAddressModel:
       required:
       - addressLine1
@@ -660,62 +702,104 @@ components:
           description: Unique identifier for this address.
           format: uuid
       additionalProperties: false
-    AlertModel:
+    AlertPageModel:
       type: object
       properties:
-        type:
+        sort:
+          type: object
+          properties:
+            Keys:
+              enum:
+              - Timestamp
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+          description: The properties and directions the data is sorted by.
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertModel'
+          description: The audit log entries in the current page.
+        sortedBy:
           enum:
-          - LicenseChanged
-          - LicenseExpiresSoon
-          - LicenseExpired
-          - ProfileImportCompleted
+          - Timestamp
           type: string
-          description: The type of event that led to this alert.
-        providerId:
-          type: string
-          description: Identifier of the provider related to this alert.
-          format: uuid
-        provider:
-          $ref: '#/components/schemas/ProviderModel'
-        entityType:
+          description: The property by which the data is sorted.
+        sortDirection:
           enum:
-          - License
-          - Verification
-          - Alert
-          - NpiRecord
-          - Note
-          - BoardCertification
-          - BoardCertificationVerification
-          - DeaVerification
-          - DatasetScan
-          - DatasetRecord
-          - File
-          - ProfileImport
-          - NpdbVerificationRequest
+          - Asc
+          - Desc
           type: string
-          description: If set, the type of the entity that `EntityId` refers to.
-        entityId:
-          type: string
-          description: Identifier of the related entity that's relevant to this alert type.
-          format: uuid
-        data:
-          $ref: '#/components/schemas/AlertData'
-        timestamp:
-          type: string
-          description: The date and time when this alert was triggered.
-          format: date-time
-        dismissalTimestamp:
-          type: string
-          description: The date and time when this alert was dismissed, if at all.
-          format: date-time
-        dismissalNote:
-          type: string
-          description: The note supplied as reason for dismissal, if and when this alert was dismissed.
+          description: The direction in which the data is sorted.
+      additionalProperties: false
+      example:
+        previousCursor: string
+        nextCursor: string
+        nextOffset: 0
+        pageSize: 0
+        count: 0
+        totalCount: 0
+        items:
+        - type: LicenseChanged
+          providerId: 4834bcdc-4a64-444d-966b-1a6fe381da24
+          entityType: License
+          entityId: 156e622c-6cdf-4c27-9bc9-2f2db69919f5
+          data:
+            messageTemplate: string
+            messageParams:
+              property1: string
+              property2: string
+            data:
+              property1: string
+              property2: string
+          timestamp: '2019-08-24T14:15:22.0000000Z'
+          dismissalTimestamp: '2019-08-24T14:15:22.0000000Z'
+          dismissalNote: string
+          id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        sortedBy: Timestamp
+        sortDirection: Asc
+        sort:
+          Timestamp: Asc
+    TaxonomyGroupModel:
+      type: object
+      properties:
         id:
           type: string
-          description: Unique identifier for this alert.
+          description: Unique identifier for the taxonomy group.
           format: uuid
+        name:
+          type: string
+          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
       additionalProperties: false
+      example:
+        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        name: Allopathic & Osteopathic Physicians
     AlertAggregationsModel:
       type: object
       properties:
@@ -743,90 +827,6 @@ components:
           type: integer
           description: The total number of active `Profile Import Completed` alerts.
           format: int32
-      additionalProperties: false
-    ProviderEmailModel:
-      type: object
-      properties:
-        email:
-          type: string
-          description: The email associated with the provider.
-        type:
-          enum:
-          - Unspecified
-          - Personal
-          - Work
-          type: string
-          description: The type of the email.
-        id:
-          type: string
-          description: Unique identifier for this specific email.
-          format: uuid
-      additionalProperties: false
-    TaxonomyGroupModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the taxonomy group.
-          format: uuid
-        name:
-          type: string
-          description: Name of the taxonomy group (e.g., "Allopathic & Osteopathic Physicians").
-      additionalProperties: false
-      example:
-        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-        name: Allopathic & Osteopathic Physicians
-    SegmentModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the segment.
-          format: uuid
-        name:
-          type: string
-          description: Name of the segment. Used for multi-tenant organizations for billing, configuration, and tracking purposes.
-      additionalProperties: false
-      example:
-        id: 3516a6ba-c998-4bfb-9017-322f8cf63674
-        name: acme-corp
-    ProviderTypeModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier associated with this provider type.
-          format: uuid
-        name:
-          type: string
-          description: Associated provider type name.
-      additionalProperties: false
-    AlertData:
-      type: object
-      properties:
-        messageTemplate:
-          type: string
-          description: An informative human readable message describing the action in the audit log entry.
-        messageParams:
-          type: object
-          additionalProperties:
-            type:
-            - string
-            - 'null'
-          description: Collection of key/value pairs containing parameters to be replaced in `messageTemplate`.
-        data:
-          type: object
-          additionalProperties:
-            type:
-            - string
-            - 'null'
-      additionalProperties: false
-    DismissRequestModel:
-      type: object
-      properties:
-        dismissalNote:
-          type: string
-          description: A note that explains why this alert was dismissed.
       additionalProperties: false
   securitySchemes:
     Bearer:

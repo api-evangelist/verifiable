@@ -43,6 +43,41 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    SsoAuthModel:
+      required:
+      - accessToken
+      type: object
+      properties:
+        accessToken:
+          $ref: '#/components/schemas/SensitiveString'
+      additionalProperties: false
+    UserRoleModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          enum:
+          - Admin
+          - LimitedAdmin
+          - Credentialing
+          - LimitedCredentialing
+          - Reader
+          - LimitedReader
+          type: string
+        permissions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            enum:
+            - None
+            - Read
+            - Write
+            - Allowed
+            type: string
+      additionalProperties: false
     AuthResponseModel:
       type: object
       properties:
@@ -76,41 +111,6 @@ components:
       additionalProperties: false
       description: If `includeSensitiveInfo` query parameter set to true the value will be shown in the response, otherwise it will be masked with *.
       example: '***'
-    UserRoleModel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          enum:
-          - Admin
-          - LimitedAdmin
-          - Credentialing
-          - LimitedCredentialing
-          - Reader
-          - LimitedReader
-          type: string
-        permissions:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            enum:
-            - None
-            - Read
-            - Write
-            - Allowed
-            type: string
-      additionalProperties: false
-    SsoAuthModel:
-      required:
-      - accessToken
-      type: object
-      properties:
-        accessToken:
-          $ref: '#/components/schemas/SensitiveString'
-      additionalProperties: false
   securitySchemes:
     Bearer:
       type: http

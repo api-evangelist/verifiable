@@ -288,20 +288,24 @@ paths:
       - Bearer: []
 components:
   schemas:
-    ProviderEnrollmentPatchModel:
+    ProviderEnrollmentModel:
       type: object
       properties:
+        id:
+          type: string
+          description: Unique identifier associated with this provider enrollment.
+          format: uuid
         payerPlanId:
           type: string
-          description: If set, the provider enrollment's `PayerPlanId` will be updated with this value.
+          description: Payer Plan Id associated with this provider enrollment.
           format: uuid
         groupId:
           type: string
-          description: If set, the provider enrollment's `GroupId` will be updated with this value.
+          description: Group Id associated with this provider enrollment.
           format: uuid
         providerId:
           type: string
-          description: If set, the provider enrollment's `ProviderId` will be updated with this value.
+          description: Provider Id associated with this provider enrollment.
           format: uuid
         enrollmentStatus:
           enum:
@@ -310,18 +314,18 @@ components:
           - Enrolled
           - Denied
           type: string
-          description: If set, the provider enrollment's `EnrollmentStatus` will be updated with this value.
+          description: Status of the enrollment.
         submissionDate:
           type: string
-          description: If set, the provider enrollment's `SubmissionDate` will be updated with this value.
+          description: Submission Date associated with this provider enrollment.
           format: date-time
         closedDate:
           type: string
-          description: If set, the provider enrollment's `ClosedDate` will be updated with this value.
+          description: Closed Date associated with this provider enrollment.
           format: date-time
         effectiveDate:
           type: string
-          description: If set, the provider enrollment's `EffectiveDate` will be updated with this value.
+          description: Effective Date associated with this provider enrollment.
           format: date-time
         networkStatus:
           enum:
@@ -329,25 +333,47 @@ components:
           - Par
           - NonPar
           type: string
-          description: If set, the provider enrollment's `NetworkStatus` will be updated with this value.
+          description: Network Status associated with this provider enrollment.
         specialistType:
           enum:
           - None
           - Pcp
           - Specialist
           type: string
-          description: If set, the provider enrollment's `SpecialistType` will be updated with this value.
+          description: Specialist Type associated with this provider enrollment.
         externalProviderPlanId:
           type: string
-          description: If set, the provider enrollment's `ProviderId` in external system will be updated with this value.
+          description: '`ProviderId` in external system.'
         comments:
           type: string
-          description: If set, the provider enrollment's `Comments` will be updated with this value.
+        payerPlanModel:
+          $ref: '#/components/schemas/PayerPlanModel'
+        groupModel:
+          $ref: '#/components/schemas/GroupModel'
       additionalProperties: false
-      example:
-        PayerPlanId: 1704B2EA-098D-4A70-969F-70A5F6B336DE
-        EnrollmentStatus: NotSubmitted
-        SubmissionDate: 2000-12-31 23:59
+    GroupModel:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier associated with this group.
+          format: uuid
+        name:
+          minLength: 1
+          type: string
+          description: The name associated with this group.
+        npi:
+          type: integer
+          description: NPI number associated with this group.
+          format: int64
+        taxId:
+          type: string
+          description: Tax ID number associated with this group.
+        remitAddress:
+          $ref: '#/components/schemas/AddressModel'
+      additionalProperties: false
     AddressModel:
       required:
       - addressLine1
@@ -429,47 +455,93 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    GroupModel:
-      required:
-      - name
+    ProviderEnrollmentPageModel:
       type: object
       properties:
-        id:
-          type: string
-          description: Unique identifier associated with this group.
-          format: uuid
-        name:
-          minLength: 1
-          type: string
-          description: The name associated with this group.
-        npi:
+        sort:
+          type:
+          - object
+          - 'null'
+          properties:
+            Keys:
+              enum:
+              - Id
+              - NetworkStatus
+              - EnrollmentStatus
+              - SpecialistType
+              - SubmissionDate
+              - EffectiveDate
+              - PayerPlanName
+              type: string
+            Values:
+              enum:
+              - Asc
+              - Desc
+              type: string
+        previousCursor:
+          type:
+          - string
+          - 'null'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+        nextOffset:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        pageSize:
           type: integer
-          description: NPI number associated with this group.
-          format: int64
-        taxId:
-          type: string
-          description: Tax ID number associated with this group.
-        remitAddress:
-          $ref: '#/components/schemas/AddressModel'
+          format: int32
+        count:
+          type: integer
+          format: int32
+        totalCount:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProviderEnrollmentModel'
+        sortedBy:
+          enum:
+          - Id
+          - NetworkStatus
+          - EnrollmentStatus
+          - SpecialistType
+          - SubmissionDate
+          - EffectiveDate
+          - PayerPlanName
+          type:
+          - string
+          - 'null'
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type:
+          - string
+          - 'null'
       additionalProperties: false
-    ProviderEnrollmentModel:
+    ProviderEnrollmentPatchModel:
       type: object
       properties:
-        id:
-          type: string
-          description: Unique identifier associated with this provider enrollment.
-          format: uuid
         payerPlanId:
           type: string
-          description: Payer Plan Id associated with this provider enrollment.
+          description: If set, the provider enrollment's `PayerPlanId` will be updated with this value.
           format: uuid
         groupId:
           type: string
-          description: Group Id associated with this provider enrollment.
+          description: If set, the provider enrollment's `GroupId` will be updated with this value.
           format: uuid
         providerId:
           type: string
-          description: Provider Id associated with this provider enrollment.
+          description: If set, the provider enrollment's `ProviderId` will be updated with this value.
           format: uuid
         enrollmentStatus:
           enum:
@@ -478,18 +550,18 @@ components:
           - Enrolled
           - Denied
           type: string
-          description: Status of the enrollment.
+          description: If set, the provider enrollment's `EnrollmentStatus` will be updated with this value.
         submissionDate:
           type: string
-          description: Submission Date associated with this provider enrollment.
+          description: If set, the provider enrollment's `SubmissionDate` will be updated with this value.
           format: date-time
         closedDate:
           type: string
-          description: Closed Date associated with this provider enrollment.
+          description: If set, the provider enrollment's `ClosedDate` will be updated with this value.
           format: date-time
         effectiveDate:
           type: string
-          description: Effective Date associated with this provider enrollment.
+          description: If set, the provider enrollment's `EffectiveDate` will be updated with this value.
           format: date-time
         networkStatus:
           enum:
@@ -497,24 +569,25 @@ components:
           - Par
           - NonPar
           type: string
-          description: Network Status associated with this provider enrollment.
+          description: If set, the provider enrollment's `NetworkStatus` will be updated with this value.
         specialistType:
           enum:
           - None
           - Pcp
           - Specialist
           type: string
-          description: Specialist Type associated with this provider enrollment.
+          description: If set, the provider enrollment's `SpecialistType` will be updated with this value.
         externalProviderPlanId:
           type: string
-          description: '`ProviderId` in external system.'
+          description: If set, the provider enrollment's `ProviderId` in external system will be updated with this value.
         comments:
           type: string
-        payerPlanModel:
-          $ref: '#/components/schemas/PayerPlanModel'
-        groupModel:
-          $ref: '#/components/schemas/GroupModel'
+          description: If set, the provider enrollment's `Comments` will be updated with this value.
       additionalProperties: false
+      example:
+        PayerPlanId: 1704B2EA-098D-4A70-969F-70A5F6B336DE
+        EnrollmentStatus: NotSubmitted
+        SubmissionDate: 2000-12-31 23:59
     PayerPlanModel:
       type: object
       properties:
@@ -660,79 +733,6 @@ components:
         payerPlanId: 1704b2ea-098d-4a70-969f-70a5f6b336de
         enrollmentStatus: NotSubmitted
         submissionDate: 2000-12-31 23:59
-    ProviderEnrollmentPageModel:
-      type: object
-      properties:
-        sort:
-          type:
-          - object
-          - 'null'
-          properties:
-            Keys:
-              enum:
-              - Id
-              - NetworkStatus
-              - EnrollmentStatus
-              - SpecialistType
-              - SubmissionDate
-              - EffectiveDate
-              - PayerPlanName
-              type: string
-            Values:
-              enum:
-              - Asc
-              - Desc
-              type: string
-        previousCursor:
-          type:
-          - string
-          - 'null'
-        nextCursor:
-          type:
-          - string
-          - 'null'
-        nextOffset:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        count:
-          type: integer
-          format: int32
-        totalCount:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProviderEnrollmentModel'
-        sortedBy:
-          enum:
-          - Id
-          - NetworkStatus
-          - EnrollmentStatus
-          - SpecialistType
-          - SubmissionDate
-          - EffectiveDate
-          - PayerPlanName
-          type:
-          - string
-          - 'null'
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
   securitySchemes:
     Bearer:
       type: http

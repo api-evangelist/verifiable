@@ -188,6 +188,110 @@ paths:
       - Bearer: []
 components:
   schemas:
+    TaxonomyPageModel:
+      type: object
+      properties:
+        previousCursor:
+          type: string
+          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
+        nextCursor:
+          type: string
+          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
+        nextOffset:
+          type: integer
+          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
+          format: int32
+          deprecated: true
+        pageSize:
+          type: integer
+          description: The maximum number of items included in this page.
+          format: int32
+        count:
+          type: integer
+          description: The number of items in this page.
+          format: int32
+        totalCount:
+          type: integer
+          description: The total number of items in all pages combined.
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxonomyModel'
+          description: The NUCC taxonomy codes in the current page.
+        sortedBy:
+          enum:
+          - Id
+          - Code
+          type: string
+          description: The property by which the data is sorted.
+        sortDirection:
+          enum:
+          - Asc
+          - Desc
+          type: string
+          description: The direction in which the data is sorted.
+        sort:
+          type: object
+          additionalProperties:
+            enum:
+            - Asc
+            - Desc
+            type: string
+          description: The properties and directions the data is sorted by.
+      additionalProperties: false
+      example:
+        previousCursor: '0'
+        nextCursor: '100'
+        pageSize: 100
+        count: 100
+        totalCount: 850
+        items:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          code: 207R00000X
+          grouping: Allopathic & Osteopathic Physicians
+          classification: Internal Medicine
+          specialization: Cardiovascular Disease
+          section: Section 1
+          displayName: Internal Medicine - Cardiovascular Disease
+        sortedBy: Code
+        sortDirection: Asc
+        sort:
+          Code: Asc
+    TaxonomyModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the taxonomy.
+          format: uuid
+        code:
+          type: string
+          description: 10-character NUCC taxonomy code (e.g., "207R00000X").
+        grouping:
+          type: string
+          description: Grouping classification (e.g., "Allopathic & Osteopathic Physicians").
+        classification:
+          type: string
+          description: Classification within the grouping (e.g., "Internal Medicine").
+        specialization:
+          type: string
+          description: Specialization within the classification (e.g., "Cardiovascular Disease").
+        section:
+          type: string
+          description: Section identifier for the taxonomy.
+        displayName:
+          type: string
+          description: Human-readable display name for the taxonomy.
+      additionalProperties: false
+      example:
+        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        code: 207R00000X
+        grouping: Allopathic & Osteopathic Physicians
+        classification: Internal Medicine
+        specialization: Cardiovascular Disease
+        section: Section 1
+        displayName: Internal Medicine - Cardiovascular Disease
     CountryModel:
       type: object
       properties:
@@ -280,110 +384,6 @@ components:
       example:
         id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
         name: Allopathic & Osteopathic Physicians
-    TaxonomyModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the taxonomy.
-          format: uuid
-        code:
-          type: string
-          description: 10-character NUCC taxonomy code (e.g., "207R00000X").
-        grouping:
-          type: string
-          description: Grouping classification (e.g., "Allopathic & Osteopathic Physicians").
-        classification:
-          type: string
-          description: Classification within the grouping (e.g., "Internal Medicine").
-        specialization:
-          type: string
-          description: Specialization within the classification (e.g., "Cardiovascular Disease").
-        section:
-          type: string
-          description: Section identifier for the taxonomy.
-        displayName:
-          type: string
-          description: Human-readable display name for the taxonomy.
-      additionalProperties: false
-      example:
-        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-        code: 207R00000X
-        grouping: Allopathic & Osteopathic Physicians
-        classification: Internal Medicine
-        specialization: Cardiovascular Disease
-        section: Section 1
-        displayName: Internal Medicine - Cardiovascular Disease
-    TaxonomyPageModel:
-      type: object
-      properties:
-        previousCursor:
-          type: string
-          description: The value to use for `cursor` to get to the previous paginated page. `null` will be returned if it's the first page.
-        nextCursor:
-          type: string
-          description: The value to use for `cursor` to get to the next paginated page. `null` will be returned if it's the last page.
-        nextOffset:
-          type: integer
-          description: The value to use for `offset` to get the next page following the current page or `null` if this page is the last.
-          format: int32
-          deprecated: true
-        pageSize:
-          type: integer
-          description: The maximum number of items included in this page.
-          format: int32
-        count:
-          type: integer
-          description: The number of items in this page.
-          format: int32
-        totalCount:
-          type: integer
-          description: The total number of items in all pages combined.
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxonomyModel'
-          description: The NUCC taxonomy codes in the current page.
-        sortedBy:
-          enum:
-          - Id
-          - Code
-          type: string
-          description: The property by which the data is sorted.
-        sortDirection:
-          enum:
-          - Asc
-          - Desc
-          type: string
-          description: The direction in which the data is sorted.
-        sort:
-          type: object
-          additionalProperties:
-            enum:
-            - Asc
-            - Desc
-            type: string
-          description: The properties and directions the data is sorted by.
-      additionalProperties: false
-      example:
-        previousCursor: '0'
-        nextCursor: '100'
-        pageSize: 100
-        count: 100
-        totalCount: 850
-        items:
-        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-          code: 207R00000X
-          grouping: Allopathic & Osteopathic Physicians
-          classification: Internal Medicine
-          specialization: Cardiovascular Disease
-          section: Section 1
-          displayName: Internal Medicine - Cardiovascular Disease
-        sortedBy: Code
-        sortDirection: Asc
-        sort:
-          Code: Asc
   securitySchemes:
     Bearer:
       type: http

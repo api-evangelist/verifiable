@@ -171,36 +171,6 @@ paths:
       - Bearer: []
 components:
   schemas:
-    EventLogModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the event.
-          format: uuid
-        timestamp:
-          type: string
-          description: The date & time of the event.
-          format: date-time
-        type:
-          enum:
-          - System
-          - Request
-          - Legacy
-          type: string
-          description: The type of the event indicating if it was system or user initiated.
-        messageTemplate:
-          type: string
-          description: Human readable description of the event that occurred. To be used in conjunction with `messageParameters`.
-        messageParameters:
-          description: If the `messageTemplate` contains parameters, this object will contain the values to be used to replace those parameters.
-        correlationId:
-          type: string
-          description: The correlation identifier associated with the request. Verifiable staff can use this for further troubleshooting.
-          format: uuid
-        context:
-          description: Any relevant contextual data for the event. For events of type `Request` this will contain `request` and `user` data. In addition most events will include  an array of `relatedEntities` with identifiers of objects that are related to this specific event.
-      additionalProperties: false
     EventLogPageModel:
       type: object
       properties:
@@ -293,6 +263,36 @@ components:
         sortDirection: Desc
         sort:
           Timestamp: Desc
+    EventLogModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the event.
+          format: uuid
+        timestamp:
+          type: string
+          description: The date & time of the event.
+          format: date-time
+        type:
+          enum:
+          - System
+          - Request
+          - Legacy
+          type: string
+          description: The type of the event indicating if it was system or user initiated.
+        messageTemplate:
+          type: string
+          description: Human readable description of the event that occurred. To be used in conjunction with `messageParameters`.
+        messageParameters:
+          description: If the `messageTemplate` contains parameters, this object will contain the values to be used to replace those parameters.
+        correlationId:
+          type: string
+          description: The correlation identifier associated with the request. Verifiable staff can use this for further troubleshooting.
+          format: uuid
+        context:
+          description: Any relevant contextual data for the event. For events of type `Request` this will contain `request` and `user` data. In addition most events will include  an array of `relatedEntities` with identifiers of objects that are related to this specific event.
+      additionalProperties: false
   securitySchemes:
     Bearer:
       type: http
